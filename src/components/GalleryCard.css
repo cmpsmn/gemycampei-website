@@ -1,0 +1,90 @@
+/*
+ * Styles for GalleryCard.tsx and the grid that holds the cards.
+ * Imported by the component, so they are only loaded on pages that use cards.
+ */
+
+/* Two columns of cards, like the category pages of the original site */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 8vw, 8rem);
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* A single card is centred instead of sitting in the left column */
+.card-grid:has(> .card:only-child) {
+  grid-template-columns: minmax(0, 560px);
+  justify-content: center;
+}
+
+/* One column on phones */
+@media (max-width: 700px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card-link {
+  display: block;
+  text-decoration: none;
+}
+
+/* Fixed shape so the page doesn't jump while images load */
+.card-image {
+  overflow: hidden;
+  aspect-ratio: 1200 / 1160;
+  background: var(--panel);
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Slow, subtle zoom on hover */
+.card-link:hover .card-image img {
+  transform: scale(1.025);
+}
+
+.card-body {
+  padding-top: 2rem;
+  text-align: center;
+}
+
+.card-category {
+  font-size: 0.7rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+}
+
+/* "S & J" in spaced serif capitals */
+.card-couple {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin: 0 0 0.2rem;
+}
+
+.card-title {
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  margin: 0 0 0.9rem;
+}
+
+/* Darker than the original light beige so it is readable (WCAG AA contrast) */
+.card-cta {
+  font-size: 0.85rem;
+  color: var(--muted);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.card-link:hover .card-cta {
+  color: var(--accent);
+  border-bottom-color: currentColor;
+}

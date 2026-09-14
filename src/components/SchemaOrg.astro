@@ -1,0 +1,29 @@
+---
+/**
+ * ============================================================================
+ * STRUCTURED DATA  (src/components/SchemaOrg.astro)
+ * ============================================================================
+ *
+ * Writes JSON-LD blocks into the page head: a script element with the type
+ * "application/ld+json" that contains e.g. { "@type": "FAQPage", ... }.
+ *
+ * Browsers ignore this script type. Search engines read it to understand the
+ * page. The data objects are built in src/lib/seo.ts.
+ *
+ * `set:html` inserts the JSON text without escaping it. That is safe here
+ * because JSON.stringify output contains no HTML, and every "<" is escaped
+ * below, so a text in the content can never close the script element early.
+ * ============================================================================
+ */
+import type { Schema } from '../lib/seo';
+
+interface Props {
+  data: Schema[];
+}
+
+// "as Props" states the type explicitly (the type checker can't infer it through <script> tags)
+const { data } = Astro.props as Props;
+const json = (item: Schema) => JSON.stringify(item).replace(/</g, '\\u003c');
+---
+
+{data.map((item: Schema) => <script is:inline type="application/ld+json" set:html={json(item)} />)}

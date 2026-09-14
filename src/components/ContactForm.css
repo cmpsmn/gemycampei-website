@@ -1,0 +1,132 @@
+/*
+ * Styles for ContactForm.tsx.
+ * Underlined fields with centred, spaced serif labels, like the original form.
+ */
+.contact-form {
+  display: grid;
+  gap: 1.6rem;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: grid;
+  gap: 0.2rem;
+  text-align: center;
+}
+
+.field-label {
+  font-family: var(--font-serif);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  text-align: center;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding: 0.7rem 0.25rem;
+  transition: border-color 0.2s;
+}
+
+.field textarea {
+  text-align: left;
+  resize: vertical;
+  min-height: 7rem;
+}
+
+.field select {
+  appearance: none;
+  text-align-last: center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' fill='none' stroke='%231d1c1a' stroke-width='1.2'%3E%3Cpath d='M1 1l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.4rem center;
+  cursor: pointer;
+}
+
+.field input::placeholder {
+  color: #9c968c;
+}
+
+/* Visible focus: the underline darkens (the original form had no focus state) */
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.consent input {
+  margin-top: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+}
+
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-status {
+  padding: 1rem 1.2rem;
+  background: var(--bg);
+  border-left: 2px solid;
+  margin: 0;
+}
+
+.form-status.error {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.form-status.success {
+  border-color: var(--success);
+  text-align: center;
+  border-left: 0;
+  padding: 2rem 1rem;
+}
+
+.form-status.success .caps-title {
+  font-size: 1.4rem;
+}
+
+/* "I do my best to respond within 48 hours ..." below the button */
+.response-note {
+  font-style: italic;
+  font-size: 0.82rem;
+  text-align: center;
+  color: var(--muted);
+  margin: 0.5rem 0 0;
+}

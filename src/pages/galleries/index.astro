@@ -1,0 +1,83 @@
+---
+/**
+ * ============================================================================
+ * ALL GALLERIES  (src/pages/galleries/index.astro)  →  /galleries/
+ * ============================================================================
+ *
+ * Overview of every gallery that has its own page, with filter buttons per
+ * category. The GALLERIES menu item links here.
+ *
+ * The filter is a React component. `client:load` makes Astro send its
+ * JavaScript to the browser so the buttons work. The data (cards) is prepared
+ * here at build time and passed in as props.
+ *
+ * A gallery listed in several categories (via `alsoIn`) appears once, and
+ * shows up under each of its filter buttons.
+ *
+ * Categories with `display: slider` or `carousel` (maternity, film) show their
+ * photos on their own page; they are linked below the grid.
+ * ============================================================================
+ */
+import Base from '../../layouts/Base.astro';
+import GalleryFilter from '../../components/GalleryFilter';
+import { getCategories, getGalleries, toCardData } from '../../lib/galleries';
+import { breadcrumbSchema } from '../../lib/seo';
+
+const categories = await getCategories({ onlyWithGalleries: true });
+const cardCategories = categories.filter((c) => c.data.display === 'cards');
+const photoCategories = categories.filter((c) => c.data.display !== 'cards');
+const labelOf = (id: string) => categories.find((c) => c.id === id)?.data.menuLabel ?? id;
+
+// One card per gallery with its own page, labelled with its main category
+const galleries = (await getGalleries()).filter((g) => g.hasPage);
+const cards = await Promise.all(galleries.map((g) => toCardData(g, labelOf(g.categoryId))));
+
+// Filter buttons only for categories that have cards
+const filterOptions = cardCategories.map((c) => ({ id: c.id, label: c.data.menuLabel }));
+---
+
+<Base
+  title="Wedding & Elopement Portfolio · Vienna and the Dolomites"
+  description="A curated archive of candid wedding stories, mountain elopements, proposals and couple sessions across Vienna, the Italian Dolomites and European destinations."
+  schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Galleries', path: '/galleries/' }])]}
+>
+  <section class="container">
+    <header class="intro">
+      <p class="tagline">Beyond the day, preserved in time</p>
+      <h1 class="h1-quiet heading">Wedding &amp; Elopement Portfolio</h1>
+    </header>
+
+    <GalleryFilter client:load galleries={cards} categories={filterOptions} />
+
+    {
+      photoCategories.length > 0 && (
+        <p class="more center">
+          Also explore{' '}
+          {photoCategories.map((c, i) => (
+            <>
+              {i > 0 && ' and '}
+              <a href={c.href}>{c.data.menuLabel}</a>
+            </>
+          ))}
+          .
+        </p>
+      )
+    }
+  </section>
+</Base>
+
+<style>
+  .intro {
+    text-align: center;
+    padding-block: clamp(1rem, 4vw, 2.5rem) 1rem;
+  }
+
+  .heading {
+    margin-top: 1.5rem;
+  }
+
+  .more {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    font-size: 0.9rem;
+  }
+</style>

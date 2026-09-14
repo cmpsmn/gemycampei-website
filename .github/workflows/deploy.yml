@@ -1,0 +1,79 @@
+# =============================================================================
+# AUTOMATIC DEPLOYMENT  (.github/workflows/deploy.yml)
+# =============================================================================
+#
+# GitHub Actions runs this file on GitHub's computers every time you push to
+# the `main` branch (or when you click "Run workflow" in the Actions tab):
+#
+#   1. download the code          (checkout)
+#   2. install Node.js + packages (setup-node, npm ci)
+#   3. build the site             (npm run build → dist/)
+#   4. upload dist/ to Hostinger  (rsync over SSH)
+#
+# Required repository secrets (GitHub > Settings > Secrets and variables > Actions):
+#   SSH_HOST         e.g. 123.45.67.89          (hPanel > Advanced > SSH Access)
+#   SSH_PORT         e.g. 65002
+#   SSH_USER         e.g. u523573211
+#   SSH_PRIVATE_KEY  private key whose public key is added in hPanel > SSH Access
+#
+# Optional repository variable:
+#   DEPLOY_PATH      default: domains/gemycampei.com/public_html
+#
+# Secrets are never shown in logs. `${{ secrets.NAME }}` inserts them at run time.
+# =============================================================================
+
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # adds a "Run workflow" button in the Actions tab
+
+# Never run two deployments at the same time
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH || 'domains/gemycampei.com/public_html' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm # re-uses downloaded packages between runs
+
+      # `npm ci` installs exactly the versions in package-lock.json
+      - run: npm ci
+
+      # Astro keeps optimised images in node_modules/.astro. Caching that folder
+      # means only NEW or CHANGED photos are processed, which keeps builds fast.
+      - name: Cache optimized images
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.astro
+          key: astro-assets-${{ hashFiles('galleries/**', 'src/assets/**', 'src/content/**') }}
+          restore-keys: astro-assets-
+
+      - run: npm run build
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      # rsync only uploads changed files. --delete removes files that no longer
+      # exist in the build. contact-config.php lives outside public_html, so it
+      # is never touched.
+      - name: Upload with rsync
+        run: |
+          rsync -az --delete --stats \
+            -e "ssh -i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT }}" \
+            dist/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${DEPLOY_PATH}/"

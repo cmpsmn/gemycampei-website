@@ -1,0 +1,275 @@
+---
+/**
+ * ============================================================================
+ * HEADER  (src/components/Header.astro)
+ * ============================================================================
+ *
+ * Centred logo and the main menu:
+ *   HOME · ABOUT · INFO + · GALLERIES + · TESTIMONIALS · CONTACT
+ *
+ * The two dropdowns fill themselves:
+ *   INFO +       → every folder in src/content/packages/
+ *   GALLERIES +  → every category folder in galleries/ that has something to show
+ *
+ * No JavaScript: the desktop dropdowns open with CSS (:hover / :focus-within),
+ * the mobile menu opens with a hidden checkbox (the "checkbox hack").
+ * ============================================================================
+ */
+import { getCollection } from 'astro:content';
+import { site } from '../site.config';
+import { getCategories } from '../lib/galleries';
+
+const categories = await getCategories({ onlyWithGalleries: true });
+const packagesPages = (await getCollection('packages')).sort((a, b) => a.data.order - b.data.order);
+
+type Link = { label: string; href: string };
+type Item = Link & { children?: Link[] };
+
+const menu: Item[] = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about/' },
+  {
+    label: 'Info',
+    // Clicking "Info" itself (e.g. on touch screens) opens the first packages page
+    href: packagesPages[0] ? `/${packagesPages[0].id}/` : '/contact/',
+    children: packagesPages.map((p) => ({ label: p.data.menuLabel, href: `/${p.id}/` })),
+  },
+  {
+    label: 'Galleries',
+    href: '/galleries/',
+    children: categories.map((c) => ({ label: c.data.menuLabel, href: c.href })),
+  },
+  { label: 'Testimonials', href: '/testimonials/' },
+  { label: 'Contact', href: '/contact/' },
+];
+
+// Mark the menu item of the current page (for styling and screen readers)
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const isActive = (item: Item) => isCurrent(item.href) || (item.children ?? []).some((c) => isCurrent(c.href));
+---
+
+<header class="header">
+  <div class="container">
+    <div class="top">
+      <a href="/" class="logo">{site.name}</a>
+
+      <!-- Mobile menu: the label toggles the invisible checkbox, CSS shows the menu when checked -->
+      <input type="checkbox" id="menu-toggle" class="menu-toggle visually-hidden" />
+      <label for="menu-toggle" class="menu-button">
+        <span class="visually-hidden">Menu</span>
+        <span class="bar"></span><span class="bar"></span>
+      </label>
+    </div>
+
+    <nav aria-label="Main">
+      <ul class="menu">
+        {
+          menu.map((item) => (
+            <li class:list={['item', { 'has-children': item.children?.length }]}>
+              <a href={item.href} aria-current={isActive(item) ? 'page' : undefined}>
+                {item.label}
+                {item.children?.length ? <span aria-hidden="true"> +</span> : null}
+              </a>
+              {item.children?.length ? (
+                <ul class="submenu">
+                  {item.children.map((child) => (
+                    <li>
+                      <a href={child.href} aria-current={isCurrent(child.href) ? 'page' : undefined}>
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    background: var(--bg);
+    position: relative;
+    z-index: 50;
+  }
+
+  .top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2.4rem;
+  }
+
+  .logo {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .menu {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 3.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 2.6rem 0 2.2rem;
+  }
+
+  .item {
+    position: relative;
+  }
+
+  .menu a {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding-block: 0.3rem;
+  }
+
+  .item > a[aria-current='page'] {
+    color: var(--accent);
+  }
+
+  /* ---- Desktop dropdown: hidden until the item is hovered or focused ---- */
+  .submenu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    min-width: 16rem;
+    transform: translateX(-50%);
+    list-style: none;
+    margin: 0.6rem 0 0;
+    padding: 1rem 0;
+    background: var(--panel);
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+  }
+
+  /* Invisible bridge so the menu stays open while the mouse moves down to it */
+  .submenu::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.8rem;
+    height: 0.8rem;
+  }
+
+  .has-children:hover .submenu,
+  .has-children:focus-within .submenu {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .submenu a {
+    display: block;
+    padding: 0.55rem 1.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .submenu a:hover,
+  .submenu a[aria-current='page'] {
+    color: var(--accent);
+  }
+
+  .menu-button {
+    display: none;
+  }
+
+  /* ---- Mobile (screens up to 900px wide) -------------------------------- */
+  @media (max-width: 900px) {
+    .top {
+      justify-content: space-between;
+      padding-block: 1.25rem;
+    }
+
+    .menu-button {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 7px;
+      width: 2.75rem;
+      height: 2.75rem;
+      cursor: pointer;
+    }
+
+    .bar {
+      display: block;
+      height: 1px;
+      width: 1.6rem;
+      margin-left: auto;
+      background: var(--text);
+      transition: transform 0.25s;
+    }
+
+    /* Turn the two bars into an X when the menu is open */
+    .menu-toggle:checked + .menu-button .bar:nth-of-type(2) {
+      transform: translateY(4px) rotate(45deg);
+    }
+
+    .menu-toggle:checked + .menu-button .bar:nth-of-type(3) {
+      transform: translateY(-4px) rotate(-45deg);
+    }
+
+    .menu-toggle:focus-visible + .menu-button {
+      outline: 2px solid var(--accent);
+    }
+
+    nav {
+      display: none;
+      border-top: 1px solid var(--line);
+    }
+
+    /* :has() = "the header that contains a checked checkbox" */
+    .header:has(.menu-toggle:checked) nav {
+      display: block;
+    }
+
+    .menu {
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 1rem 0 2rem;
+    }
+
+    .menu a {
+      padding-block: 0.7rem;
+    }
+
+    /* Sub-items are always listed on mobile: hover menus don't work on touch screens */
+    .submenu {
+      position: static;
+      transform: none;
+      opacity: 1;
+      visibility: visible;
+      background: none;
+      padding: 0 0 0.6rem;
+      margin: 0;
+      min-width: 0;
+    }
+
+    .submenu::before {
+      display: none;
+    }
+
+    .submenu a {
+      padding: 0.35rem 1rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+  }
+</style>

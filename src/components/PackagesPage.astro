@@ -1,0 +1,174 @@
+---
+/**
+ * ============================================================================
+ * PACKAGES PAGE LAYOUT  (src/components/PackagesPage.astro)
+ * ============================================================================
+ *
+ * The complete content of a packages page, used by:
+ *   src/pages/wedding-photography-packages.astro
+ *   src/pages/dolomites-elopement-packages.astro
+ *
+ * Those page files are only three lines long. All texts come from
+ * src/content/packages/<id>/index.md.
+ *
+ * WHAT THE PAGE SHOWS (like the original INFO pages)
+ *   tagline · H1 · intro text · "Request pricing" · divider
+ *   · packages (framed photo + text, alternating left/right) · FAQ · button
+ * ============================================================================
+ */
+import { Image } from 'astro:assets';
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Faq from './Faq.astro';
+import { inlineMarkdown } from '../lib/markdown';
+import { breadcrumbSchema, faqSchema } from '../lib/seo';
+
+interface Props {
+  /** Folder name in src/content/packages/, e.g. "wedding-photography-packages" */
+  id: string;
+}
+
+const { id } = Astro.props;
+const page = await getEntry('packages', id);
+if (!page) throw new Error(`No packages page found in src/content/packages/${id}/index.md`);
+
+const { Content } = await render(page); // the intro text below the settings block
+const { data } = page;
+
+const schema = [
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: data.menuLabel, path: `/${id}/` },
+  ]),
+  ...(data.faq.length ? [faqSchema(data.faq)] : []),
+];
+---
+
+<Base title={data.seoTitle} description={data.seoDescription} ogImage={data.packages[0]?.image} schema={schema}>
+  <section class="container intro">
+    <p class="tagline">{data.tagline}</p>
+    <h1 class="h1-quiet heading">{data.h1}</h1>
+    <div class="intro-text">
+      <Content />
+    </div>
+    <a class="button" href="/contact/">{data.buttonLabel}</a>
+  </section>
+
+  <div class="container">
+    <hr class="divider" />
+  </div>
+
+  <!-- class:list adds "reverse" to every second package, so photo and text swap sides -->
+  <section class="container packages" aria-label="Packages">
+    {
+      data.packages.map((pkg, i) => (
+        <article class:list={['package', { reverse: i % 2 === 1 }]}>
+          <div class="frame">
+            <Image src={pkg.image} alt={`${pkg.title}: ${data.menuLabel}`} widths={[480, 800, 1000]} sizes="(max-width: 800px) 90vw, 420px" />
+          </div>
+          <div class="package-text">
+            {pkg.eyebrow && <p class="eyebrow">{pkg.eyebrow}</p>}
+            <h2>{pkg.title}</h2>
+            <p set:html={inlineMarkdown(pkg.text)} />
+            {pkg.included.length > 0 && (
+              <>
+                <p class="included-label">What's included:</p>
+                <ul class="included">
+                  {pkg.included.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <Faq title={data.faqTitle} items={data.faq} />
+
+  <section class="container center closing">
+    <a class="button" href="/contact/">{data.buttonLabel}</a>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    text-align: center;
+    padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(3rem, 6vw, 5rem);
+  }
+
+  .heading {
+    margin-top: 2.5rem;
+  }
+
+  .intro-text {
+    max-width: 940px;
+    margin: 2rem auto 2.5rem;
+  }
+
+  /* Keeps the line breaks written in the Markdown file */
+  .intro-text :global(p) {
+    white-space: pre-line;
+  }
+
+  .packages {
+    max-width: 1240px;
+    display: grid;
+    gap: clamp(3rem, 7vw, 6rem);
+    padding-block: clamp(3rem, 6vw, 5rem);
+  }
+
+  .package {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: center;
+    gap: clamp(2rem, 6vw, 5.5rem);
+  }
+
+  .package .frame {
+    padding: clamp(1.5rem, 3.5vw, 2.75rem) clamp(1.5rem, 5vw, 3.75rem);
+  }
+
+  /* `order: 2` moves the photo to the right for every second package */
+  .package.reverse .frame {
+    order: 2;
+  }
+
+  .package h2 {
+    font-size: clamp(1.8rem, 3vw, 2.3rem);
+    margin-bottom: 1.8rem;
+  }
+
+  .package-text {
+    max-width: 580px;
+  }
+
+  .included-label {
+    font-style: italic;
+    font-size: 0.85rem;
+    margin: 2rem 0 0.8rem;
+  }
+
+  .included {
+    margin: 0;
+    padding-left: 2.3rem;
+    font-size: 0.88rem;
+    line-height: 1.95;
+  }
+
+  .closing {
+    padding-top: 1rem;
+  }
+
+  @media (max-width: 800px) {
+    .package {
+      grid-template-columns: 1fr;
+    }
+
+    .package.reverse .frame {
+      order: 0;
+    }
+  }
+</style>

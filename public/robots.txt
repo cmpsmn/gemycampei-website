@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /_mail/
+
+Sitemap: https://gemycampei.com/sitemap-index.xml

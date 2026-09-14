@@ -1,0 +1,133 @@
+---
+/**
+ * ============================================================================
+ * FOOTER  (src/components/Footer.astro)
+ * ============================================================================
+ *
+ * Logo, menu links (like the original site), social media, legal links.
+ *
+ * SEO note: the footer appears on every page, so its links to the main
+ * sections (packages, galleries) help search engines find and weigh them.
+ *
+ * Social links are plain links. Nothing is loaded from Instagram, TikTok or
+ * Pinterest until a visitor clicks, so no cookie banner is needed.
+ * ============================================================================
+ */
+import { getCollection } from 'astro:content';
+import { site } from '../site.config';
+import { getCategories } from '../lib/galleries';
+
+const categories = await getCategories({ onlyWithGalleries: true });
+const packagesPages = (await getCollection('packages')).sort((a, b) => a.data.order - b.data.order);
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container inner">
+    <a href="/" class="logo">{site.name}</a>
+    <p class="tagline small">{site.tagline}</p>
+
+    <nav aria-label="Footer" class="columns">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/testimonials/">Testimonials</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+      <ul>
+        {packagesPages.map((p) => <li><a href={`/${p.id}/`}>{p.data.menuLabel}</a></li>)}
+      </ul>
+      <ul>
+        {categories.map((c) => <li><a href={c.href}>{c.data.menuLabel}</a></li>)}
+      </ul>
+    </nav>
+
+    <ul class="social">
+      <li><a href={site.social.instagram} rel="noopener noreferrer" target="_blank">Instagram</a></li>
+      <li><a href={site.social.tiktok} rel="noopener noreferrer" target="_blank">TikTok</a></li>
+      <li><a href={site.social.pinterest} rel="noopener noreferrer" target="_blank">Pinterest</a></li>
+      <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+    </ul>
+
+    <ul class="legal">
+      <li><a href="/imprint/">Imprint</a></li>
+      <li><a href="/privacy/">Privacy Policy</a></li>
+      <li>© {year} {site.name} · Wedding &amp; elopement photographer in Vienna and the Dolomites</li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: clamp(3rem, 8vw, 6rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.6rem;
+    padding-block: 3.5rem 2.5rem;
+    text-align: center;
+  }
+
+  .logo {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .small {
+    font-size: 0.68rem;
+  }
+
+  .columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 4rem;
+    padding-block: 0.5rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .columns ul {
+    display: grid;
+    gap: 0.35rem;
+    align-content: start;
+  }
+
+  .columns a {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 2rem;
+    font-size: 0.85rem;
+  }
+
+  .social a,
+  .legal a {
+    text-decoration: none;
+  }
+
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1.6rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+</style>

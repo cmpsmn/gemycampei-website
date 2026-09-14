@@ -1,0 +1,75 @@
+# =============================================================================
+# SERVER CONFIGURATION  (public/.htaccess)
+# =============================================================================
+#
+# Hostinger runs LiteSpeed, which understands Apache ".htaccess" files.
+# Everything in public/ is copied unchanged into dist/ during the build, so
+# this file ends up in the website root on the server.
+#
+# The build also inserts the redirects for old Pixieset addresses at the
+# marker line below (see astro.config.mjs). Don't remove the marker.
+# =============================================================================
+
+# Don't list folder contents when there is no index.html
+Options -Indexes
+DirectoryIndex index.html index.php
+
+# Our own page for unknown addresses (built from src/pages/404.astro)
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Always use HTTPS (encrypted connection)
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # www.gemycampei.com → gemycampei.com (one official address avoids duplicate content)
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+  # @@LEGACY_REDIRECTS@@
+
+  # /about → /about/ (adds the trailing slash when a folder with index.html exists)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.*[^/])$ /$1/ [L,R=301]
+</IfModule>
+
+# Security headers: small protections every site should send
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+</IfModule>
+
+# Caching: tells browsers how long they may keep files.
+# Files in /_astro/ have a content hash in the name (e.g. photo.Bx7a.webp), so a
+# changed file always gets a new name. That makes "cache for 1 year" safe.
+# HTML is never cached, so visitors always get the latest pages.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/avif "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(webp|avif|jpe?g|png|css|js|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# Compress text files before sending them (faster page loads)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript text/javascript application/json image/svg+xml application/xml
+</IfModule>

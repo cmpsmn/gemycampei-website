@@ -1,0 +1,97 @@
+---
+/**
+ * ============================================================================
+ * FAQ LIST  (src/components/Faq.astro)
+ * ============================================================================
+ *
+ * Shows questions that open and close when clicked. It uses the built-in HTML
+ * elements <details> and <summary>, so it needs no JavaScript and works with
+ * the keyboard and screen readers out of the box.
+ *
+ * Usage:  <Faq title="Wedding FAQ" items={page.data.faq} />
+ *
+ * The first question is open by default, so visitors see how it works.
+ *
+ * The matching structured data for Google (FAQPage) is added by the page via
+ * faqSchema() from src/lib/seo.ts.
+ * ============================================================================
+ */
+import { inlineMarkdown } from '../lib/markdown';
+
+interface Props {
+  title?: string;
+  items: { question: string; answer: string }[];
+}
+
+const { title = 'FAQ', items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section class="container faq" aria-labelledby="faq-title">
+      <h2 id="faq-title" class="caps-title faq-title">
+        {title}
+      </h2>
+      <div class="list">
+        {items.map((item, i) => (
+          <details open={i === 0}>
+            <summary>{item.question}</summary>
+            <p set:html={inlineMarkdown(item.answer)} />
+          </details>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .faq {
+    max-width: 900px;
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .faq-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .list {
+    border-top: 1px solid var(--line);
+  }
+
+  details {
+    border-bottom: 1px solid var(--line);
+  }
+
+  summary {
+    /* Replace the default triangle with a + / − sign on the right */
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: '+';
+    font-family: var(--font-sans);
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  details[open] summary::after {
+    content: '−';
+  }
+
+  details p {
+    margin: 0 0 1.5rem;
+    max-width: 760px;
+  }
+</style>

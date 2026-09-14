@@ -1,0 +1,121 @@
+---
+import Base from '../layouts/Base.astro';
+import { legal, site } from '../site.config';
+
+// Privacy policy template according to the GDPR (DSGVO) and the Austrian
+// Datenschutzgesetz (DSG). It describes exactly what this website does:
+// no cookies, no analytics, no external fonts or embeds, a contact form sent by email.
+// If you add anything (analytics, maps, embedded Instagram), update this page first.
+// This is a template, not legal advice. Have it reviewed.
+---
+
+<Base title="Privacy Policy" description={`Privacy policy of ${site.name}.`} noindex>
+  <section class="section container narrow prose">
+    <p class="eyebrow">Legal</p>
+    <h1>Privacy Policy</h1>
+    <p>
+      Protecting your personal data is important to us. This policy explains which data we
+      process when you visit this website or contact us, and what rights you have under the
+      General Data Protection Regulation (GDPR) and the Austrian Data Protection Act (DSG).
+    </p>
+
+    <h2>1. Controller</h2>
+    <p>
+      {legal.ownerName}<br />
+      {legal.street}, {legal.postalCode} {legal.city}, {legal.country}<br />
+      Email: <a href={`mailto:${legal.email}`}>{legal.email}</a>
+    </p>
+
+    <h2>2. Hosting and server log files</h2>
+    <p>
+      This website is hosted by Hostinger. {/* TODO: add the exact Hostinger contracting entity and address from your invoice or contract */}
+      When you visit the website, the web server automatically stores technical information that
+      your browser transmits: IP address, date and time of the request, the requested page,
+      referrer URL, browser and operating system.
+    </p>
+    <p>
+      We need this data to deliver the website securely and to detect and defend against attacks.
+      The legal basis is our legitimate interest in a secure and working website (Art. 6(1)(f)
+      GDPR). The log files are stored by the hosting provider for a limited period and then
+      deleted automatically. We have concluded a data processing agreement with the hosting
+      provider (Art. 28 GDPR). The data is processed on servers within the European Union.
+      {/* TODO: confirm the data centre location chosen in hPanel */}
+    </p>
+
+    <h2>3. Cookies, analytics and external services</h2>
+    <p>
+      This website does not use cookies, tracking or analytics tools. Fonts are served from our
+      own server, so no connection to Google or other font providers is made. No content from
+      social networks or map services is embedded.
+    </p>
+    <p>
+      The footer contains a plain link to our Instagram profile. Data is only transferred to
+      Instagram (Meta Platforms Ireland Ltd.) if you click on this link and leave our website.
+      The privacy policy of Instagram then applies.
+    </p>
+
+    <h2>4. Contact form and email</h2>
+    <p>
+      If you contact us through the contact form or by email, we process the data you provide:
+      name, email address, date, venue, type of shooting, how you heard about us and your message,
+      and optionally your partner's name and phone number. We
+      use this data only to answer your inquiry and, if it leads to a booking, to prepare and
+      carry out the contract.
+    </p>
+    <p>
+      The legal basis is the performance of pre-contractual measures at your request (Art. 6(1)(b)
+      GDPR) and your consent given via the checkbox (Art. 6(1)(a) GDPR). You can withdraw your
+      consent at any time with effect for the future.
+    </p>
+    <p>
+      The form content is not stored on the web server. It is sent directly as an email to our
+      mailbox, which is hosted by Hostinger. We keep inquiries that do not lead to a booking for
+      up to 12 months and then delete them. If a contract is concluded, statutory retention
+      periods apply (in particular 7 years under § 132 BAO for accounting records).
+    </p>
+
+    <h2>5. Photos on this website</h2>
+    <p>
+      The galleries show people we have photographed. Photos are published only with the consent
+      of the people shown. If you appear in a photo and want it removed, please contact us and we
+      will remove it promptly.
+    </p>
+
+    <h2>6. Your rights</h2>
+    <p>Under the GDPR you have the right to:</p>
+    <ul>
+      <li>access your personal data (Art. 15)</li>
+      <li>rectification of incorrect data (Art. 16)</li>
+      <li>erasure (Art. 17)</li>
+      <li>restriction of processing (Art. 18)</li>
+      <li>data portability (Art. 20)</li>
+      <li>object to processing based on legitimate interests (Art. 21)</li>
+      <li>withdraw your consent at any time (Art. 7(3))</li>
+    </ul>
+    <p>
+      To exercise your rights, write to <a href={`mailto:${legal.email}`}>{legal.email}</a>.
+    </p>
+    <p>
+      If you believe that the processing of your data violates data protection law, you can lodge
+      a complaint with the Austrian Data Protection Authority (Österreichische
+      Datenschutzbehörde), Barichgasse 40–42, 1030 Vienna,{' '}
+      <a href="https://www.dsb.gv.at" rel="noopener noreferrer">www.dsb.gv.at</a>.
+    </p>
+
+    <h2>7. Encryption</h2>
+    <p>
+      This website uses TLS encryption (HTTPS). You can recognise an encrypted connection by the
+      lock symbol in your browser's address bar.
+    </p>
+
+    <p class="updated">Last updated: {legal.lastUpdated}</p>
+  </section>
+</Base>
+
+<style>
+  .updated {
+    margin-top: 3rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+</style>

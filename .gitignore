@@ -1,0 +1,30 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment / secrets
+.env
+.env.*
+contact-config.php
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# reference material from the old Pixieset site (not part of the website)
+inspo/
+
+# deleted items from the gallery manager (can be restored there)
+.trash/
+
+# personal Claude Code settings
+.claude/settings.local.json

@@ -1,0 +1,335 @@
+/*
+ * ============================================================================
+ * GLOBAL STYLES  (src/styles/global.css)
+ * ============================================================================
+ *
+ * Styles that apply to the whole site. Loaded once in src/layouts/Base.astro.
+ *
+ * Components have their own styles too:
+ *   - .astro files: a <style> block at the bottom. Astro "scopes" it, so those
+ *     rules only affect that component.
+ *   - React (.tsx) files: a .css file with the same name, imported at the top.
+ *
+ * CONTENTS
+ *   1. Fonts
+ *   2. Colours and sizes (CSS variables)
+ *   3. Base elements (body, links, headings)
+ *   4. Layout helpers (.container, .section)
+ *   5. Typography patterns from the original site
+ *   6. Buttons, frames, dividers
+ *   7. Long text pages (imprint, privacy)
+ * ============================================================================
+ */
+
+/* ---------------------------------------------------------------------------
+ * 1. FONTS
+ * Bundled from npm packages (@fontsource) and served from our own server.
+ * Loading them from Google Fonts would send visitor IP addresses to Google,
+ * which is a GDPR problem in the EU.
+ * ------------------------------------------------------------------------- */
+@import '@fontsource-variable/playfair-display'; /* serif: logo and headings */
+@import '@fontsource/poppins/300.css'; /* sans-serif: body text */
+@import '@fontsource/poppins/300-italic.css';
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/600-italic.css';
+
+/* ---------------------------------------------------------------------------
+ * 2. COLOURS AND SIZES
+ * CSS variables ("custom properties") are defined once here and used
+ * everywhere as var(--name). Change a colour here to change it site-wide.
+ *
+ * Palette "Warm White, Espresso & Black":
+ * a calm, slightly warm white that lets the photos stand out, soft black for
+ * text, dark espresso for buttons and the About page boxes.
+ * All text colours meet the WCAG AA contrast minimum (4.5:1); the ratios
+ * are noted next to each colour.
+ * ------------------------------------------------------------------------- */
+:root {
+  --bg: #faf8f4; /* page background: warm white */
+  --panel: #f1ece5; /* photo frames, contact panel, dropdown: warm off-white */
+  --line: #ddd5ca; /* dividers and input underlines */
+  --text: #1c1917; /* body text: soft black, 16.5:1 on --bg */
+  --muted: #6a5f57; /* secondary text: warm grey-brown, 5.8:1 on --bg, 5.3:1 on --panel */
+  --accent: #2e1f18; /* buttons, links on hover, focus: dark espresso, white text on it 15.8:1 */
+  --accent-dark: #4a3429; /* button hover: slightly lighter espresso, so the change is visible */
+  --dark: #2e1f18; /* About page boxes and photo frames: dark espresso (same as the buttons) */
+  --white: #ffffff;
+  --error: #9b3a2c;
+  --success: #4f6b4a;
+
+  /* Font stacks: the first available font is used */
+  --font-serif: 'Playfair Display Variable', 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --max: 1400px; /* maximum content width */
+  /* clamp(min, preferred, max): grows with the screen width but stays in range */
+  --gutter: clamp(1rem, 4vw, 3rem);
+}
+
+/* ---------------------------------------------------------------------------
+ * 3. BASE ELEMENTS
+ * ------------------------------------------------------------------------- */
+
+/* Width and height include padding and border (easier to reason about) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%; /* stops iPhones from enlarging text in landscape */
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  /* Full-width elements (the film carousel) must never cause sideways page scrolling */
+  overflow-x: clip;
+}
+
+img {
+  display: block; /* removes the small gap below inline images */
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--line);
+  text-underline-offset: 0.25em;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 0.6em;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 3.6vw, 2.5rem);
+}
+
+h2 {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+strong,
+b {
+  font-weight: 600;
+}
+
+/* Visible outline when navigating with the keyboard (Tab key) */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+ * 4. LAYOUT HELPERS
+ * ------------------------------------------------------------------------- */
+
+/* Centred content column with side padding */
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.narrow {
+  max-width: 980px;
+}
+
+/* Vertical breathing room between page sections */
+.section {
+  padding-block: clamp(3rem, 7vw, 5.5rem);
+}
+
+.center {
+  text-align: center;
+}
+
+/* Hides content visually but keeps it for screen readers */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+ * 5. TYPOGRAPHY PATTERNS FROM THE ORIGINAL SITE
+ * ------------------------------------------------------------------------- */
+
+/* Bold, widely spaced line: "CANDID SOULS × QUIET ELEGANCE" */
+.tagline {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0;
+}
+
+/* Spaced serif capitals above a heading: "BEHIND THE LENS" */
+.eyebrow {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin: 0 0 1.2rem;
+}
+
+/* Spaced sans-serif capitals: "EVERY STORY DESERVES TO BE REMEMBERED BEAUTIFULLY" */
+.kicker {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin: 0 0 0.8rem;
+}
+
+/* Serif heading in capitals: "WHAT MY CLIENTS SAY" */
+.caps-title {
+  font-family: var(--font-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Keyword H1 that sits calmly in the design (smaller than a normal H1) */
+.h1-quiet {
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 1.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * 6. BUTTONS, FRAMES, DIVIDERS
+ * ------------------------------------------------------------------------- */
+
+/* Espresso button: "REQUEST PRICING", "GET IN TOUCH" */
+.button {
+  display: inline-block;
+  padding: 1.05rem 1.8rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--white);
+  font: inherit;
+  font-weight: 400;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.button:hover {
+  background: var(--accent-dark);
+  color: var(--white);
+}
+
+.button[disabled] {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Photo in a passe-partout frame, in the espresso colour of the buttons */
+.frame {
+  background: var(--dark);
+  padding: clamp(1.25rem, 4vw, 3rem) clamp(1.25rem, 5vw, 3.75rem);
+}
+
+.frame img {
+  width: 100%;
+  height: auto;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * 7. LONG TEXT PAGES (imprint, privacy)
+ * ------------------------------------------------------------------------- */
+.prose h1 {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.prose ul {
+  padding-left: 1.2rem;
+}
+
+/* Two-column list of label + value (imprint) */
+.prose dl {
+  display: grid;
+  grid-template-columns: minmax(8rem, max-content) 1fr;
+  gap: 0.3rem 1.5rem;
+}
+
+.prose dt {
+  color: var(--muted);
+}
+
+.prose dd {
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .prose dl {
+    grid-template-columns: 1fr;
+  }
+
+  .prose dd {
+    margin-bottom: 0.6rem;
+  }
+}
+
+/* People who set "reduce motion" in their system settings get no animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

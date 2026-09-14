@@ -1,0 +1,184 @@
+---
+/**
+ * ============================================================================
+ * ABOUT PAGE  (src/pages/about.astro)  →  https://gemycampei.com/about/
+ * ============================================================================
+ *
+ * Copy taken over from the Pixieset about page. Edit the text directly below.
+ * The portrait lives in src/assets/about/.
+ *
+ * WATCH OUT: when a line ends with a word and the next line starts with a tag
+ * like <strong>, Astro drops the space between them ("andquiet"). End such
+ * lines with {' '} to keep the space, as done below.
+ * Old address /ABOUT/ is redirected here (see src/pages/redirects.json.ts).
+ * ============================================================================
+ */
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import portrait from '../assets/about/gemy-campei-photographer-vienna.jpg';
+import { site } from '../site.config';
+---
+
+<Base
+  title="About Gemy · Vienna & Dolomites Wedding Photographer"
+  description="Hi, I'm Gemy: a visual storyteller and destination wedding photographer raised between the Italian Dolomites and Bangkok, now based in Vienna."
+  ogImage={portrait}
+>
+  <section class="container about">
+    <div class="frame portrait">
+      <Image
+        src={portrait}
+        alt={`${site.name}, wedding and elopement photographer based in Vienna`}
+        widths={[480, 800]}
+        sizes="(max-width: 800px) 80vw, 340px"
+        priority
+      />
+    </div>
+    <div class="text">
+      <p class="eyebrow">Behind the lens</p>
+      <h1>Hi, I'm Gemy!</h1>
+      <p class="lead">
+        Capturing honest love stories and unforgettable moments across <strong>Vienna</strong>, the{' '}
+        <strong>Dolomites</strong>, and <strong>beyond</strong>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Two dark statement boxes with the full story, as on the original page -->
+  <section class="container boxes">
+    <article class="box">
+      <h2 class="box-title">Visual storyteller &amp; destination wedding photographer</h2>
+      <p>
+        I was raised between the quiet majesty of the <strong><em>Italian Dolomites</em></strong> and the vibrancy
+        of <strong><em>Bangkok</em></strong>, and today I call <strong><em>Vienna</em></strong> home. Living in a
+        city built on art, romance, and history constantly shapes how I view light, composition, and human connection.
+      </p>
+      <p>
+        My love for photography deepened when I planned my own wedding. Experiencing that day from the inside gave me
+        a profound appreciation for how fast moments move and how rare it is to find imagery that captures both how a
+        day looked and how it actually felt.
+      </p>
+      <p>
+        When I'm not photographing celebrations, I'm usually <strong>traveling</strong>, collecting new flavors, and{' '}
+        <strong><em>finding inspiration in culture, architecture</em></strong>, and <strong><em>design</em></strong>.
+      </p>
+    </article>
+
+    <article class="box">
+      <h2 class="box-title">Editorial documentary photography</h2>
+      <p class="box-sub">My approach</p>
+      <p>
+        My style lives at the intersection of honest <strong><em>storytelling</em></strong> and{' '}
+        <strong><em>quiet artistry</em></strong>. I document weddings through an{' '}
+        <strong><em>editorial documentary lens</em></strong>, capturing spontaneous, unscripted emotion alongside
+        clean, elevated portraiture that feels effortless rather than staged.
+      </p>
+      <p>
+        <strong><em>Digital precision with subtle film texture:</em></strong> I shoot fully digital, editing each
+        gallery in a clean, modern, and timeless tone. To give your images an added layer of soul and organic warmth,
+        I selectively introduce a touch of warm analog grain to key moments.
+      </p>
+      <p>
+        <strong><em>True presence:</em></strong> whether capturing an intimate civil ceremony in Vienna, a full-day
+        wedding, an elopement in the Dolomites or a destination wedding weekend abroad, my goal is simple: to keep you
+        feeling completely at ease so you can remain present in every moment.
+      </p>
+      <p>
+        I preserve the unscripted energy, the quiet beauty, and the true atmosphere of your celebration, turning real
+        memories into <strong><em>lasting art</em></strong>.
+      </p>
+    </article>
+  </section>
+
+  <section class="container center cta">
+    <a class="button" href="/contact/">Get in touch</a>
+  </section>
+</Base>
+
+<style>
+  .about {
+    display: grid;
+    grid-template-columns: minmax(0, 340px) minmax(0, 480px);
+    justify-content: center;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 3rem);
+    padding-block: 1rem clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .portrait {
+    padding: 0.6rem;
+  }
+
+  .portrait :global(img) {
+    width: 100%;
+    aspect-ratio: 32 / 45;
+    object-fit: cover;
+    filter: grayscale(1); /* black and white, as on the original page */
+  }
+
+  .text {
+    text-align: center;
+  }
+
+  .text h1 {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    margin-bottom: 1.8rem;
+  }
+
+  .lead {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    line-height: 2.1;
+  }
+
+  /* Dark pine statement boxes */
+  .boxes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .box {
+    background: var(--dark);
+    color: var(--white);
+    padding: clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4.5rem);
+    text-align: center;
+  }
+
+  .box p {
+    font-size: 0.92rem;
+    line-height: 1.95;
+  }
+
+  .box-title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin: 0 0 2rem;
+  }
+
+  .box-sub {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .cta {
+    padding-top: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  @media (max-width: 860px) {
+    .about,
+    .boxes {
+      grid-template-columns: 1fr;
+    }
+
+    .portrait {
+      max-width: 340px;
+      margin-inline: auto;
+    }
+  }
+</style>

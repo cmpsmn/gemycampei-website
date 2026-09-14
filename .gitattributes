@@ -1,0 +1,9 @@
+# Store text files with LF line endings on every computer (and on GitHub's Linux build),
+# and never touch photos or fonts.
+* text=auto eol=lf
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.avif binary
+*.woff2 binary

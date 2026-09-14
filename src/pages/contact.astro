@@ -1,0 +1,64 @@
+---
+/**
+ * ============================================================================
+ * CONTACT  (src/pages/contact.astro)  →  /contact/
+ * ============================================================================
+ *
+ * Grey panel with the inquiry form. The form itself is a React component
+ * (src/components/ContactForm.tsx). `client:load` sends its JavaScript to the
+ * browser immediately, because visitors interact with it right away.
+ * ============================================================================
+ */
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm';
+import { breadcrumbSchema } from '../lib/seo';
+---
+
+<Base
+  title="Inquire for Weddings & Elopements in Vienna and the Dolomites"
+  description="Limited bookings for weddings, elopements, proposals and couple sessions in Vienna, the Dolomites and worldwide. Check availability and share your vision."
+  schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }])]}
+>
+  <section class="container">
+    <div class="panel">
+      <p class="kicker">Every story deserves to be remembered beautifully</p>
+      <h1 class="caps-title">I can't wait to hear yours!</h1>
+      <p class="intro">
+        Planning a wedding in Vienna, an elopement in the Dolomites or a destination celebration abroad? Share your
+        date, venue and vision, and I'll get back to you with availability and my collection guide.
+      </p>
+
+      <div class="form">
+        <ContactForm client:load />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .panel {
+    background: var(--panel);
+    max-width: 880px;
+    margin-inline: auto;
+    padding: clamp(2.5rem, 7vw, 5.5rem) clamp(1.25rem, 6vw, 5rem);
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+  }
+
+  .intro {
+    max-width: 620px;
+    margin: 0 auto clamp(2.5rem, 6vw, 4rem);
+    font-size: 0.9rem;
+  }
+
+  .form {
+    max-width: 640px;
+    margin-inline: auto;
+    text-align: left;
+  }
+</style>

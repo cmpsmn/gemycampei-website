@@ -1,0 +1,70 @@
+/*
+ * Styles for PhotoCarousel.tsx: a full-width row of same-height photos.
+ */
+
+/*
+ * Full width: the carousel sits inside a centred .container, so it "breaks out"
+ * to the edges of the window with a negative margin of half the leftover space.
+ */
+.carousel {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.carousel-track {
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  padding-inline: var(--gutter);
+  position: relative; /* slide positions are measured relative to the track */
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-slide {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  height: clamp(300px, 45vw, 618px);
+}
+
+.carousel-slide a {
+  display: block;
+  height: 100%;
+  cursor: zoom-in;
+}
+
+/* Same height for all photos, width follows the photo's own shape */
+.carousel-slide img {
+  height: 100%;
+  width: auto;
+  background: var(--panel);
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.carousel-arrow {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.carousel-arrow:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}

@@ -1,0 +1,2 @@
+# Library files for contact.php. They are included from PHP, never requested directly.
+Require all denied

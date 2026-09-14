@@ -1,0 +1,21 @@
+---
+/**
+ * THANK YOU  →  /thank-you/
+ * Shown after sending the contact form when the visitor's browser has
+ * JavaScript turned off (public/contact.php redirects here).
+ * With JavaScript, the form shows its own thank-you message instead.
+ */
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+---
+
+<Base title="Thank you" noindex>
+  <section class="section container narrow center">
+    <h1 class="caps-title">Thank you!</h1>
+    <p>
+      Your message has been sent. I do my best to respond within 48 hours. If you don't hear from me by then, please
+      check your spam folder or write to <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+    <a class="button" href="/galleries/">Back to the galleries</a>
+  </section>
+</Base>

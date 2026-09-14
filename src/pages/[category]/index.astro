@@ -1,0 +1,184 @@
+---
+/**
+ * ============================================================================
+ * CATEGORY PAGE  (src/pages/[category]/index.astro)
+ *   →  /weddings/  /the-alps/  /maternity/  /35mm-super-8-film/
+ * ============================================================================
+ *
+ * DYNAMIC ROUTES
+ * The square brackets in the folder name "[category]" make this ONE file
+ * produce MANY pages. Astro calls getStaticPaths() at build time; it returns
+ * one entry per category folder in galleries/. For each entry Astro renders
+ * this template once, with `params` (the URL part) and `props` (the data).
+ *
+ * Fixed pages like about.astro always win over a dynamic route, so a category
+ * folder called "about" would never be reachable. Don't name folders like pages.
+ *
+ * WHAT THE PAGE SHOWS
+ *   hero image · H1 + intro text (from _category.md) · link to packages
+ *   · then, depending on `display` in _category.md:
+ *       cards    → a card for every gallery (weddings, the alps)
+ *       carousel → all photos of this folder in a moving row (maternity, 35mm & Super 8)
+ *       slider   → all photos of this folder one at a time with thumbnails
+ *   · galleries that are only listed here via `alsoIn` → cards
+ *   · optional FAQ · button to the contact page
+ * ============================================================================
+ */
+import type { GetStaticPaths } from 'astro';
+import { getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Faq from '../../components/Faq.astro';
+import GalleryCard from '../../components/GalleryCard';
+import PhotoSlider from '../../components/PhotoSlider';
+import PhotoCarousel from '../../components/PhotoCarousel';
+import '../../components/GalleryCard.css';
+import { getCategories, getGalleries, toCardData, toPhotoData, describeGallery, type Category } from '../../lib/galleries';
+import { breadcrumbSchema, faqSchema, imageGallerySchema } from '../../lib/seo';
+
+export const getStaticPaths = (async () => {
+  // Only categories with visible galleries get a page (no empty pages on the live site)
+  const categories = await getCategories({ onlyWithGalleries: true });
+  return categories.map((category) => ({
+    params: { category: category.id },
+    props: { category },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  category: Category;
+}
+
+const { category } = Astro.props;
+const { data } = category;
+
+// Render the Markdown body of _category.md into a component we can place below
+const { Content } = await render(category.entry);
+
+// All galleries listed in this category, and the ones whose folder is actually here
+const listed = await getGalleries(category.id);
+const ownGalleries = listed.filter((g) => g.categoryId === category.id);
+const extraGalleries = listed.filter((g) => g.categoryId !== category.id);
+
+const showPhotos = data.display === 'slider' || data.display === 'carousel';
+
+// Cards: every listed gallery on a cards page, only the `alsoIn` ones on a photo page
+const cardGalleries = showPhotos ? extraGalleries : listed;
+const cards = await Promise.all(cardGalleries.map((g) => toCardData(g, data.menuLabel)));
+
+// Photos for the slider / carousel: all photos of the galleries in this folder
+const photos = showPhotos
+  ? await Promise.all(
+      ownGalleries.flatMap((gallery) =>
+        gallery.photos.map((photo, i) => toPhotoData(photo.image, `${describeGallery(gallery)}, photo ${i + 1}`)),
+      ),
+    )
+  : [];
+
+// The packages page this category links to, if set in _category.md
+const packagesPage = data.packages ? await getEntry('packages', data.packages) : undefined;
+
+// Structured data for Google
+const schema = [
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: data.menuLabel, path: category.href },
+  ]),
+  ...(data.faq.length ? [faqSchema(data.faq)] : []),
+  ...(photos.length
+    ? [imageGallerySchema({ name: data.h1, description: data.seoDescription, path: category.href, imageUrls: photos.map((p) => p.full.src) })]
+    : []),
+];
+---
+
+<Base title={data.seoTitle} description={data.seoDescription} ogImage={category.hero} schema={schema}>
+  <PageHero image={category.hero} title={data.heroTitle} subtitle={data.heroSubtitle} alt={data.h1} />
+
+  <section class="container intro">
+    <h1 class="h1-quiet">{data.h1}</h1>
+    <div class="intro-text">
+      <Content />
+    </div>
+    {
+      packagesPage && (
+        <p class="packages-link">
+          <a href={`/${packagesPage.id}/`}>Explore the {packagesPage.data.menuLabel.toLowerCase()} →</a>
+        </p>
+      )
+    }
+  </section>
+
+  <!--
+    client:visible = the React component's JavaScript loads only when it scrolls into view.
+    The HTML with all photos is there from the start (good for Google).
+  -->
+  {
+    data.display === 'slider' && photos.length > 0 && (
+      <section class="container photos-section">
+        <PhotoSlider client:visible photos={photos} label={`${data.menuLabel} photos`} />
+      </section>
+    )
+  }
+  {
+    data.display === 'carousel' && photos.length > 0 && (
+      <section class="container photos-section">
+        <PhotoCarousel client:visible photos={photos} label={`${data.menuLabel} photos`} />
+      </section>
+    )
+  }
+
+  {
+    cards.length > 0 && (
+      <section class="container cards-section">
+        {showPhotos && <h2 class="caps-title more-title">More {data.menuLabel} stories</h2>}
+        <div class="card-grid">
+          {cards.map((card, i) => (
+            <GalleryCard gallery={card} eager={i < 2} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <Faq title={`${data.menuLabel} FAQ`} items={data.faq} />
+
+  <section class="container center cta">
+    <p class="kicker">Every story deserves to be remembered beautifully</p>
+    <a class="button" href="/contact/">Get in touch</a>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    max-width: 860px;
+    text-align: center;
+    padding-block: clamp(3rem, 6vw, 4.5rem) clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .intro-text :global(p) {
+    margin-bottom: 1.1em;
+  }
+
+  .packages-link a {
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--accent);
+  }
+
+  .photos-section,
+  .cards-section {
+    padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .more-title {
+    text-align: center;
+    font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+    margin: clamp(2rem, 5vw, 4rem) 0 2.5rem;
+  }
+
+  .cta {
+    padding-top: clamp(2rem, 5vw, 3rem);
+  }
+</style>

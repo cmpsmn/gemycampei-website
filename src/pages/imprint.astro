@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import { legal, site } from '../site.config';
+
+// Imprint (Impressum) according to § 5 E-Commerce-Gesetz (ECG),
+// § 14 Unternehmensgesetzbuch (UGB, only for registered companies)
+// and § 25 Mediengesetz (MedienG).
+// All values come from src/site.config.ts. Have them checked before going live.
+---
+
+<Base title="Imprint" description={`Imprint of ${site.name}.`} noindex>
+  <section class="section container narrow prose">
+    <p class="eyebrow">Legal</p>
+    <h1>Imprint</h1>
+    <p>Information according to § 5 ECG and disclosure according to § 25 MedienG.</p>
+
+    <h2>Media owner and service provider</h2>
+    <dl>
+      <dt>Name</dt>
+      <dd>{legal.ownerName}</dd>
+      <dt>Business</dt>
+      <dd>{legal.businessDescription}</dd>
+      <dt>Address</dt>
+      <dd>
+        {legal.street}<br />
+        {legal.postalCode} {legal.city}<br />
+        {legal.country}
+      </dd>
+      <dt>Phone</dt>
+      <dd>{legal.phone}</dd>
+      <dt>Email</dt>
+      <dd><a href={`mailto:${legal.email}`}>{legal.email}</a></dd>
+      {
+        legal.vatId && (
+          <>
+            <dt>VAT ID</dt>
+            <dd>{legal.vatId}</dd>
+          </>
+        )
+      }
+      {
+        legal.tradeLicence && (
+          <>
+            <dt>Trade licence</dt>
+            <dd>{legal.tradeLicence}</dd>
+          </>
+        )
+      }
+      {
+        legal.tradeAuthority && (
+          <>
+            <dt>Supervisory authority</dt>
+            <dd>{legal.tradeAuthority}</dd>
+          </>
+        )
+      }
+      {
+        legal.chamberMembership && (
+          <>
+            <dt>Chamber membership</dt>
+            <dd>{legal.chamberMembership}</dd>
+          </>
+        )
+      }
+      <dt>Applicable law</dt>
+      <dd>
+        Gewerbeordnung (GewO), available at{' '}
+        <a href="https://www.ris.bka.gv.at" rel="noopener noreferrer">www.ris.bka.gv.at</a>
+      </dd>
+    </dl>
+
+    <h2>Basic direction of the website</h2>
+    <p>
+      Presentation of the photography services of {site.name} and of selected wedding and couple
+      photo shoots.
+    </p>
+
+    <h2>Consumer dispute resolution</h2>
+    <p>
+      We are not obliged and not willing to take part in dispute resolution proceedings before a
+      consumer arbitration board.
+    </p>
+
+    <h2>Copyright</h2>
+    <p>
+      All photographs and texts on this website are protected by copyright. Any use, reproduction
+      or publication without written permission is not allowed. People shown in the photographs
+      have agreed to their publication.
+    </p>
+
+    <h2>Liability for links</h2>
+    <p>
+      This website contains links to external websites. We have no influence on their content and
+      accept no liability for it. If we become aware of any illegal content, we will remove the
+      link immediately.
+    </p>
+  </section>
+</Base>

@@ -1,0 +1,17 @@
+---
+/**
+ * PAGE NOT FOUND  →  built as dist/404.html
+ * The web server shows it for unknown addresses (configured in public/.htaccess:
+ * "ErrorDocument 404 /404.html"). `noindex` keeps it out of search results.
+ */
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Page not found" noindex>
+  <section class="section container narrow center">
+    <p class="kicker">404</p>
+    <h1 class="caps-title">This page does not exist</h1>
+    <p>The page may have moved when the website was renewed.</p>
+    <a class="button" href="/galleries/">View the galleries</a>
+  </section>
+</Base>

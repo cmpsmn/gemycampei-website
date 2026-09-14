@@ -1,0 +1,170 @@
+---
+/**
+ * ============================================================================
+ * HOME PAGE  (src/pages/index.astro)  →  https://gemycampei.com/
+ * ============================================================================
+ *
+ * FILE-BASED ROUTING
+ * Every file in src/pages/ becomes a URL:
+ *   index.astro        → /
+ *   about.astro        → /about/
+ *   [category]/...     → /weddings/, /the-alps/ ... (see those files)
+ *
+ * STRUCTURE (taken over from the Pixieset home page)
+ *   H1 (search phrase) · tagline · photo grid 1 · statement · photo grid 2 · button
+ *
+ * PHOTOS
+ * Drop images into src/assets/home/grid-1/ or grid-2/. They are shown in file
+ * name order. Delete a file to remove it from the page.
+ * ============================================================================
+ */
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { getHomeGrid1, getHomeGrid2 } from '../lib/galleries';
+import { site } from '../site.config';
+
+const grid1 = getHomeGrid1();
+const grid2 = getHomeGrid2();
+
+// Shared settings for the grid images.
+// Columns are at most ~420px wide on desktop and half the screen on tablets.
+// On phones (one column) 67vw caps high-density screens at ~2× instead of 3×:
+// just as sharp to the eye, but files less than half the size.
+const gridWidths = [320, 480, 640, 800];
+const gridSizes = '(max-width: 640px) 67vw, (max-width: 1000px) 50vw, 420px';
+const gridQuality = 72;
+---
+
+<Base
+  title={`${site.defaultTitle} | ${site.name}`}
+  description="Wedding and elopement photographer based in Vienna and the Dolomites. Candid, editorial photos of weddings, elopements, proposals and couple sessions."
+  ogImage={grid1[0]}
+>
+  <section class="container intro">
+    <!-- The H1 names what the site is about. Styled small so the tagline stays the visual focus. -->
+    <h1 class="h1-quiet">Dolomites Elopement &amp; Vienna Wedding Photographer</h1>
+    <p class="tagline">
+      Candid souls <span class="x" aria-hidden="true">×</span> Quiet elegance
+    </p>
+  </section>
+
+  <!-- Only the first row of photos loads immediately, the rest while scrolling -->
+  <section class="container" aria-label="Selected photographs">
+    <div class="masonry">
+      {
+        grid1.map((image, i) => (
+          <Image
+            src={image}
+            alt={`Wedding and elopement photography in Vienna and the Dolomites by ${site.name}`}
+            widths={gridWidths}
+            sizes={gridSizes}
+            quality={gridQuality}
+            loading={i < 3 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : 'auto'}
+            class="tile"
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container statement">
+    <p>Rooted in design and driven by connection, my approach turns quiet, familiar moments into lasting visual stories.</p>
+    <p>It's about honest emotion, refined framing, and effortless imagery.</p>
+  </section>
+
+  <section class="container" aria-label="More photographs">
+    <div class="masonry">
+      {
+        grid2.map((image) => (
+          <Image
+            src={image}
+            alt={`Candid wedding and couple photography by ${site.name}`}
+            widths={gridWidths}
+            sizes={gridSizes}
+            quality={gridQuality}
+            loading="lazy"
+            class="tile"
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container cta">
+    <p class="kicker">Every story deserves to be remembered beautifully</p>
+    <p class="caps-title cta-title">I can't wait to hear yours!</p>
+    <a class="button" href="/contact/">Get in touch</a>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    text-align: center;
+    padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(3rem, 7vw, 6rem);
+  }
+
+  .intro .h1-quiet {
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+
+  .x {
+    display: inline-block;
+    margin-inline: 0.9em;
+  }
+
+  /*
+   * Masonry grid with CSS columns: photos flow top to bottom in 3 columns,
+   * each keeping its own height (like the original home page).
+   */
+  .masonry {
+    max-width: 1340px;
+    margin-inline: auto;
+    columns: 3;
+    column-gap: clamp(1rem, 3vw, 2.75rem);
+  }
+
+  .masonry :global(.tile) {
+    width: 100%;
+    height: auto;
+    margin-bottom: clamp(1rem, 3vw, 2.75rem);
+    break-inside: avoid; /* never split a photo across two columns */
+  }
+
+  @media (max-width: 1000px) {
+    .masonry {
+      columns: 2;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .masonry {
+      columns: 1;
+    }
+  }
+
+  .statement {
+    max-width: 900px;
+    text-align: center;
+    padding-block: clamp(3rem, 7vw, 6rem);
+  }
+
+  .statement p {
+    font-family: var(--font-serif);
+    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+  }
+
+  .cta {
+    text-align: center;
+    padding-block: clamp(3rem, 8vw, 6rem) 0;
+  }
+
+  .cta-title {
+    font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+    margin-bottom: 2rem;
+  }
+</style>
