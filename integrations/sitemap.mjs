@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * SITEMAP  (integrations/sitemap.mjs)  →  dist/sitemap-index.xml + dist/sitemap-pages.xml
+ * SITEMAP  (integrations/sitemap.mjs)  →  dist/sitemap-index.xml (also as sitemap.xml) + dist/sitemap-pages.xml
  * ============================================================================
  *
  * A sitemap is the list of pages a search engine should know about. This one
@@ -130,6 +130,9 @@ ${urls}
 `;
         await writeFile(path.join(root, 'sitemap-pages.xml'), pages);
         await writeFile(path.join(root, 'sitemap-index.xml'), index);
+        // The same index under the usual name: many people (and some tools) type
+        // /sitemap.xml into Google Search Console
+        await writeFile(path.join(root, 'sitemap.xml'), index);
         const imageCount = entries.reduce((sum, e) => sum + e.images.length, 0);
         logger.info(`Sitemap: ${entries.length} pages, ${imageCount} images`);
       },
