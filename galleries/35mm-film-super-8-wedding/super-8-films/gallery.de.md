@@ -7,8 +7,8 @@ location: "Hochzeiten in Schweden & Marokko"
 seoTitle: "Super-8-Hochzeitsfilme · Vintage Hochzeitsvideo"
 seoDescription: "Super-8-Hochzeitsfilme auf echtem Filmmaterial: kurze, nostalgische Highlight-Filme mit Korn, Lichtlecks und weicher Bewegung, von Hochzeiten in ganz Europa."
 videoTitles:
-  - "Leonie & Yassine · Super-8-Hochzeitsfilm"
   - "Araya & Christoffer · Super-8-Hochzeitsfilm"
+  - "Leonie & Yassine · Super-8-Hochzeitsfilm"
 ---
 
 Super 8 hält die Stimmung eines Festes fest, nicht nur den Ablauf. Gedreht mit **Vintage-Kameras** auf echtem Filmmaterial, hat jeder Film natürliches Korn, weiche Lichtlecks und das sanfte Flackern der Bewegung, das kein digitaler Filter nachahmen kann.
