@@ -1,0 +1,66 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+cadini-di-misurina-couple-session-k-and-e-001.jpg:
+  en: "Couple embracing on a rocky ridge below the jagged Cadini di Misurina at first light"
+  de: "Paar umarmt sich auf einem Felsgrat unter den zackigen Cadini di Misurina im ersten Licht"
+cadini-di-misurina-couple-session-k-and-e-002.jpg:
+  en: "Couple in a silk gown and white jacket leaning into the frame against a clear blue sky"
+  de: "Paar in Seidenkleid und weißem Sakko lehnt sich vor klarem blauem Himmel ins Bild"
+cadini-di-misurina-couple-session-k-and-e-003.jpg:
+  en: "Bride in a silk gown and groom on a dark mountain ridge before dawn"
+  de: "Braut im Seidenkleid und Bräutigam auf einem dunklen Berggrat vor der Dämmerung"
+cadini-di-misurina-couple-session-k-and-e-004.jpg:
+  en: "Black and white photo of the bride under a long veil sitting on the alpine grass"
+  de: "Schwarz-Weiß-Foto der Braut unter einem langen Schleier im Almgras sitzend"
+cadini-di-misurina-couple-session-k-and-e-005.jpg:
+  en: "Couple sitting on the rocks of a mountain ridge in the Dolomites at blue hour"
+  de: "Paar sitzt zur blauen Stunde auf den Felsen eines Berggrats in den Dolomiten"
+cadini-di-misurina-couple-session-k-and-e-006.jpg:
+  en: "Silhouettes of the couple on the ridge as the sky glows orange before sunrise"
+  de: "Silhouetten des Paares am Grat, während der Himmel vor Sonnenaufgang orange glüht"
+cadini-di-misurina-couple-session-k-and-e-007.jpg:
+  en: "Bride looks back at the groom under pink clouds above the Dolomites"
+  de: "Braut blickt zum Bräutigam zurück, unter rosa Wolken über den Dolomiten"
+cadini-di-misurina-couple-session-k-and-e-008.jpg:
+  en: "Groom lifts the bride against the rising sun on the mountain ridge"
+  de: "Bräutigam hebt die Braut vor der aufgehenden Sonne am Berggrat hoch"
+cadini-di-misurina-couple-session-k-and-e-009.jpg:
+  en: "Couple embracing in front of the needle-sharp Cadini di Misurina peaks"
+  de: "Paar umarmt sich vor den nadelspitzen Gipfeln der Cadini di Misurina"
+cadini-di-misurina-couple-session-k-and-e-010.jpg:
+  en: "Black and white photo of the groom carrying the bride on his shoulders"
+  de: "Schwarz-Weiß-Foto: Der Bräutigam trägt die Braut auf den Schultern"
+cadini-di-misurina-couple-session-k-and-e-011.jpg:
+  en: "Couple kissing under a veil blowing in the wind, on film"
+  de: "Paar küsst sich unter einem wehenden Schleier, auf Film fotografiert"
+cadini-di-misurina-couple-session-k-and-e-012.jpg:
+  en: "Close-up of her hands with an engagement ring holding his white jacket"
+  de: "Nahaufnahme ihrer Hände mit Verlobungsring an seinem weißen Sakko"
+cadini-di-misurina-couple-session-k-and-e-013.jpg:
+  en: "Groom lifts the bride into the sunrise light on the ridge"
+  de: "Bräutigam hebt die Braut ins Licht des Sonnenaufgangs am Grat"
+cadini-di-misurina-couple-session-k-and-e-014.jpg:
+  en: "Bride in a backless gown looks over the valleys as the sky turns pink"
+  de: "Braut im rückenfreien Kleid blickt über die Täler, während der Himmel rosa wird"
+cadini-di-misurina-couple-session-k-and-e-015.jpg:
+  en: "Close-up of the couple holding hands against the mountains, on film"
+  de: "Nahaufnahme des Paares Hand in Hand vor den Bergen, auf Film"
+cadini-di-misurina-couple-session-k-and-e-016.jpg:
+  en: "Clouds drifting over the Cadini di Misurina towers in the morning"
+  de: "Wolken ziehen am Morgen über die Türme der Cadini di Misurina"
+cadini-di-misurina-couple-session-k-and-e-017.jpg:
+  en: "Couple walking with a long veil in front of the Tre Cime di Lavaredo"
+  de: "Paar geht mit langem Schleier vor den Drei Zinnen spazieren"
+cadini-di-misurina-couple-session-k-and-e-018.jpg:
+  en: "Groom kisses the bride's hand at the edge of the rocky ridge"
+  de: "Bräutigam küsst die Hand der Braut am Rand des Felsgrats"
+cadini-di-misurina-couple-session-k-and-e-019.jpg:
+  en: "Two hands with rings reaching for each other against a hazy sunrise"
+  de: "Zwei Hände mit Ringen greifen im dunstigen Sonnenaufgang nacheinander"
+cadini-di-misurina-couple-session-k-and-e-020.jpg:
+  en: "Black and white photo of the couple close together below the Dolomites peaks"
+  de: "Schwarz-Weiß-Foto des Paares eng beieinander unter den Dolomitengipfeln"

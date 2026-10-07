@@ -7,7 +7,7 @@
  * requests like
  *
  *   GET  /api/state                           everything for the start screen
- *   PUT  /api/galleries/weddings/palais/…     save a gallery
+ *   PUT  /api/galleries/vienna-wedding-photographer/palais/…     save a gallery
  *
  * Each route below connects a method + URL pattern to a function. Values in
  * the URL (":category", ":slug" ...) are passed to the function in `params`.
@@ -20,10 +20,21 @@
  * ============================================================================
  */
 
-import { UserError } from './paths.mjs';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import YAML from 'yaml';
+import { ROOT, UserError } from './paths.mjs';
 import { listCategories, writeGalleryOrder } from './categories.mjs';
-import { afterGalleryRestored, createGallery, deleteGallery, listGalleries, readGallery, saveGallery } from './galleries.mjs';
-import { afterPhotosRestored, deletePhotos, movePhotos, reorderPhotos, uploadPhoto } from './photos.mjs';
+import {
+  afterGalleryRestored,
+  createGallery,
+  deleteGallery,
+  listGalleries,
+  readGallery,
+  saveGallery,
+  uploadPoster,
+} from './galleries.mjs';
+import { afterPhotosRestored, deletePhotos, movePhotos, reorderPhotos, savePhotoAlt, uploadPhoto } from './photos.mjs';
 import {
   createTestimonial,
   deleteTestimonial,
@@ -32,6 +43,14 @@ import {
   saveTestimonial,
   uploadTestimonialImage,
 } from './testimonials.mjs';
+import {
+  createJournalEntry,
+  deleteJournalEntry,
+  listDocuments,
+  readDocument,
+  saveDocument,
+  uploadDocumentImage,
+} from './documents.mjs';
 import { deleteTrashEntry, emptyTrash, listTrash, restoreFromTrash } from './trash.mjs';
 import { galleryChecks } from './checks.mjs';
 import { getChanges } from './changes.mjs';
@@ -67,6 +86,15 @@ async function readJson(req) {
   }
 }
 
+/** Is the German version switched on? (src/content/settings.yaml → german) */
+async function germanSwitchedOn() {
+  try {
+    return YAML.parse(await readFile(path.join(ROOT, 'src', 'content', 'settings.yaml'), 'utf8'))?.german === true;
+  } catch {
+    return false;
+  }
+}
+
 /** A gallery with its checks, as the editor expects it. */
 async function galleryWithChecks(id) {
   const gallery = await readGallery(id);
@@ -84,6 +112,7 @@ const routes = [
     categories: await listCategories(),
     galleries: await listGalleries(),
     trashCount: (await listTrash()).length,
+    german: await germanSwitchedOn(),
   })],
 
   // ---- Galleries ----------------------------------------------------------
@@ -103,6 +132,15 @@ const routes = [
     ({ renamed: await reorderPhotos(galleryId(params), (await readJson(req)).names ?? []) })],
   ['POST', '/api/galleries/:category/:slug/photos/delete', async ({ req, params }) =>
     ({ trashEntry: await deletePhotos(galleryId(params), (await readJson(req)).names ?? []) })],
+  // The description (alt text) of one photo, in English and German
+  ['POST', '/api/galleries/:category/:slug/photos/alt', async ({ req, params }) => {
+    const { name, alt } = await readJson(req);
+    await savePhotoAlt(galleryId(params), name, alt ?? {});
+    return { ok: true };
+  }],
+  // A video preview image (into the gallery's posters/ folder)
+  ['PUT', '/api/galleries/:category/:slug/posters', async ({ req, params, query }) =>
+    uploadPoster(galleryId(params), query.get('name') ?? 'poster', await readBody(req))],
   ['POST', '/api/galleries/:category/:slug/photos/move', async ({ req, params }) => {
     const { names = [], to } = await readJson(req);
     return { moved: await movePhotos(galleryId(params), to, names) };
@@ -124,6 +162,16 @@ const routes = [
   ['PUT', '/api/testimonials/:id', async ({ req, params }) => saveTestimonial(params.id, await readJson(req))],
   ['PUT', '/api/testimonials/:id/image', async ({ req, params }) => uploadTestimonialImage(params.id, await readBody(req))],
   ['DELETE', '/api/testimonials/:id', async ({ params }) => ({ trashEntry: await deleteTestimonial(params.id) })],
+
+  // ---- Other texts: categories, packages, journal, pages, settings ----------
+  // (see documents.mjs; ":kind" is one of those five words)
+  ['GET', '/api/docs/:kind', ({ params }) => listDocuments(params.kind)],
+  ['POST', '/api/docs/journal', async ({ req }) => ({ id: await createJournalEntry(await readJson(req)) })],
+  ['GET', '/api/docs/:kind/:id', ({ params }) => readDocument(params.kind, params.id)],
+  ['PUT', '/api/docs/:kind/:id', async ({ req, params }) => saveDocument(params.kind, params.id, await readJson(req))],
+  ['PUT', '/api/docs/:kind/:id/file', async ({ req, params, query }) =>
+    uploadDocumentImage(params.kind, params.id, query.get('name'), await readBody(req))],
+  ['DELETE', '/api/docs/journal/:id', async ({ params }) => ({ trashEntry: await deleteJournalEntry(params.id) })],
 
   // ---- Trash ----------------------------------------------------------------
   ['GET', '/api/trash', () => listTrash()],

@@ -7,8 +7,8 @@
  * manages the `galleryOrder` list in each _category.md:
  *
  *   galleryOrder:
- *     - weddings/palais-daun-kinsky-wedding-vienna
- *     - weddings/schloss-hernstein-wedding-austria
+ *     - vienna-wedding-photographer/palais-daun-kinsky-wedding-vienna
+ *     - vienna-wedding-photographer/schloss-hernstein-wedding-austria
  *
  * The website shows the galleries of a category page in this order
  * (see byCategoryOrder in src/lib/galleries.ts).
@@ -33,6 +33,7 @@ export async function listCategories() {
       label: data.menuLabel ?? entry.name,
       singular: data.singular ?? '',
       display: data.display ?? 'cards',
+      galleryPages: data.galleryPages === true,
       region: data.region ?? 'destination',
       menuOrder: data.order ?? 100,
       galleryOrder: Array.isArray(data.galleryOrder) ? data.galleryOrder : [],

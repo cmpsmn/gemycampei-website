@@ -9,7 +9,7 @@ block at the top explaining what it does.
 - Deployment to Hostinger: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
 - Search engine optimisation: [docs/SEO.md](docs/SEO.md)
 - Adding photos: [galleries/README.md](galleries/README.md)
-- Managing galleries and testimonials with a click-and-drag app: `npm run manage` ([section 7](#7-the-gallery-manager))
+- Managing galleries, texts, packages, journal, reviews and settings with a click-and-drag app: `npm run manage` ([section 7](#7-the-gallery-manager))
 
 ---
 
@@ -38,6 +38,7 @@ You need [Node.js](https://nodejs.org) 22.12 or newer.
 ```bash
 npm install          # once: downloads all libraries into node_modules/
 npm run manage       # opens the gallery manager in your browser (see section 7)
+npm run import-pixieset  # downloads the gallery photos from the old Pixieset site (galleries/README.md)
 npm run dev          # starts a local preview at http://localhost:4321
 npm run build        # creates the finished website in dist/
 npm run preview      # shows the finished dist/ website locally
@@ -93,10 +94,10 @@ viewer, the gallery filter and the contact form.
 | **[Zod](https://zod.dev)** | Data validation | Checks every Markdown settings block against `src/content.config.ts`. A typo stops the build with a clear message. |
 | **Markdown** (`.md`) | Simple text format | All editable texts: categories, galleries, packages, testimonials. The part between `---` lines holds settings, the rest is text. |
 | **[PhotoSwipe](https://photoswipe.com)** | Lightbox library | Fullscreen photo viewer with swipe and keyboard support. |
-| **[Fontsource](https://fontsource.org)** | Fonts as npm packages | Playfair Display and Poppins are served from our own server instead of Google Fonts (GDPR). |
+| **[Fontsource](https://fontsource.org)** | Fonts as npm packages | Newsreader (headings) and Jost (text) are served from our own server instead of Google Fonts (GDPR). Both are variable fonts: one file covers every weight. |
 | **PHP + [PHPMailer](https://github.com/PHPMailer/PHPMailer)** | Server-side script + mail library | The only code that runs on the server: sends contact form emails. |
 | **`.htaccess`** | Web server configuration | HTTPS, redirects from old Pixieset URLs, caching, security headers. |
-| **[GitHub Actions](https://docs.github.com/actions)** | Automation on GitHub | Builds the site and uploads it to Hostinger on every `git push`. |
+| **[GitHub Actions](https://docs.github.com/actions)** | Automation on GitHub | Tests every feature branch, and builds and uploads the site to Hostinger on every change on `master`. |
 | **Hostinger** | Web hosting | Serves the files in `public_html/` and runs `contact.php`. |
 
 ---
@@ -107,16 +108,18 @@ viewer, the gallery filter and the contact form.
 website-gemycampei/
 │
 ├── galleries/                         ← ALL GALLERY PHOTOS (see galleries/README.md)
-│   ├── weddings/                        a category folder = one section of the site (/weddings/)
+│   ├── vienna-wedding-photographer/                        a category folder = one section of the site (/vienna-wedding-photographer/)
 │   │   ├── _category.md                   settings, intro text + order of the galleries
 │   │   ├── hero.jpg                       big image at the top of the category page
 │   │   └── palais-daun-kinsky-wedding-vienna/   a gallery folder = one gallery page
-│   │       ├── gallery.md                   optional settings + story text
+│   │       ├── gallery.md                   optional settings + story text (+ Vimeo videos)
+│   │       ├── posters/                     optional: preview images of the videos
 │   │       └── *.jpg                        the photos, sorted by file name
-│   ├── the-alps/  maternity/  35mm-super-8-film/
+│   ├── dolomites-elopement-photographer/  vienna-maternity-photographer/  35mm-film-super-8-wedding/
 │
 ├── src/                               ← THE WEBSITE CODE
 │   ├── pages/                           every file here becomes a URL (see section 5)
+│   │   │                                  the English pages are thin wrappers around src/views/
 │   │   ├── index.astro                    /
 │   │   ├── about.astro                    /about/
 │   │   ├── contact.astro                  /contact/
@@ -124,15 +127,17 @@ website-gemycampei/
 │   │   ├── wedding-photography-packages.astro   /wedding-photography-packages/
 │   │   ├── dolomites-elopement-packages.astro   /dolomites-elopement-packages/
 │   │   ├── galleries/index.astro          /galleries/  (overview with filter)
-│   │   ├── [category]/index.astro         /weddings/, /the-alps/ ...  (one per category folder)
-│   │   ├── [category]/[gallery].astro     /weddings/palais-daun-kinsky-wedding-vienna/ ...
+│   │   ├── [category]/index.astro         /vienna-wedding-photographer/, /dolomites-elopement-photographer/ ...  (one per category folder)
+│   │   ├── [category]/[gallery].astro     /vienna-wedding-photographer/palais-daun-kinsky-wedding-vienna/ ...
+│   │   ├── journal/index.astro, journal/[slug].astro   /journal/ … (guides)
 │   │   ├── redirects.json.ts              list of old Pixieset URLs → new URLs
 │   │   ├── imprint.astro, privacy.astro   legal pages
 │   │   └── 404.astro, thank-you.astro, message-error.astro
 │   │
 │   ├── components/                      reusable building blocks
 │   │   ├── Header.astro, Footer.astro     menu and footer on every page
-│   │   ├── PageHero.astro                 big photo with title
+│   │   ├── CallToAction.astro             closing "Enquire about your date" band
+│   │   ├── VimeoVideo.astro               Super 8 video, loads Vimeo only after a click
 │   │   ├── PackagesPage.astro             layout of both packages pages
 │   │   ├── Faq.astro                      questions & answers
 │   │   ├── SchemaOrg.astro                structured data for Google
@@ -140,21 +145,34 @@ website-gemycampei/
 │   │   ├── GalleryFilter.tsx (+ .css)     React: filter buttons on /galleries/
 │   │   ├── PhotoGallery.tsx (+ .css)      React: photo grid on gallery pages
 │   │   ├── PhotoSlider.tsx (+ .css)       React: one-at-a-time slider with thumbnails (optional display)
-│   │   ├── PhotoCarousel.tsx (+ .css)     React: full-width moving row of photos (maternity, 35mm & Super 8)
+│   │   ├── PhotoCarousel.tsx (+ .css)     React: full-width moving row of photos (gallery pages, carousel display)
 │   │   ├── useLightbox.ts                 React hook: fullscreen viewer shared by the three above
 │   │   ├── carousel.ts                    scroll helpers for slider and carousel
 │   │   └── ContactForm.tsx (+ .css)       React: the inquiry form
 │   │
-│   ├── layouts/Base.astro               HTML frame: <head>, SEO tags, header, footer
+│   ├── routes/de/                       the German pages (/de/, /de/hochzeitsfotograf-wien/ …). Not in
+│   │                                      src/pages/: astro.config.mjs adds them only while the German
+│   │                                      version is switched on (settings.yaml → german)
+│   │
+│   ├── views/                           the page bodies, shared by English and German
+│   │                                      (HomeView, CategoryView, GalleryView, ArticleView …)
+│   ├── i18n/index.ts                    languages: German menu/button texts, page addresses
+│   ├── layouts/Base.astro               HTML frame: <head>, SEO tags, hreflang, header, footer
 │   │
 │   ├── lib/                             helper functions (no HTML)
 │   │   ├── galleries.ts                   reads the galleries/ folders, prepares images
 │   │   ├── testimonials.ts                reviews + their links to galleries
-│   │   ├── seo.ts                         page titles and structured data
+│   │   ├── seo.ts                         page titles and structured data (business, person, articles …)
+│   │   ├── packages.ts, journal.ts        packages pages and journal articles in both languages
+│   │   ├── pages.ts                       reads the texts of the home, about and contact pages
 │   │   └── markdown.ts                    **bold** / *italic* for short texts
 │   │
 │   ├── content/                         texts that are not galleries
-│   │   ├── packages/<page>/index.md       packages + FAQ of each packages page
+│   │   ├── settings.yaml                  email, social links, Google defaults, legal details,
+│   │   │                                  German version on/off
+│   │   ├── pages/home.yaml, about.yaml, contact.yaml   texts of these pages (en + de)
+│   │   ├── packages/<page>/index.md       packages + FAQ of each packages page (+ index.de.md)
+│   │   ├── journal/<article>/index.md     guides (+ index.de.md for the German version)
 │   │   └── testimonials/*.md              one file per review
 │   │
 │   ├── assets/                          images used by pages
@@ -163,7 +181,7 @@ website-gemycampei/
 │   │
 │   ├── styles/global.css                colours, fonts and shared styles
 │   ├── content.config.ts                which fields each Markdown file may have
-│   └── site.config.ts                   business name, email, social links, legal details
+│   └── site.config.ts                   reads src/content/settings.yaml for the rest of the code
 │
 ├── public/                            ← copied unchanged into the website root
 │   ├── .htaccess                        server settings + redirects
@@ -173,14 +191,16 @@ website-gemycampei/
 │
 ├── tools/gallery-manager/             ← the local app behind `npm run manage` (section 7)
 │   ├── server.mjs                       starts the local web server + opens the browser
-│   ├── api/                             Node code that changes files (galleries, photos, trash …)
-│   └── app/                             React user interface (components/, styles.css)
+│   ├── api/                             Node code that changes files (galleries, photos, documents, trash …)
+│   └── app/                             React user interface (components/, schemas.ts, styles.css)
 │
 ├── scripts/new-gallery.mjs            ← helper: create a gallery from a photo export
+├── scripts/import-pixieset.mjs        ← helper: download gallery photos from the old Pixieset site
 ├── scripts/lib/photos.mjs             ← photo optimising shared by the script and the manager
 ├── .trash/                            ← items deleted in the manager (not in Git, restorable)
 ├── server/contact-config.example.php  ← template for the mail password file on the server
-├── docs/                              ← DEPLOYMENT.md, SEO.md
+├── integrations/sitemap.mjs           ← builds the sitemap (both languages, photos) from the finished pages
+├── docs/                              ← DEPLOYMENT.md, SEO.md (what the site does for Google + your checklist)
 ├── .github/workflows/deploy.yml       ← automatic deployment
 ├── astro.config.mjs                   ← Astro settings (+ redirect writer)
 ├── package.json                       ← list of libraries and npm scripts
@@ -202,7 +222,7 @@ Astro looks at `src/pages/`. Each file becomes a page:
 |---|---|
 | `src/pages/about.astro` | `/about/` |
 | `src/pages/galleries/index.astro` | `/galleries/` |
-| `src/pages/[category]/index.astro` | `/weddings/`, `/the-alps/`, … |
+| `src/pages/[category]/index.astro` | `/vienna-wedding-photographer/`, `/dolomites-elopement-photographer/`, … |
 
 Square brackets mark a **dynamic route**: one file that produces many pages. It exports a
 function `getStaticPaths()` that returns a list of pages to build. For categories, that list
@@ -214,7 +234,7 @@ comes from the folders in `galleries/`.
 ---
 // 1. FRONTMATTER: runs at build time (like a script). Import things, load data.
 import Base from '../layouts/Base.astro';
-const galleries = await getGalleries('weddings');
+const galleries = await getGalleries('vienna-wedding-photographer');
 ---
 
 <!-- 2. TEMPLATE: HTML with {expressions} -->
@@ -233,13 +253,13 @@ const galleries = await getGalleries('weddings');
 
 ```mermaid
 flowchart TD
-  F["galleries/weddings/palais-daun-kinsky-wedding-vienna/<br/>*.jpg + gallery.md"]
+  F["galleries/vienna-wedding-photographer/palais-daun-kinsky-wedding-vienna/<br/>*.jpg + gallery.md"]
   F -->|"import.meta.glob finds photos"| L["src/lib/galleries.ts<br/>getGalleries()"]
   F -->|"content collection reads gallery.md"| L
   L -->|"list of galleries"| P["src/pages/[category]/[gallery].astro<br/>getStaticPaths()"]
   P -->|"toPhotoData(): resize to WebP"| C["PhotoGallery.tsx"]
   P --> B["Base.astro: title, description, structured data"]
-  C --> H["dist/weddings/palais-daun-kinsky-wedding-vienna/index.html"]
+  C --> H["dist/vienna-wedding-photographer/palais-daun-kinsky-wedding-vienna/index.html"]
   B --> H
 ```
 
@@ -253,15 +273,19 @@ flowchart TD
 | **Change a gallery's title image** | Manager: click the ★ on a photo and the focus point on the cover. By hand: `cover: file-name.jpg` (and optionally `coverFocus: "50% 30%"`) in its `gallery.md`, or name a photo `cover.jpg`. |
 | **Hide a gallery** | Manager: tick "Draft". By hand: `draft: true` in its `gallery.md`. |
 | **Move a gallery to another category** | Manager: choose another main category and save (folder, photo names, links and redirect are handled). By hand: move the folder and add its previous URL to `legacyUrls`. |
-| **Show a gallery in several categories** | Manager: tick the categories. By hand: `alsoIn: [35mm-super-8-film]` in its `gallery.md`. It keeps one address (its folder) and appears as a card in the other categories too. |
+| **Show a gallery in several categories** | Manager: tick the categories. By hand: `alsoIn: [35mm-film-super-8-wedding]` in its `gallery.md`. It keeps one address (its folder) and appears as a card in the other categories too. |
 | **Change the order of galleries** | Manager: tab **Order on pages**. By hand: the `galleryOrder` list in each `_category.md`. Every category has its own order. |
 | **Set the kind of shoot** | `type: "Couple Session"` in `gallery.md` (default: `singular` of the category). Used in headings and for Google. |
 | **Add a category** | Create `galleries/<name>/` with `_category.md` (copy one) and `hero.jpg`. Choose `display: cards`, `slider` or `carousel`. It appears in the menu once it has a visible gallery. |
-| **Edit packages or FAQs** | `src/content/packages/<page>/index.md` |
+| **Edit a category page** (intro, steps, FAQ, Google texts, title photo) | Manager: tab **Categories**. By hand: `galleries/<category>/_category.md`. |
+| **Edit packages or FAQs** | Manager: tab **Packages** (texts, included lists, photos, FAQ). By hand: `src/content/packages/<page>/index.md`. No prices on the site. |
+| **Write a journal article** | Manager: tab **Journal** → type a title → **+ New** → pick a cover photo. It starts as a draft; switch it to "Published" when it's ready. By hand: copy a folder in `src/content/journal/`. |
+| **Add videos to a gallery** | Manager: the **Videos** card of the gallery (Vimeo address, title, preview image). By hand: `videos:` in its `gallery.md`, preview images in its `posters/` folder. Allow embedding on gemycampei.com in Vimeo. |
 | **Add a testimonial** | Manager: tab **Testimonials**. By hand: copy `src/content/testimonials/annie-and-huong.md`. Link it to a gallery with `gallery:` + `galleryPhoto:` to show it on that gallery page too. |
 | **Change home page photos** | Add, remove or rename files in `src/assets/home/grid-1/` and `grid-2/`. |
-| **Edit About, Contact, home texts** | Directly in `src/pages/about.astro`, `contact.astro`, `index.astro`. |
-| **Change email or social links** | `src/site.config.ts` |
+| **Edit About, Contact, home texts** | Manager: tab **Pages**. By hand: `src/content/pages/home.yaml`, `about.yaml`, `contact.yaml`. The layout and photos are in `src/views/`. |
+| **Change email, social links, imprint details** | Manager: tab **Settings**. By hand: `src/content/settings.yaml`. |
+| **Switch the German version on or off** | Manager: tab **Settings** → German version (or `german:` in `src/content/settings.yaml`), then restart `npm run dev`. Off: only English is built, no language switch, no hreflang; the German texts stay in their files. |
 | **Change colours or fonts** | `src/styles/global.css` (top section) |
 
 Every field allowed in the Markdown settings is listed and explained in
@@ -269,15 +293,20 @@ Every field allowed in the Markdown settings is listed and explained in
 
 ### Publishing a change
 
+Work on a feature branch; merging it into `master` publishes the website.
+
 ```bash
+git switch master && git pull
+git switch -c add-lago-di-braies     # a feature branch
 npm run dev                          # check it locally (or the Preview button in the manager)
 git add .
 git commit -m "Add gallery Lago di Braies"
-git push                             # GitHub builds and uploads in about 2–3 minutes
+git push -u origin add-lago-di-braies   # GitHub tests the branch, nothing is published
 ```
 
-`git push` needs a GitHub repository connected once (`git remote add origin …`), see
-[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). The local repository and a first commit already exist.
+Then open a pull request on GitHub and merge it into `master`: GitHub checks, builds and
+uploads the site to Hostinger within a few minutes. Setup and details:
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ---
 
@@ -288,9 +317,9 @@ npm run manage
 ```
 
 This opens a small app in your browser (`http://127.0.0.1:4400`). It is a comfortable way to
-change the files in `galleries/` and `src/content/testimonials/`. It **only changes files on
-your computer**: nothing goes online until you commit and push. Stop it with Ctrl+C in the
-terminal.
+change everything you maintain: the files in `galleries/` and `src/content/`. It **only changes
+files on your computer**: nothing goes online until you commit and push. Stop it with Ctrl+C in
+the terminal.
 
 ### The tabs
 
@@ -299,18 +328,29 @@ terminal.
 | **Galleries** | Sidebar with every gallery (filter: all / published / drafts). **+ New gallery** asks for main category, title, type, couple and place and suggests the address. The editor has all fields: title, couple, type, location, date, draft, story, SEO title and description (with length counters), address and old addresses. |
 | | **Categories**: tick every category the gallery fits, choose the *main* one (it decides the address). A card linking to the gallery then appears on every ticked category page. |
 | | **Photos**: drop files onto the grid (or "Add photos"). Each upload is rotated, resized to 2400 px, stripped of camera/GPS data and named `<slug>-001.jpg`; exact duplicates are skipped and small photos get a warning. Drag photos to reorder. Click to select, Shift+click for a range, then move or delete several at once. ★ makes a photo the cover. |
-| | **Cover focus**: click the important spot on the cover. The preview shows how the square card crop will look. |
+| | **Cover focus**: click the important spot on the cover. The preview shows how the portrait (3 : 4) card crop will look. |
 | | **Checks**: hints such as "fewer than 10 photos", "story is empty", "SEO title too long". |
-| **Order on pages** | Pick a category and drag its galleries into place. Saved immediately. |
+| | **Videos** (shown for galleries with videos or without photos, e.g. Super 8): Vimeo address, title and preview image per video; upload preview images into the gallery's `posters/` folder. |
+| **Categories** | The category pages: menu name, big title, title photo, H1, intro, Google texts, "how it works" steps, FAQ, display style, gallery pages, heading above the videos. |
+| **Packages** | The packages pages: heading, intro, every package with its photo and "included" list, FAQ, button text. |
+| **Journal** | Guides and stories: **+ New** creates a draft. Title, summary, the text (Markdown), cover and photo row (picked from the galleries, with their descriptions), related galleries, FAQ, dates, published/draft. **Delete** moves the article to the trash. |
 | **Testimonials** | Add, edit, delete and drag reviews into order. Link a review to a gallery: the testimonials page then shows "View their gallery" and the gallery page shows the review. The photo can be picked from that gallery or uploaded. |
+| **Pages** | The texts of the home, about and contact pages. |
+| **Settings** | German version on/off, email, social links, default Google texts, the data for Google (languages, places, services) and the legal details for the imprint. |
+| **Order on pages** | Pick a category and drag its galleries into place. Saved immediately. |
 | **Trash** | Everything deleted in the manager. Restore or delete for good. |
 | **Changes** | Files changed since the last Git commit, grouped per gallery/review, plus the commands to publish them. |
 
 ### What is saved when
 
-- **Text and settings** (fields, categories, cover, focus, testimonials): with **Save** or
-  Ctrl+S. The manager warns you before you leave a gallery with unsaved changes.
-- **Photos and order** (upload, reorder, move, delete, category order): immediately.
+- **Text and settings** (fields, categories, cover, focus, videos, testimonials, everything in
+  the Categories, Packages, Journal, Pages and Settings tabs): with **Save** or Ctrl+S. The
+  manager warns you before you leave a form with unsaved changes. Only the fields you changed
+  are written; comments and the layout of the files stay as they are.
+- **German fields** only appear while the German version is switched on (a **Deutsch** button
+  above the form, the Deutsch card of a gallery).
+- **Photos and order** (upload, reorder, move, delete, category order, replacing a package or
+  title photo, video preview images): immediately.
 - **Deleting** moves things into `.trash/` in the project folder. The message that appears
   has an **Undo** button; older deletions are in the Trash tab. `.trash/` is not uploaded.
 
@@ -336,7 +376,10 @@ after you close the manager; stop it with `npx astro dev stop`.
 `tools/gallery-manager/server.mjs` starts a Node web server that only listens on your own
 computer. It serves the React app from `app/` through Vite and answers requests under `/api/`
 with the code in `api/` (one file per topic: `galleries.mjs`, `photos.mjs`, `testimonials.mjs`,
-`trash.mjs` …). Every request needs a secret token that is created at start and written into the
+`trash.mjs` …). The Categories, Packages, Journal, Pages and Settings tabs share one editor:
+`api/documents.mjs` reads and writes those files, `app/schemas.ts` lists their fields and
+`app/components/DocumentEditor.tsx` builds the forms from that list. A new field on the website
+usually needs one more line in `app/schemas.ts`. Every request needs a secret token that is created at start and written into the
 page, so other websites open in your browser can't change your files. It's a good project for
 learning React: the components in `app/components/` use state, effects, custom hooks
 (`app/hooks.ts`) and drag & drop.
@@ -398,10 +441,25 @@ To change quality or sizes, see the constants at the bottom of `src/lib/gallerie
   `var(--accent)`, defined once at the top.
 - **Component styles**: a `<style>` block in `.astro` files (scoped to that file) or a `.css`
   file next to a `.tsx` component.
-- **Palette "Warm White, Espresso & Black"**: warm white background `#FAF8F4`, off-white
-  panels `#F1ECE5`, soft black text `#1C1917`, warm grey-brown secondary text `#6A5F57`,
-  dark espresso buttons, About page boxes and photo frames `#2E1F18`.
-- **Fonts**: Playfair Display (headings) and Poppins (text), bundled locally.
+- **Palette (from the v3 design)**: warm paper background, a quieter band tone for the
+  about/FAQ sections, espresso ink for text and dark bands, and terracotta for the small
+  capitals, links and details. The colours are written as `oklch(lightness chroma hue)`,
+  so related shades are easy to read and adjust.
+- **Layout**: section backgrounds run the full width, while their content stays within
+  1440px (`--content`); `var(--edge)` is the side padding that achieves this, so use it
+  instead of a fixed gutter. `.band` is the quiet tone, `.band-dark` the espresso one.
+- **Spacing and photo sizes**: every gap is a step of the spacing scale (`--space-1` 8px
+  to `--space-7` 64px). A photo next to text is capped by `--photo-text` (400px) or
+  `--photo-quote` (380px), so it never grows to fill half the page.
+- **Section headings**: use `src/components/SectionHead.astro` (terracotta line, title,
+  optional link on the right), so every section introduces itself the same way.
+- **Ready-made pieces**: `.display` (large light serif), `.section-title`, `.eyebrow` (small
+  terracotta capitals), `.meta` (grey capitals), `.lede`, `.button`, `.button-ghost`,
+  `.link-quiet`.
+- **Scroll reveal**: add `data-reveal` to an element and it fades up when it scrolls into
+  view (see the script in `src/layouts/Base.astro`). It does nothing when the visitor has
+  "reduce motion" switched on, or without JavaScript.
+- **Fonts**: Newsreader (headings, quotes) and Jost (text, labels, menu), bundled locally.
 
 ---
 

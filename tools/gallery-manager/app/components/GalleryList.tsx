@@ -59,7 +59,7 @@ export default function GalleryList({ state, selectedId, onSelect }: Props) {
                       {g.couple && <small>{g.couple}</small>}
                       <strong>{g.title}</strong>
                       <small>
-                        {g.photoCount} {g.photoCount === 1 ? 'photo' : 'photos'}
+                        {g.videoCount && !g.photoCount ? `${g.videoCount} ${g.videoCount === 1 ? 'video' : 'videos'}` : `${g.photoCount} ${g.photoCount === 1 ? 'photo' : 'photos'}`}
                         {g.draft && <em className="tag draft">Draft</em>}
                         {g.categories.slice(1).map((c) => (
                           <em key={c} className="tag">

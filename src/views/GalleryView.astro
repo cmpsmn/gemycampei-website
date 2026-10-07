@@ -1,0 +1,540 @@
+---
+/**
+ * ============================================================================
+ * GALLERY PAGE  (src/views/GalleryView.astro)
+ * ============================================================================
+ *
+ * One gallery in either language:
+ *   src/pages/[category]/[gallery].astro     → /vienna-wedding-photographer/palais-daun-kinsky-wedding-vienna/
+ *   src/pages/de/[category]/[gallery].astro  → /de/hochzeitsfotograf-wien/palais-daun-kinsky-wedding-vienna/
+ *
+ * WHAT THE PAGE SHOWS
+ *   cover photo with couple names and the H1 ("Wedding at Palais Daun-Kinsky")
+ *   · story text (gallery.md body, or gallery.de.md in German) with the facts
+ *   · photo grid with lightbox; the couple's review as a pause
+ *   · previous / next gallery · link to packages
+ *
+ * The German page of a gallery without gallery.de.md shows the English story
+ * and is marked noindex (kept out of Google) until the translation exists.
+ * ============================================================================
+ */
+import { Image, Picture } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PhotoGallery from '../components/PhotoGallery';
+import VimeoVideo from '../components/VimeoVideo.astro';
+import {
+  toPhotoData,
+  describeGallery,
+  galleryText,
+  categoryText,
+  placeWithoutTitle,
+  photoAlt,
+  hrefIn,
+  type Category,
+  type Gallery,
+} from '../lib/galleries';
+import { getPackagesPage } from '../lib/packages';
+import { breadcrumbSchema, imageGallerySchema } from '../lib/seo';
+import { getTestimonialsFor } from '../lib/testimonials';
+import { excerpt } from '../lib/markdown';
+import { langOf, pick, routes, useUi } from '../i18n';
+import { site } from '../site.config';
+
+interface Props {
+  gallery: Gallery;
+  category: Category;
+  prev: Gallery | null;
+  next: Gallery | null;
+}
+
+const { gallery, category, prev, next } = Astro.props;
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
+const text = galleryText(gallery, lang);
+const categoryLabel = categoryText(category, lang).menuLabel;
+const href = hrefIn(gallery, lang);
+
+// "Lago di Braies, Dolomites, Italy" next to the title "Lago di Braies" → "Dolomites, Italy"
+const placeShort = placeWithoutTitle(text.place, text.title);
+const description = describeGallery(gallery, lang); // "Wedding at Palais Daun-Kinsky, Vienna, Austria"
+
+// The H1 says what and where: "Elopement at Lago di Braies" / "Elopement am Lago di Braies"
+const heading = pick(lang, {
+  en: `${text.typeLabel} at ${text.title}`,
+  de: `${text.typeLabel} · ${text.title}`,
+});
+
+// Story text: German body if gallery.de.md exists, else the English body
+const storyEntry = lang === 'de' && gallery.de ? gallery.de : gallery.entry;
+const Story = storyEntry ? (await render(storyEntry)).Content : null;
+const storyLang = lang === 'de' && !gallery.de ? 'en' : lang;
+
+const photos = await Promise.all(gallery.photos.map((p) => toPhotoData(p.image, photoAlt(gallery, p, lang))));
+const coverPhoto = gallery.photos.find((p) => p.image === gallery.cover);
+const coverAlt = coverPhoto ? photoAlt(gallery, coverPhoto, lang) : description;
+
+// Reviews that link to this gallery: only the first words here, the full text
+// is on the testimonials page (linked with "Read the whole review").
+const reviews = (await getTestimonialsFor(gallery.id)).map((review) => ({
+  review,
+  text: excerpt(review.entry.body ?? ''),
+}));
+
+const copy = pick(lang, {
+  en: {
+    type: 'Type',
+    place: 'Place',
+    year: 'Year',
+    previous: '← Previous',
+    next: 'Next →',
+    allGalleries: `All ${categoryLabel.toLowerCase()} galleries →`,
+    moreGalleries: 'More galleries',
+    readWhole: 'Read the whole review →',
+    planning: `Planning your own ${text.typeLabel.toLowerCase()}? Every collection includes planning support, honest guidance and a private online gallery.`,
+    seePackages: (label: string) => `See the ${label.toLowerCase()}`,
+    seoTitle: `${gallery.couple ? `${gallery.couple} · ` : ''}${text.typeLabel} at ${text.title}, ${placeShort}`,
+    seoDescription: `${description}. Candid ${text.typeLabel.toLowerCase()} photography by ${site.name}, photographer in Vienna and the Dolomites.`,
+  },
+  de: {
+    type: 'Art',
+    place: 'Ort',
+    year: 'Jahr',
+    previous: '← Zurück',
+    next: 'Weiter →',
+    allGalleries: `Alle Galerien: ${categoryLabel} →`,
+    moreGalleries: 'Weitere Galerien',
+    readWhole: 'Die ganze Bewertung lesen →',
+    planning: 'Plant ihr euren eigenen großen Tag? Jedes Paket enthält Hilfe bei der Planung, ehrliche Beratung und eine private Online-Galerie.',
+    seePackages: (label: string) => `${label} ansehen`,
+    seoTitle: `${text.typeLabel} ${text.title}, ${placeShort}`,
+    seoDescription: `${description}. Natürliche Fotos von ${site.name}, Hochzeitsfotograf in Wien und den Dolomiten.`,
+  },
+});
+
+// Facts next to the story: kind of shoot, place, year (when a date is set)
+// (label and value together, so a missing date never shifts the labels)
+const facts = [
+  { label: copy.type, value: text.typeLabel },
+  { label: copy.place, value: placeShort },
+  { label: copy.year, value: gallery.date ? String(gallery.date.getFullYear()) : '' },
+].filter((fact) => fact.value);
+
+// Previous / next galleries shown as small cover cards at the end
+const neighbours = [
+  prev && { gallery: prev, label: copy.previous },
+  next && { gallery: next, label: copy.next },
+].filter(Boolean) as { gallery: Gallery; label: string }[];
+
+const packagesPage = category.data.packages ? await getPackagesPage(category.data.packages) : undefined;
+
+// Title and description for Google, unless gallery.md / gallery.de.md sets its own
+const seoTitle = text.seoTitle ?? copy.seoTitle;
+const seoDescription = text.seoDescription ?? copy.seoDescription;
+
+const schema = [
+  breadcrumbSchema([
+    { name: t.breadcrumbHome, path: routes.home[lang] },
+    { name: categoryLabel, path: hrefIn(category, lang) },
+    { name: text.title, path: href },
+  ]),
+  imageGallerySchema({
+    name: seoTitle,
+    description: seoDescription,
+    path: href,
+    images: photos.map((p) => ({ url: p.full.src, caption: p.alt })),
+    location: text.place,
+    lang,
+  }),
+];
+---
+
+<Base
+  title={seoTitle}
+  description={seoDescription}
+  ogImage={gallery.cover}
+  schema={schema}
+  noindex={!text.translated}
+  alternates={{ en: gallery.href, de: gallery.de ? gallery.hrefDe : undefined }}
+>
+  <article>
+    <!-- 1. The cover chosen in the gallery manager, full width, with the title over it -->
+    <header class="opener">
+      <Picture
+        src={gallery.cover}
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1920, 2400]}
+        sizes="100vw"
+        quality={65}
+        alt={coverAlt}
+        loading="eager"
+        fetchpriority="high"
+        class="opener-image"
+        style={gallery.coverFocus ? `object-position: ${gallery.coverFocus}` : undefined}
+      />
+      <div class="opener-text">
+        {gallery.couple && <p class="eyebrow opener-couple">{gallery.couple}</p>}
+        <h1 class="display opener-title">{heading}</h1>
+      </div>
+    </header>
+
+    <!-- 2. The story, with the facts beside it -->
+    <section class="section intro">
+      <div class="story body-text" lang={storyLang !== lang ? storyLang : undefined}>
+        {Story ? <Story /> : <p>{description}.</p>}
+      </div>
+      <dl class="facts">
+        {
+          facts.map((fact) => (
+            <div>
+              <dt class="meta">{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <!-- Videos (e.g. the Super 8 films), two per row -->
+    {
+      gallery.videos.length > 0 && (
+        <div class="section videos">
+          {gallery.videos.map((video, i) => (
+            <VimeoVideo
+              vimeoId={video.vimeoId}
+              title={(lang === 'de' && gallery.de?.data.videoTitles[i]) || video.title}
+              poster={video.poster}
+            />
+          ))}
+        </div>
+      )
+    }
+
+    <!-- 3–5. The photos in even rows, with the review and full-width photos as pauses -->
+    <div class="photos" hidden={photos.length === 0}>
+      <PhotoGallery client:visible photos={photos} hasReview={reviews.length > 0} lang={lang}>
+        {
+          reviews.length > 0 && (
+            <div slot="review" class="reviews">
+              {reviews.map(({ review, text: quote }) => (
+                <figure class="review">
+                  <Image
+                    src={review.image}
+                    alt={`${review.names}, ${t.photographedBy} ${site.name}`}
+                    widths={[480, 800]}
+                    sizes="(max-width: 800px) 60vw, 240px"
+                    class="review-photo"
+                  />
+                  <div class="review-text">
+                    <p class="eyebrow">{t.kindWords}</p>
+                    <blockquote class="review-quote" lang="en">
+                      <p>{quote}</p>
+                    </blockquote>
+                    <figcaption class="review-meta">
+                      <span class="meta">{review.names}</span>
+                      <a class="link-quiet" href={`${routes.testimonials[lang]}#${review.entry.id}`}>
+                        {copy.readWhole}
+                      </a>
+                    </figcaption>
+                  </div>
+                </figure>
+              ))}
+            </div>
+          )
+        }
+      </PhotoGallery>
+    </div>
+
+    <!-- 6. More stories: previous and next as cover cards -->
+    <nav class="section more" aria-label={copy.moreGalleries}>
+      <div class="more-head">
+        <p class="eyebrow">{t.moreStories}</p>
+        <a class="link-quiet" href={hrefIn(category, lang)}>{copy.allGalleries}</a>
+      </div>
+      <div class="neighbours">
+        {
+          neighbours.map(({ gallery: other, label }) => (
+            <a class="neighbour" href={hrefIn(other, lang)}>
+              <Image
+                src={other.cover}
+                alt={describeGallery(other, lang)}
+                widths={[480, 800, 1200]}
+                sizes="(max-width: 700px) 92vw, 45vw"
+                quality={70}
+                class="neighbour-image"
+                style={other.coverFocus ? `object-position: ${other.coverFocus}` : undefined}
+              />
+              <span class="meta">{label}</span>
+              <span class="neighbour-title">
+                {other.couple ? `${other.couple} · ` : ''}
+                {galleryText(other, lang).title}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </nav>
+
+    <!-- Sentence left, button right, so the page does not end on a lone line -->
+    {
+      packagesPage && (
+        <div class="section packages">
+          <p class="body-text packages-text">{copy.planning}</p>
+          <a class="button-ghost" href={lang === 'de' ? packagesPage.hrefDe : packagesPage.href}>
+            {copy.seePackages(packagesPage.label[lang])}
+          </a>
+        </div>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  /* ── 1. Cover opener ── */
+  .opener {
+    position: relative;
+    display: grid;
+    align-items: end;
+    /* Down to just above the bottom of the window, so the first lines of
+       the story still show */
+    height: calc(100vh - var(--header-h) - var(--hero-peek)); /* fallback for older browsers */
+    height: calc(100svh - var(--header-h) - var(--hero-peek));
+    min-height: 24rem;
+    max-height: 60rem;
+    padding: var(--space-6) var(--edge);
+    overflow: hidden;
+  }
+
+  .opener :global(picture),
+  .opener :global(.opener-image) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Dark gradient at the bottom so the white title stays readable */
+  .opener::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, oklch(0.22 0.012 60 / 0.7), oklch(0.22 0.012 60 / 0) 55%);
+  }
+
+  .opener-text {
+    position: relative;
+    z-index: 1;
+    color: var(--white);
+  }
+
+  .opener-couple {
+    color: oklch(0.9 0.03 70);
+    margin-bottom: var(--space-1);
+  }
+
+  /* The H1 names the kind of shoot and the place, so it is a little smaller */
+  .opener-title {
+    max-width: 18ch;
+    font-size: clamp(2.25rem, 5.6vw, 4.75rem);
+    text-wrap: balance;
+  }
+
+  /* ── 2. Story and facts ── */
+  .intro {
+    display: grid;
+    grid-template-columns: min(var(--measure), 100% - 16rem - var(--space-6)) 16rem;
+    justify-content: space-between;
+    align-items: start;
+    gap: var(--space-6);
+  }
+
+  .story :global(p) {
+    margin-bottom: 1.1em;
+  }
+
+  .story :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .facts {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    border-top: 1px solid var(--line-strong);
+    padding-top: var(--space-3);
+  }
+
+  .facts dd {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 1.25rem;
+  }
+
+  .photos {
+    padding-inline: var(--edge);
+  }
+
+  /* ── The couple's review, as the first pause between the photos ── */
+  .reviews {
+    display: grid;
+    gap: var(--space-6);
+    border-block: 1px solid var(--line);
+    padding-block: var(--space-6);
+  }
+
+  /* A small photo beside a short excerpt: the full review is on /testimonials/ */
+  .review {
+    --review-photo: 15rem; /* 240px */
+    display: grid;
+    grid-template-columns: var(--review-photo) min(var(--measure), 100% - var(--review-photo) - var(--space-6));
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-6);
+    margin: 0;
+  }
+
+  .review :global(.review-photo) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .review-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+  }
+
+  .review-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .review-quote {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: 200;
+    font-size: clamp(1.0625rem, 1.8vw, 1.375rem);
+    line-height: 1.55;
+  }
+
+  .review-quote :global(p) {
+    margin: 0;
+  }
+
+  .review-quote :global(p + p) {
+    margin-top: 0.75em;
+  }
+
+  .review-quote :global(p:first-child)::before {
+    content: '\201C';
+  }
+
+  .review-quote :global(p:last-child)::after {
+    content: '\201D';
+  }
+
+  /* ── 6. More stories: previous and next as cover cards ── */
+  .more {
+    border-top: 1px solid var(--line);
+  }
+
+  .more-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-5);
+    margin-bottom: var(--space-4);
+  }
+
+  .more-head .eyebrow {
+    margin: 0;
+  }
+
+  .neighbours {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .neighbour {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  /* The "Next" card stays on the right even when there is no previous one */
+  .neighbour:only-child:last-child {
+    grid-column: 2;
+  }
+
+  .neighbour :global(.neighbour-image) {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: opacity 0.3s;
+  }
+
+  .neighbour:hover :global(.neighbour-image) {
+    opacity: 0.9;
+  }
+
+  .neighbour-title {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(1.25rem, 2vw, 1.625rem);
+    line-height: 1.2;
+  }
+
+  .packages {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+    padding-top: 0;
+  }
+
+  .packages-text {
+    max-width: 55ch;
+    margin: 0;
+  }
+
+  @media (max-width: 800px) {
+    .intro,
+    .review {
+      grid-template-columns: 1fr;
+    }
+
+    .review :global(.review-photo) {
+      max-width: 15rem;
+    }
+
+    .neighbours {
+      grid-template-columns: 1fr;
+    }
+
+    .neighbour:only-child:last-child {
+      grid-column: auto;
+    }
+  }
+
+  /* Videos: two per row, one on phones */
+  .videos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 700px) {
+    .videos {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

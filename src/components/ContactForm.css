@@ -1,35 +1,32 @@
 /*
  * Styles for ContactForm.tsx.
- * Underlined fields with centred, spaced serif labels, like the original form.
+ * From the v3 design: small uppercase labels above bordered fields,
+ * left aligned, two per row on wide screens.
  */
 .contact-form {
-  display: grid;
-  gap: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 35rem;
 }
 
 .field-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.6rem 2.5rem;
-}
-
-@media (max-width: 640px) {
-  .field-row {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+  gap: 1rem;
 }
 
 .field {
-  display: grid;
-  gap: 0.2rem;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .field-label {
-  font-family: var(--font-serif);
-  font-size: 0.72rem;
-  letter-spacing: 0.22em;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  color: var(--muted);
 }
 
 .field input,
@@ -37,50 +34,48 @@
 .field textarea {
   width: 100%;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
+  font-weight: 300;
   color: var(--text);
-  text-align: center;
   background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   border-radius: 0;
-  padding: 0.7rem 0.25rem;
+  padding: 0.8125rem 0.875rem;
   transition: border-color 0.2s;
 }
 
 .field textarea {
-  text-align: left;
   resize: vertical;
   min-height: 7rem;
 }
 
 .field select {
   appearance: none;
-  text-align-last: center;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' fill='none' stroke='%231d1c1a' stroke-width='1.2'%3E%3Cpath d='M1 1l6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' fill='none' stroke='%23463c33' stroke-width='1.2'%3E%3Cpath d='M1 1l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 0.4rem center;
+  background-position: right 0.75rem center;
   cursor: pointer;
 }
 
 .field input::placeholder {
-  color: #9c968c;
+  color: var(--muted);
 }
 
-/* Visible focus: the underline darkens (the original form had no focus state) */
+/* Visible focus: the border takes the accent colour */
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
   outline: none;
-  border-bottom-color: var(--accent);
+  border-color: var(--accent);
 }
 
 .consent {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   line-height: 1.6;
+  color: var(--text-soft);
 }
 
 .consent input {
@@ -91,6 +86,10 @@
   accent-color: var(--accent);
 }
 
+.consent a {
+  border-bottom: 1px solid var(--line-strong);
+}
+
 .hp {
   position: absolute;
   left: -10000px;
@@ -99,34 +98,39 @@
   overflow: hidden;
 }
 
+.contact-form .button {
+  align-self: start;
+}
+
 .form-status {
-  padding: 1rem 1.2rem;
-  background: var(--bg);
-  border-left: 2px solid;
   margin: 0;
+  padding: 1.125rem 1.25rem;
+  background: var(--panel);
+  font-size: 0.875rem;
+  line-height: 1.7;
 }
 
 .form-status.error {
-  border-color: var(--error);
+  border-left: 2px solid var(--error);
   color: var(--error);
+  background: transparent;
 }
 
-.form-status.success {
-  border-color: var(--success);
-  text-align: center;
-  border-left: 0;
-  padding: 2rem 1rem;
-}
 
-.form-status.success .caps-title {
-  font-size: 1.4rem;
+
+.form-status-title {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 1.5rem;
 }
 
 /* "I do my best to respond within 48 hours ..." below the button */
 .response-note {
+  margin: 0;
+  font-family: var(--font-serif);
   font-style: italic;
-  font-size: 0.82rem;
-  text-align: center;
-  color: var(--muted);
-  margin: 0.5rem 0 0;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text-soft);
 }

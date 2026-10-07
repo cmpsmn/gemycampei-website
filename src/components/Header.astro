@@ -4,167 +4,303 @@
  * HEADER  (src/components/Header.astro)
  * ============================================================================
  *
- * Centred logo and the main menu:
- *   HOME · ABOUT · INFO + · GALLERIES + · TESTIMONIALS · CONTACT
+ * Sticky bar with the wordmark on the left and the menu on the right:
+ *   HOME · ABOUT · INFO ▾ · GALLERIES ▾ · JOURNAL · TESTIMONIALS · CONTACT · DE
+ *
+ * The menu is in the language of the page. When the German version is switched
+ * on (settings.yaml → german), the last item switches to the same page in the
+ * other language (`alternates` from Base.astro).
+ *
+ * "Info" is not a link: it only opens its dropdown (the packages pages).
  *
  * The two dropdowns fill themselves:
- *   INFO +       → every folder in src/content/packages/
- *   GALLERIES +  → every category folder in galleries/ that has something to show
+ *   INFO ▾       → every folder in src/content/packages/
+ *   GALLERIES ▾  → every category folder in galleries/ that has something to show
  *
  * No JavaScript: the desktop dropdowns open with CSS (:hover / :focus-within),
- * the mobile menu opens with a hidden checkbox (the "checkbox hack").
+ * the full-screen mobile menu opens with a hidden checkbox (the "checkbox hack").
  * ============================================================================
  */
-import { getCollection } from 'astro:content';
 import { site } from '../site.config';
-import { getCategories } from '../lib/galleries';
+import { getCategories, categoryText, hrefIn } from '../lib/galleries';
+import { getPackagesPages } from '../lib/packages';
+import { getJournalArticles } from '../lib/journal';
+import { langOf, routes, useUi, type Alternates } from '../i18n';
+
+interface Props {
+  /** This page in each language (for the language switch) */
+  alternates?: Alternates;
+}
+
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
+const other = lang === 'en' ? 'de' : 'en';
+const { alternates = {} } = Astro.props;
+const switchHref = alternates[other] ?? routes.home[other];
 
 const categories = await getCategories({ onlyWithGalleries: true });
-const packagesPages = (await getCollection('packages')).sort((a, b) => a.data.order - b.data.order);
+const packagesPages = await getPackagesPages();
+const hasJournal = (await getJournalArticles(lang)).length > 0;
 
 type Link = { label: string; href: string };
-type Item = Link & { children?: Link[] };
+/** An item without `href` is only a label that opens its dropdown */
+type Item = { label: string; href?: string; children?: Link[]; highlight?: boolean };
 
 const menu: Item[] = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '/about/' },
+  { label: t.home, href: routes.home[lang] },
+  { label: t.about, href: routes.about[lang] },
   {
-    label: 'Info',
-    // Clicking "Info" itself (e.g. on touch screens) opens the first packages page
-    href: packagesPages[0] ? `/${packagesPages[0].id}/` : '/contact/',
-    children: packagesPages.map((p) => ({ label: p.data.menuLabel, href: `/${p.id}/` })),
+    // Only a label: the pages are in its dropdown
+    label: t.info,
+    children: packagesPages.map((p) => ({ label: p.label[lang], href: lang === 'de' ? p.hrefDe : p.href })),
   },
   {
-    label: 'Galleries',
-    href: '/galleries/',
-    children: categories.map((c) => ({ label: c.data.menuLabel, href: c.href })),
+    label: t.galleries,
+    href: routes.galleries[lang],
+    children: categories.map((c) => ({ label: categoryText(c, lang).menuLabel, href: hrefIn(c, lang) })),
   },
-  { label: 'Testimonials', href: '/testimonials/' },
-  { label: 'Contact', href: '/contact/' },
+  ...(hasJournal ? [{ label: t.journal, href: routes.journal[lang] }] : []),
+  { label: t.testimonials, href: routes.testimonials[lang] },
+  { label: t.contact, href: routes.contact[lang], highlight: true },
 ];
 
 // Mark the menu item of the current page (for styling and screen readers)
 const path = Astro.url.pathname;
-const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
-const isActive = (item: Item) => isCurrent(item.href) || (item.children ?? []).some((c) => isCurrent(c.href));
+const isCurrent = (href: string) => (href === routes.home[lang] ? path === href : path.startsWith(href));
+const isActive = (item: Item) =>
+  (item.href ? isCurrent(item.href) : false) || (item.children ?? []).some((c) => isCurrent(c.href));
 ---
 
 <header class="header">
-  <div class="container">
-    <div class="top">
-      <a href="/" class="logo">{site.name}</a>
+  <a href={routes.home[lang]} class="logo wordmark">{site.name}</a>
 
-      <!-- Mobile menu: the label toggles the invisible checkbox, CSS shows the menu when checked -->
-      <input type="checkbox" id="menu-toggle" class="menu-toggle visually-hidden" />
-      <label for="menu-toggle" class="menu-button">
-        <span class="visually-hidden">Menu</span>
-        <span class="bar"></span><span class="bar"></span>
-      </label>
-    </div>
-
-    <nav aria-label="Main">
-      <ul class="menu">
-        {
-          menu.map((item) => (
-            <li class:list={['item', { 'has-children': item.children?.length }]}>
-              <a href={item.href} aria-current={isActive(item) ? 'page' : undefined}>
+  <!-- Desktop menu -->
+  <nav class="desktop-nav" aria-label={t.mainNav}>
+    <ul class="menu">
+      {
+        menu.map((item) => (
+          <li class:list={['item', { 'has-children': item.children?.length }]}>
+            {item.href ? (
+              <a
+                href={item.href}
+                class:list={['menu-link', { highlight: item.highlight }]}
+                aria-current={isActive(item) ? 'page' : undefined}
+              >
                 {item.label}
-                {item.children?.length ? <span aria-hidden="true"> +</span> : null}
+                {item.children?.length ? <span aria-hidden="true">&#8202;▾</span> : null}
               </a>
-              {item.children?.length ? (
-                <ul class="submenu">
-                  {item.children.map((child) => (
-                    <li>
-                      <a href={child.href} aria-current={isCurrent(child.href) ? 'page' : undefined}>
-                        {child.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-  </div>
+            ) : (
+              /* A button, so keyboard users can open the dropdown (it opens on focus) */
+              <button type="button" class:list={['menu-link', 'menu-label', { current: isActive(item) }]} aria-haspopup="true">
+                {item.label}
+                <span aria-hidden="true">&#8202;▾</span>
+              </button>
+            )}
+            {item.children?.length ? (
+              <ul class="submenu">
+                {item.children.map((child) => (
+                  <li>
+                    <a href={child.href} aria-current={isCurrent(child.href) ? 'page' : undefined}>
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </li>
+        ))
+      }
+      {
+        site.german && (
+          <li class="item">
+            <a href={switchHref} class="menu-link lang-switch" hreflang={other} lang={other} title={t.languageSwitchLabel}>
+              {other.toUpperCase()}
+            </a>
+          </li>
+        )
+      }
+    </ul>
+  </nav>
+
+  <!-- Mobile: the label toggles the invisible checkbox, CSS shows the overlay -->
+  <input type="checkbox" id="menu-toggle" class="menu-toggle visually-hidden" />
+  <label for="menu-toggle" class="menu-button">
+    <span class="menu-word" aria-hidden="true">{t.menu}</span>
+    <span class="close-word" aria-hidden="true">{t.close}</span>
+    <span class="visually-hidden">{t.menuToggle}</span>
+    <span class="bars"><span class="bar"></span><span class="bar"></span></span>
+  </label>
+
+  <nav class="mobile-nav" aria-label={`${t.mainNav} (mobile)`}>
+    {
+      menu.map((item) => (
+        <>
+          {item.href ? (
+            <a href={item.href} class:list={['mobile-link', { highlight: item.highlight }]}>
+              {item.label}
+            </a>
+          ) : (
+            <span class="mobile-link mobile-label">{item.label}</span>
+          )}
+          {item.children?.length ? (
+            <div class="mobile-children">
+              {item.children.map((child) => (
+                <a href={child.href}>{child.label}</a>
+              ))}
+            </div>
+          ) : null}
+        </>
+      ))
+    }
+    {
+      site.german && (
+        <a href={switchHref} class="mobile-link" hreflang={other} lang={other}>
+          {t.languageSwitch}
+        </a>
+      )
+    }
+    <div class="mobile-social">
+      <a href={site.social.instagram}>Instagram</a>
+      <a href={site.social.tiktok}>TikTok</a>
+      <a href={site.social.pinterest}>Pinterest</a>
+    </div>
+  </nav>
 </header>
 
 <style>
+  /*
+   * The bar stays at the top while scrolling. The background is slightly
+   * see-through, with the photos behind it blurred (backdrop-filter).
+   */
   .header {
-    background: var(--bg);
-    position: relative;
-    z-index: 50;
-  }
-
-  .top {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    min-height: var(--header-h);
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
     align-items: center;
-    padding-top: 2.4rem;
+    justify-content: space-between;
+    gap: 0.875rem 1.5rem;
+    padding: 1rem var(--edge);
+    background: oklch(0.955 0.012 85 / 0.94);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
   }
 
   .logo {
-    font-family: var(--font-serif);
-    font-size: 1.3rem;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    text-decoration: none;
+    font-size: clamp(1rem, 1.6vw, 1.1875rem);
+    white-space: nowrap;
   }
 
   .menu {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
-    gap: 0.5rem 3.6rem;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.375rem clamp(0.875rem, 2vw, 1.875rem);
     list-style: none;
     margin: 0;
-    padding: 2.6rem 0 2.2rem;
+    padding: 0;
   }
 
   .item {
     position: relative;
   }
 
-  .menu a {
+  .menu-link {
     display: inline-block;
-    font-size: 0.8rem;
-    font-weight: 300;
-    letter-spacing: 0.22em;
+    padding-block: 0.375rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    text-decoration: none;
-    padding-block: 0.3rem;
   }
 
-  .item > a[aria-current='page'] {
+  /*
+   * Contact is set apart by an outline, not by colour: terracotta is kept for
+   * the current page only, so two items never look active at the same time.
+   */
+  .menu-link.highlight {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--line-strong);
+    transition: border-color 0.25s ease, color 0.25s ease;
+  }
+
+  .menu-link.highlight:hover {
+    border-color: var(--accent);
+  }
+
+  .menu-link[aria-current='page'],
+  .menu-link.current {
     color: var(--accent);
+  }
+
+  /* "Info": looks like the other items, but is not a link */
+  .menu-label {
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 0.75rem;
+    color: inherit;
+    cursor: default;
+  }
+
+  .mobile-label {
+    cursor: default;
+  }
+
+  .menu-link.highlight[aria-current='page'] {
+    border-color: var(--accent);
+  }
+
+  /*
+   * Between tablet and small laptop widths the menu is tightened a little, so
+   * that it stays on one line in both languages (German words are longer).
+   */
+  @media (max-width: 1080px) {
+    .menu {
+      column-gap: 0.75rem;
+    }
+
+    .menu-link {
+      letter-spacing: 0.1em;
+    }
+
+    .menu-link.highlight {
+      padding-inline: 0.6rem;
+    }
   }
 
   /* ---- Desktop dropdown: hidden until the item is hovered or focused ---- */
   .submenu {
     position: absolute;
     top: 100%;
-    left: 50%;
-    min-width: 16rem;
-    transform: translateX(-50%);
+    right: -1rem;
+    min-width: 17.5rem;
     list-style: none;
-    margin: 0.6rem 0 0;
-    padding: 1rem 0;
-    background: var(--panel);
-    text-align: center;
+    margin: 0;
+    padding: 0.625rem 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 40px -24px oklch(0.28 0.012 60 / 0.35);
+    display: flex;
+    flex-direction: column;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s, visibility 0.2s;
   }
 
-  /* Invisible bridge so the menu stays open while the mouse moves down to it */
-  .submenu::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -0.8rem;
-    height: 0.8rem;
+  .submenu a {
+    padding: 0.6875rem 1.25rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .submenu a:hover,
+  .submenu a[aria-current='page'] {
+    color: var(--accent);
   }
 
   .has-children:hover .submenu,
@@ -173,103 +309,117 @@ const isActive = (item: Item) => isCurrent(item.href) || (item.children ?? []).s
     visibility: visible;
   }
 
-  .submenu a {
-    display: block;
-    padding: 0.55rem 1.5rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .submenu a:hover,
-  .submenu a[aria-current='page'] {
-    color: var(--accent);
-  }
-
-  .menu-button {
+  .menu-button,
+  .mobile-nav {
     display: none;
   }
 
-  /* ---- Mobile (screens up to 900px wide) -------------------------------- */
-  @media (max-width: 900px) {
-    .top {
-      justify-content: space-between;
-      padding-block: 1.25rem;
+  /* ---- Mobile (screens up to 820px wide, as in the design) -------------- */
+  @media (max-width: 820px) {
+    .desktop-nav {
+      display: none;
     }
 
     .menu-button {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 7px;
-      width: 2.75rem;
-      height: 2.75rem;
+      align-items: center;
+      gap: 0.625rem;
+      min-height: 2.75rem;
       cursor: pointer;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .bars {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 22px;
     }
 
     .bar {
-      display: block;
       height: 1px;
-      width: 1.6rem;
-      margin-left: auto;
       background: var(--text);
       transition: transform 0.25s;
     }
 
-    /* Turn the two bars into an X when the menu is open */
-    .menu-toggle:checked + .menu-button .bar:nth-of-type(2) {
-      transform: translateY(4px) rotate(45deg);
+    .close-word {
+      display: none;
     }
 
-    .menu-toggle:checked + .menu-button .bar:nth-of-type(3) {
-      transform: translateY(-4px) rotate(-45deg);
+    /* Swap the label and turn the bars into an X while the menu is open */
+    .menu-toggle:checked ~ .menu-button .menu-word {
+      display: none;
     }
 
-    .menu-toggle:focus-visible + .menu-button {
+    .menu-toggle:checked ~ .menu-button .close-word {
+      display: inline;
+    }
+
+    .menu-toggle:checked ~ .menu-button .bar:first-child {
+      transform: translateY(3px) rotate(45deg);
+    }
+
+    .menu-toggle:checked ~ .menu-button .bar:last-child {
+      transform: translateY(-3px) rotate(-45deg);
+    }
+
+    .menu-toggle:focus-visible ~ .menu-button {
       outline: 2px solid var(--accent);
+      outline-offset: 3px;
     }
 
-    nav {
-      display: none;
-      border-top: 1px solid var(--line);
+    /* Full-screen overlay with large serif links */
+    .menu-toggle:checked ~ .mobile-nav {
+      display: flex;
     }
 
-    /* :has() = "the header that contains a checked checkbox" */
-    .header:has(.menu-toggle:checked) nav {
-      display: block;
-    }
-
-    .menu {
+    .mobile-nav {
+      position: fixed;
+      inset: 0;
+      z-index: 55;
       flex-direction: column;
-      align-items: center;
-      gap: 0;
-      padding: 1rem 0 2rem;
+      overflow-y: auto;
+      padding: 6rem 1.25rem 2.5rem;
+      background: var(--bg);
     }
 
-    .menu a {
-      padding-block: 0.7rem;
+    .mobile-link {
+      padding-block: 0.875rem;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--font-serif);
+      font-weight: 300;
+      font-size: 1.875rem;
+      line-height: 1.1;
     }
 
-    /* Sub-items are always listed on mobile: hover menus don't work on touch screens */
-    .submenu {
-      position: static;
-      transform: none;
-      opacity: 1;
-      visibility: visible;
-      background: none;
-      padding: 0 0 0.6rem;
-      margin: 0;
-      min-width: 0;
+    .mobile-link.highlight {
+      color: var(--accent);
     }
 
-    .submenu::before {
-      display: none;
+    .mobile-children {
+      display: flex;
+      flex-direction: column;
+      padding-block: 0.375rem 0.625rem;
+      border-bottom: 1px solid var(--line);
     }
 
-    .submenu a {
-      padding: 0.35rem 1rem;
-      color: var(--muted);
+    .mobile-children a {
+      padding: 0.625rem 0 0.625rem 1.125rem;
       font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .mobile-social {
+      display: flex;
+      gap: 1.375rem;
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
     }
   }
 </style>

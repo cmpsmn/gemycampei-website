@@ -1,0 +1,39 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+passo-gardena-couple-session-k-and-b-001.jpg:
+  en: "Couple walking a path towards the Sella group at Passo Gardena on a summer evening"
+  de: "Paar geht an einem Sommerabend einen Weg Richtung Sellagruppe am Grödner Joch"
+passo-gardena-couple-session-k-and-b-002.jpg:
+  en: "She looks back and smiles in a lace gown and long veil on the trail"
+  de: "Sie blickt im Spitzenkleid mit langem Schleier auf dem Weg lächelnd zurück"
+passo-gardena-couple-session-k-and-b-003.jpg:
+  en: "The Sella rock towers glowing in golden light above Passo Gardena"
+  de: "Die Felstürme der Sellagruppe leuchten im goldenen Licht über dem Grödner Joch"
+passo-gardena-couple-session-k-and-b-004.jpg:
+  en: "He lifts her in her lace gown, the rock towers behind them"
+  de: "Er hebt sie im Spitzenkleid hoch, dahinter die Felstürme"
+passo-gardena-couple-session-k-and-b-005.jpg:
+  en: "Couple walking a winding path through wildflower meadows below the Dolomites"
+  de: "Paar geht einen gewundenen Weg durch Blumenwiesen unter den Dolomiten"
+passo-gardena-couple-session-k-and-b-006.jpg:
+  en: "Close-up of the couple laughing nose to nose"
+  de: "Nahaufnahme des Paares, lachend Nase an Nase"
+passo-gardena-couple-session-k-and-b-007.jpg:
+  en: "He holds her close on the hillside with the Sella group behind"
+  de: "Er hält sie am Hang eng umschlungen, dahinter die Sellagruppe"
+passo-gardena-couple-session-k-and-b-008.jpg:
+  en: "Couple wrapped in a long veil glowing in the evening light"
+  de: "Paar in einen langen Schleier gehüllt, im Abendlicht leuchtend"
+passo-gardena-couple-session-k-and-b-009.jpg:
+  en: "She twirls her lace gown on the path as he watches"
+  de: "Sie schwingt ihr Spitzenkleid auf dem Weg, während er zusieht"
+passo-gardena-couple-session-k-and-b-010.jpg:
+  en: "Couple walking hand in hand along the trail below the rock walls"
+  de: "Paar geht Hand in Hand den Weg unter den Felswänden entlang"
+passo-gardena-couple-session-k-and-b-011.jpg:
+  en: "Couple small on a flower meadow below the towering Dolomites"
+  de: "Paar klein auf einer Blumenwiese unter den hohen Dolomiten"

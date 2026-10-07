@@ -22,7 +22,7 @@
  * ============================================================================
  */
 
-import { mkdir, readdir, rename, stat } from 'node:fs/promises';
+import { mkdir, readdir, rename, rm, stat, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 import {
@@ -39,7 +39,8 @@ import { applyChanges, parseMarkdown, readMarkdown, toPlain, writeMarkdown } fro
 import { assertCategory, listCategories, positionsOf, renameInOrders, restorePositions, syncGalleryInOrders, updateOrders } from './categories.mjs';
 import { detachGallery, reattachGallery, renameGalleryRefs, renamePhotoRefs } from './testimonials.mjs';
 import { moveFile, moveToTrash } from './trash.mjs';
-import { isGalleryPhoto, naturalSort, photoName, slugify } from '../../../scripts/lib/photos.mjs';
+import { isGalleryPhoto, naturalSort, optimisePhoto, photoName, slugify } from '../../../scripts/lib/photos.mjs';
+import { readAlts, renameAlts } from './alts.mjs';
 
 const REGIONS = ['vienna', 'dolomites', 'austria', 'destination'];
 
@@ -57,6 +58,25 @@ async function photoInfo(file) {
     sizeCache.set(key, { width: rotated ? meta.height : meta.width, height: rotated ? meta.width : meta.height });
   }
   return { ...sizeCache.get(key), size: info.size, version: Math.round(info.mtimeMs) };
+}
+
+/**
+ * Gives files a new, unique modification time.
+ *
+ * The manager recognises a photo version by file name + modification time
+ * (thumbnail URLs and the thumbnail cache). Photos imported together often
+ * share the same time to the millisecond, so after renaming, a different photo
+ * could get a name AND time that an old thumbnail already used, and the old
+ * picture showed up twice. Called for every photo that is renamed or moved.
+ * @param {string[]} files absolute paths
+ */
+let lastStamp = 0;
+export async function markChanged(files) {
+  for (const file of files) {
+    lastStamp = Math.max(Date.now(), lastStamp + 1);
+    const time = new Date(lastStamp);
+    await utimes(file, time, time);
+  }
 }
 
 /** Photo file names in a gallery folder, in website order (file name order). */
@@ -86,11 +106,21 @@ export async function readGallery(id) {
   const { doc, body } = await readMarkdown(path.join(dir, 'gallery.md'));
   const data = toPlain(doc);
   const names = await photoNames(category, slug);
-  const photos = await Promise.all(names.map(async (name) => ({ name, ...(await photoInfo(path.join(dir, name))) })));
+  const alts = await readAlts(dir);
+  const photos = await Promise.all(
+    names.map(async (name) => ({
+      name,
+      ...(await photoInfo(path.join(dir, name))),
+      alt: { en: alts[name]?.en ?? '', de: alts[name]?.de ?? '' },
+    })),
+  );
 
   // Same cover rule as the website: cover setting → a file called cover.* → first photo
   const coverPhoto =
     (data.cover && names.includes(data.cover) && data.cover) || names.find((n) => /^cover\./i.test(n)) || names[0] || '';
+
+  // German texts from gallery.de.md (optional; empty strings when missing)
+  const german = await readGerman(dir);
 
   // Dates come back from YAML as Date objects or strings: always send "YYYY-MM-DD"
   const date = data.date instanceof Date ? data.date.toISOString().slice(0, 10) : (data.date ?? '');
@@ -115,11 +145,83 @@ export async function readGallery(id) {
       legacyUrls: Array.isArray(data.legacyUrls) ? data.legacyUrls : [],
     },
     story: body.trim(),
+    videos: readVideos(data.videos),
+    posters: await posterNames(dir),
+    de: german,
     categories: [category, ...(Array.isArray(data.alsoIn) ? data.alsoIn : []).filter((c) => c !== category)],
     photos,
     coverPhoto,
     displayTitle: data.title || titleFromFolder(slug),
   };
+}
+
+/** Vimeo videos of a gallery (gallery.md → videos), always as plain strings */
+function readVideos(list) {
+  if (!Array.isArray(list)) return [];
+  return list.map((v) => ({ vimeoId: String(v?.vimeoId ?? ''), title: String(v?.title ?? ''), poster: String(v?.poster ?? '') }));
+}
+
+/** Preview images of the videos: files in the gallery's posters/ folder */
+async function posterNames(dir) {
+  const posters = path.join(dir, 'posters');
+  return (await isDirectory(posters)) ? (await readdir(posters)).filter(isGalleryPhoto).sort(naturalSort) : [];
+}
+
+/**
+ * Saves a video preview image in posters/ (optimised like photos).
+ * @returns {{ name: string }} the file name to use as `poster`
+ */
+export async function uploadPoster(id, originalName, buffer) {
+  const { category, slug } = parseGalleryId(id);
+  const dir = galleryDir(category, slug);
+  if (!(await isDirectory(dir))) throw new UserError(`The gallery "${id}" does not exist.`, 404);
+  let photo;
+  try {
+    photo = await optimisePhoto(buffer);
+  } catch {
+    throw new UserError('This file could not be read as a photo.');
+  }
+  const name = `${slugify(String(originalName).replace(/\.[^.]+$/, '')) || 'poster'}.jpg`;
+  await mkdir(path.join(dir, 'posters'), { recursive: true });
+  await writeFile(path.join(dir, 'posters', name), photo.buffer);
+  return { name };
+}
+
+/** The German fields of gallery.de.md, as strings (empty when the file is missing). */
+const GERMAN_FIELDS = ['title', 'type', 'location', 'seoTitle', 'seoDescription'];
+
+async function readGerman(dir) {
+  const file = path.join(dir, 'gallery.de.md');
+  const empty = { title: '', type: '', location: '', seoTitle: '', seoDescription: '', story: '', videoTitles: [] };
+  if (!(await exists(file))) return empty;
+  const { doc, body } = await readMarkdown(file);
+  const data = toPlain(doc);
+  return {
+    ...empty,
+    ...Object.fromEntries(GERMAN_FIELDS.map((key) => [key, String(data[key] ?? '')])),
+    videoTitles: Array.isArray(data.videoTitles) ? data.videoTitles.map(String) : [],
+    story: body.trim(),
+  };
+}
+
+/**
+ * Writes gallery.de.md. The German page of a gallery is only shown to Google
+ * once this file exists; with all fields empty the file is removed again.
+ */
+async function writeGerman(dir, german = {}) {
+  const file = path.join(dir, 'gallery.de.md');
+  const values = Object.fromEntries(GERMAN_FIELDS.map((key) => [key, String(german[key] ?? '').trim()]));
+  const story = String(german.story ?? '').trim();
+  // Video titles in the order of the videos; trailing empty ones are left out
+  const videoTitles = (Array.isArray(german.videoTitles) ? german.videoTitles : []).map((t) => String(t ?? '').trim());
+  while (videoTitles.length && !videoTitles.at(-1)) videoTitles.pop();
+  if (!story && !videoTitles.length && Object.values(values).every((v) => !v)) {
+    if (await exists(file)) await rm(file);
+    return;
+  }
+  const { doc } = (await exists(file)) ? await readMarkdown(file) : parseMarkdown(NEW_GERMAN_TEMPLATE);
+  applyChanges(doc, { ...values, videoTitles });
+  await writeMarkdown(file, doc, story);
 }
 
 /** Short summaries of all galleries for the sidebar. */
@@ -136,8 +238,10 @@ export async function listGalleries() {
       couple: gallery.fields.couple,
       draft: gallery.fields.draft,
       photoCount: gallery.photos.length,
-      coverPhoto: gallery.coverPhoto,
+      // A gallery of videos only shows its first preview image
+      coverPhoto: gallery.coverPhoto || (gallery.videos[0]?.poster ? `posters/${gallery.videos[0].poster}` : ''),
       coverVersion: cover?.version ?? 0,
+      videoCount: gallery.videos.length,
       categories: gallery.categories,
     });
   }
@@ -151,6 +255,13 @@ const NEW_GALLERY_TEMPLATE = `---
 title: ""
 # Hidden on the live site until you publish it in the manager
 draft: true
+---
+`;
+
+/** Template for German texts (gallery.de.md) */
+const NEW_GERMAN_TEMPLATE = `---
+# German texts of this gallery. Photos and settings come from gallery.md.
+# The text below the settings block is the German story.
 ---
 `;
 
@@ -202,8 +313,12 @@ export async function renumberPhotos(id, orderedNames) {
     await rename(path.join(dir, temp), path.join(dir, target));
     if (target !== name) map[name] = target;
   }
+  // Renamed photos get a new version, so no old thumbnail is shown for them
+  await markChanged(Object.values(map).map((name) => path.join(dir, name)));
 
   if (Object.keys(map).length) {
+    // Photo descriptions are keyed by file name: rename them too
+    await renameAlts(dir, map);
     const file = path.join(dir, 'gallery.md');
     const { doc, body } = await readMarkdown(file);
     const cover = toPlain(doc).cover;
@@ -217,7 +332,7 @@ export async function renumberPhotos(id, orderedNames) {
 }
 
 /** Checks the form data from the editor before anything is written. */
-async function validate(payload, photos) {
+async function validate(payload, photos, posters = []) {
   const { fields, categories, mainCategory, slug } = payload;
   assertSlug(slug, 'Folder name');
   if (!Array.isArray(categories) || categories.length === 0) throw new UserError('Tick at least one category.');
@@ -230,6 +345,13 @@ async function validate(payload, photos) {
   if (fields.date && !/^\d{4}-\d{2}-\d{2}$/.test(fields.date)) throw new UserError('The date must look like 2026-06-14.');
   if (fields.coverFocus && !/^\d{1,3}% \d{1,3}%$/.test(fields.coverFocus)) throw new UserError('Invalid cover focus point.');
   if (fields.cover && !photos.includes(fields.cover)) throw new UserError(`The cover "${fields.cover}" is not in this gallery.`);
+  for (const video of payload.videos ?? []) {
+    if (!/^\d+$/.test(String(video.vimeoId ?? ''))) {
+      throw new UserError('Each video needs the number from its Vimeo address (vimeo.com/1226323019 → 1226323019).');
+    }
+    if (!String(video.title ?? '').trim()) throw new UserError('Each video needs a title.');
+    if (!video.poster || !posters.includes(video.poster)) throw new UserError(`Choose or upload a preview image for "${video.title}".`);
+  }
   for (const url of fields.legacyUrls ?? []) {
     if (!/^\/[\w\-./]*$/.test(url)) throw new UserError(`Old address "${url}" must start with / (e.g. /PalaisDaunKinsky/).`);
   }
@@ -243,7 +365,7 @@ async function validate(payload, photos) {
  */
 export async function saveGallery(id, payload) {
   const current = await readGallery(id);
-  await validate(payload, current.photos.map((p) => p.name));
+  await validate(payload, current.photos.map((p) => p.name), current.posters);
   const { fields, story, categories, mainCategory, slug } = payload;
 
   const newId = `${mainCategory}/${slug}`;
@@ -280,8 +402,13 @@ export async function saveGallery(id, payload) {
     seoDescription: fields.seoDescription?.trim(),
     draft: fields.draft ? true : undefined, // only written when true
     legacyUrls,
+    // Only touched when the form sends videos (older forms don't)
+    ...(Array.isArray(payload.videos)
+      ? { videos: payload.videos.map((v) => ({ vimeoId: String(v.vimeoId), title: String(v.title).trim(), poster: v.poster })) }
+      : {}),
   });
   await writeMarkdown(file, doc, story ?? '');
+  if (payload.de) await writeGerman(galleryDir(mainCategory, slug), payload.de);
 
   await syncGalleryInOrders(newId, categories);
   return readGallery(newId);

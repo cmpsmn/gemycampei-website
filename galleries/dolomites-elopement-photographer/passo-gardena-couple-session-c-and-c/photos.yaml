@@ -1,0 +1,66 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+passo-gardena-couple-session-c-and-c-001.jpg:
+  en: "Couple on a grassy slope at Passo Gardena, clouds over the Dolomites"
+  de: "Paar auf einem Wiesenhang am Grödner Joch, Wolken über den Dolomiten"
+passo-gardena-couple-session-c-and-c-002.jpg:
+  en: "She smiles in a white dress on a mountain path, he sits on a wooden fence"
+  de: "Sie lächelt im weißen Kleid auf einem Bergweg, er sitzt auf einem Holzzaun"
+passo-gardena-couple-session-c-and-c-003.jpg:
+  en: "Her hands with wedding rings resting on the back of his neck"
+  de: "Ihre Hände mit Eheringen im Nacken ihres Mannes"
+passo-gardena-couple-session-c-and-c-004.jpg:
+  en: "Couple walking hand in hand up a gravel path towards the rock towers of Passo Gardena"
+  de: "Paar geht Hand in Hand einen Schotterweg zu den Felstürmen am Grödner Joch hinauf"
+passo-gardena-couple-session-c-and-c-005.jpg:
+  en: "Couple on a steep meadow below the rock walls of Passo Gardena"
+  de: "Paar auf einer steilen Wiese unter den Felswänden am Grödner Joch"
+passo-gardena-couple-session-c-and-c-006.jpg:
+  en: "Couple resting their heads on a wooden bench above the valley, on film"
+  de: "Paar lehnt die Köpfe an eine Holzbank über dem Tal, auf Film"
+passo-gardena-couple-session-c-and-c-007.jpg:
+  en: "Couple looking back over their shoulders on the path by the little chapel at Passo Gardena"
+  de: "Paar blickt auf dem Weg bei der kleinen Kapelle am Grödner Joch über die Schulter zurück"
+passo-gardena-couple-session-c-and-c-008.jpg:
+  en: "Couple standing in front of a large wooden barn in the mist"
+  de: "Paar steht im Nebel vor einem großen Holzstadel"
+passo-gardena-couple-session-c-and-c-009.jpg:
+  en: "Black and white photo of the couple embracing on a bench"
+  de: "Schwarz-Weiß-Foto: Das Paar umarmt sich auf einer Bank"
+passo-gardena-couple-session-c-and-c-010.jpg:
+  en: "Hikers resting on the meadow below the Cir peaks, the bride's dress in the foreground"
+  de: "Wanderer rasten auf der Wiese unter den Cirspitzen, im Vordergrund das Kleid der Braut"
+passo-gardena-couple-session-c-and-c-011.jpg:
+  en: "Green hills and the winding road of Passo Gardena"
+  de: "Grüne Hügel und die kurvige Straße des Grödner Jochs"
+passo-gardena-couple-session-c-and-c-012.jpg:
+  en: "He leads her by the hand up a steep path"
+  de: "Er führt sie an der Hand einen steilen Weg hinauf"
+passo-gardena-couple-session-c-and-c-013.jpg:
+  en: "He lifts her as she holds his face and smiles"
+  de: "Er hebt sie hoch, sie hält sein Gesicht und lächelt"
+passo-gardena-couple-session-c-and-c-014.jpg:
+  en: "Couple walking hand in hand through golden grass below the rock walls"
+  de: "Paar geht Hand in Hand durch goldenes Gras unter den Felswänden"
+passo-gardena-couple-session-c-and-c-015.jpg:
+  en: "Couple small on the path below the rock towers of Passo Gardena"
+  de: "Paar klein auf dem Weg unter den Felstürmen am Grödner Joch"
+passo-gardena-couple-session-c-and-c-016.jpg:
+  en: "Couple standing together on the path, the Cir peaks in the clouds behind"
+  de: "Paar steht zusammen auf dem Weg, dahinter die Cirspitzen in den Wolken"
+passo-gardena-couple-session-c-and-c-017.jpg:
+  en: "Wooden wayside shrine by the hiking path"
+  de: "Hölzerner Bildstock am Wanderweg"
+passo-gardena-couple-session-c-and-c-018.jpg:
+  en: "Couple kissing below the tall rock towers of Passo Gardena"
+  de: "Paar küsst sich unter den hohen Felstürmen am Grödner Joch"
+passo-gardena-couple-session-c-and-c-019.jpg:
+  en: "He runs towards her across the meadow below the rock walls"
+  de: "Er läuft über die Wiese unter den Felswänden auf sie zu"
+passo-gardena-couple-session-c-and-c-020.jpg:
+  en: "Close-up of her hand with a ring on his arm, her white eyelet dress"
+  de: "Nahaufnahme ihrer Hand mit Ring an seinem Arm, ihr weißes Lochstickereikleid"

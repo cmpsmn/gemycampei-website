@@ -1,0 +1,38 @@
+---
+/**
+ * THANK YOU  (src/views/ThankYouView.astro)
+ * Shown after sending the contact form when the visitor's browser has
+ * JavaScript turned off (public/contact.php redirects here, in the language
+ * of the form). With JavaScript, the form shows its own thank-you message.
+ */
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+import { langOf, pick, routes } from '../i18n';
+
+const lang = langOf(Astro.currentLocale);
+const copy = pick(lang, {
+  en: {
+    title: 'Thank you',
+    heading: 'Your message is on its way',
+    text: "Your message has been sent. I do my best to respond within 48 hours. If you don't hear from me by then, please check your spam folder or write to",
+    back: 'Back to the galleries',
+  },
+  de: {
+    title: 'Danke',
+    heading: 'Eure Nachricht ist unterwegs',
+    text: 'Eure Nachricht wurde gesendet. Ich antworte so schnell wie möglich, meist innerhalb von 48 Stunden. Falls ihr bis dahin nichts von mir hört, schaut bitte in euren Spam-Ordner oder schreibt an',
+    back: 'Zurück zu den Galerien',
+  },
+});
+---
+
+<Base title={copy.title} noindex cta={false} alternates={{ en: routes.thankYou.en, de: routes.thankYou.de }}>
+  <section class="section container narrow center">
+    <p class="eyebrow">{copy.title}</p>
+    <h1>{copy.heading}</h1>
+    <p>
+      {copy.text} <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+    <a class="button" href={routes.galleries[lang]}>{copy.back}</a>
+  </section>
+</Base>

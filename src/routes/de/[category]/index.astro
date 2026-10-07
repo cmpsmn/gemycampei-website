@@ -1,0 +1,29 @@
+---
+/**
+ * ============================================================================
+ * CATEGORY PAGES, GERMAN  (src/pages/de/[category]/index.astro)
+ * ============================================================================
+ *
+ * The German twin of src/pages/[category]/index.astro, e.g.
+ *   /de/hochzeitsfotograf-wien/  /de/elopement-fotograf-dolomiten/
+ * The address is the `slug` in galleries/<category>/_category.de.md.
+ * ============================================================================
+ */
+import type { GetStaticPaths } from 'astro';
+import CategoryView from '../../../views/CategoryView.astro';
+import { getCategories, type Category } from '../../../lib/galleries';
+
+export const getStaticPaths = (async () => {
+  const categories = await getCategories({ onlyWithGalleries: true });
+  return categories.map((category) => ({
+    params: { category: category.de?.data.slug ?? category.id },
+    props: { category },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  category: Category;
+}
+---
+
+<CategoryView category={Astro.props.category} />

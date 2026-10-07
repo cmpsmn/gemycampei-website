@@ -39,7 +39,7 @@ async function runningUrl() {
 
 /**
  * Makes sure the dev server runs and returns the full URL for a page.
- * @param {string} pagePath e.g. "/weddings/palais-daun-kinsky-wedding-vienna/"
+ * @param {string} pagePath e.g. "/vienna-wedding-photographer/palais-daun-kinsky-wedding-vienna/"
  */
 export async function previewUrl(pagePath = '/') {
   if (!/^\/[a-z0-9/-]*$/.test(pagePath)) throw new UserError('Invalid page address.');

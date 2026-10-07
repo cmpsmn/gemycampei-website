@@ -1,0 +1,146 @@
+---
+/**
+ * ============================================================================
+ * JOURNAL OVERVIEW  (src/views/JournalIndexView.astro)
+ * ============================================================================
+ * Used by src/pages/journal/index.astro (/journal/) and
+ * src/pages/de/journal/index.astro (/de/journal/).
+ * Lists every guide in src/content/journal/, newest first. German lists only
+ * the guides that have an index.de.md.
+ * ============================================================================
+ */
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { getJournalArticles, articleText, describePhotoRef } from '../lib/journal';
+import { breadcrumbSchema } from '../lib/seo';
+import { langOf, pick, routes, useUi } from '../i18n';
+
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
+const articles = await Promise.all(
+  (await getJournalArticles(lang)).map(async (article) => ({ ...article, coverAlt: await describePhotoRef(article.coverRef, lang) })),
+);
+const dateFormat = new Intl.DateTimeFormat(lang === 'de' ? 'de-AT' : 'en-GB', { month: 'long', year: 'numeric' });
+
+const copy = pick(lang, {
+  en: {
+    title: 'Journal · Elopement & Wedding Planning Guides',
+    description:
+      'Guides for planning an elopement in the Dolomites, a wedding in Vienna or a destination wedding in Europe: places, seasons, timelines and honest advice.',
+    display: 'Guides for planning your day',
+    blurb: 'Places, seasons and honest advice from behind the camera, in the Dolomites, Vienna and beyond.',
+  },
+  de: {
+    title: 'Journal · Ratgeber für Hochzeit & Elopement',
+    description:
+      'Ratgeber für euer Elopement in den Dolomiten, eure Hochzeit in Wien oder eure Destination Wedding in Europa: Orte, Jahreszeiten, Zeitpläne und ehrliche Tipps.',
+    display: 'Ratgeber für die Planung eures Tages',
+    blurb: 'Orte, Jahreszeiten und ehrliche Tipps von hinter der Kamera, in den Dolomiten, in Wien und darüber hinaus.',
+  },
+});
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  schema={[
+    breadcrumbSchema([
+      { name: t.breadcrumbHome, path: routes.home[lang] },
+      { name: t.journal, path: routes.journal[lang] },
+    ]),
+  ]}
+  alternates={{ en: routes.journal.en, de: routes.journal.de }}
+>
+  <section class="section">
+    <header class="head">
+      <div>
+        <h1 class="h1-quiet">{t.journal}</h1>
+        <p class="display head-title">{copy.display}</p>
+      </div>
+      <p class="lede head-blurb">{copy.blurb}</p>
+    </header>
+
+    <div class="articles">
+      {
+        articles.map((article, i) => {
+          const text = articleText(article, lang);
+          return (
+            <a class="article" href={lang === 'de' ? article.hrefDe : article.href}>
+              <Image
+                src={article.cover}
+                alt={article.coverAlt}
+                widths={[480, 800, 1200]}
+                sizes="(max-width: 800px) 92vw, 45vw"
+                quality={72}
+                loading={i < 2 ? 'eager' : 'lazy'}
+                class="article-image"
+              />
+              <span class="meta">{dateFormat.format(article.entry.data.updated ?? article.entry.data.date)}</span>
+              <h2 class="article-title">{text.title}</h2>
+              <p class="body-text article-text">{text.description}</p>
+            </a>
+          );
+        })
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem clamp(1.5rem, 4vw, 3rem);
+    margin-bottom: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .head-title {
+    font-size: clamp(2.25rem, 6.4vw, 5rem);
+  }
+
+  .head-blurb {
+    max-width: 34ch;
+  }
+
+  .articles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 3vw, 2.5rem);
+  }
+
+  .article {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    color: var(--text);
+  }
+
+  .article:hover {
+    color: var(--text);
+  }
+
+  .article :global(.article-image) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    margin-bottom: var(--space-1);
+  }
+
+  .article-title {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+    line-height: 1.15;
+  }
+
+  .article-text {
+    margin: 0;
+  }
+
+  @media (max-width: 800px) {
+    .articles {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

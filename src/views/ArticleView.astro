@@ -1,0 +1,270 @@
+---
+/**
+ * ============================================================================
+ * JOURNAL ARTICLE  (src/views/ArticleView.astro)
+ * ============================================================================
+ * Used by src/pages/journal/[slug].astro and src/pages/de/journal/[slug].astro.
+ *
+ *   cover photo · title + short answer (the description) · author and date
+ *   · the article (Markdown body) · a row of photos · questions and answers
+ *   · the related galleries as cards
+ *
+ * WHY THIS SHAPE? Google and AI assistants quote pages that answer a question
+ * directly and are written by a real person with first-hand experience. So the
+ * description sits right under the title as the short answer, the author is
+ * named with a link to the about page, and the article shows real photos from
+ * the galleries.
+ * ============================================================================
+ */
+import { Image, Picture } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import GalleryCard from '../components/GalleryCard';
+import '../components/GalleryCard.css';
+import { articleText, describePhotoRef, type JournalArticle } from '../lib/journal';
+import { getGalleryById, toCardData, categoryText, getCategories, type Gallery } from '../lib/galleries';
+import { articleSchema, breadcrumbSchema, faqSchema } from '../lib/seo';
+import { site } from '../site.config';
+import { langOf, pick, routes, useUi } from '../i18n';
+
+interface Props {
+  article: JournalArticle;
+}
+
+const { article } = Astro.props;
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
+const text = articleText(article, lang);
+const href = lang === 'de' ? article.hrefDe! : article.href;
+const { Content } = await render(lang === 'de' && article.de ? article.de : article.entry);
+const { date, updated } = article.entry.data;
+const dateFormat = new Intl.DateTimeFormat(lang === 'de' ? 'de-AT' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+// Descriptions of the photos, from the photos.yaml of their galleries
+const coverAlt = await describePhotoRef(article.coverRef, lang);
+const photos = await Promise.all(article.photos.map(async (p) => ({ ...p, alt: await describePhotoRef(p.ref, lang) })));
+
+// Related galleries as cards
+const categories = await getCategories();
+const related = (
+  await Promise.all(article.entry.data.galleries.map((id) => getGalleryById(id)))
+).filter((g): g is Gallery => Boolean(g && g.hasPage));
+const cards = await Promise.all(
+  related.map((g) => {
+    const category = categories.find((c) => c.id === g.categoryId)!;
+    return toCardData(g, categoryText(category, lang).menuLabel, lang);
+  }),
+);
+
+const copy = pick(lang, {
+  en: { by: 'By', updated: 'Updated', related: 'Galleries from these places', questions: 'Questions & answers' },
+  de: { by: 'Von', updated: 'Aktualisiert', related: 'Galerien von diesen Orten', questions: 'Fragen & Antworten' },
+});
+
+const schema = [
+  breadcrumbSchema([
+    { name: t.breadcrumbHome, path: routes.home[lang] },
+    { name: t.journal, path: routes.journal[lang] },
+    { name: text.title, path: href },
+  ]),
+  articleSchema({
+    title: text.title,
+    description: text.description,
+    path: href,
+    datePublished: date,
+    dateModified: updated,
+    lang,
+  }),
+  ...(text.faq.length ? [faqSchema(text.faq)] : []),
+];
+---
+
+<Base
+  title={text.seoTitle}
+  description={text.description}
+  ogImage={article.cover}
+  schema={schema}
+  alternates={{ en: article.href, de: article.hrefDe }}
+>
+  <article>
+    <header class="opener">
+      <Picture
+        src={article.cover}
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1920, 2400]}
+        sizes="100vw"
+        quality={65}
+        alt={coverAlt}
+        loading="eager"
+        fetchpriority="high"
+        class="opener-image"
+      />
+    </header>
+
+    <div class="section body">
+      <p class="eyebrow">{t.journal}</p>
+      <h1 class="article-title">{text.title}</h1>
+      <p class="lede answer">{text.description}</p>
+      <p class="meta byline">
+        {copy.by} <a href={routes.about[lang]}>{site.person.name}</a> ·{' '}
+        <time datetime={date.toISOString().slice(0, 10)}>{dateFormat.format(date)}</time>
+        {
+          updated && (
+            <>
+              {' · '}
+              {copy.updated} <time datetime={updated.toISOString().slice(0, 10)}>{dateFormat.format(updated)}</time>
+            </>
+          )
+        }
+      </p>
+
+      <div class="article-body body-text">
+        <Content />
+      </div>
+    </div>
+
+    {
+      photos.length > 0 && (
+        <div class="section photo-row">
+          {photos.map((photo) => (
+            // Cropped to 4:5 when the site is built, so landscape photos are not
+            // scaled up in the browser (which made them look soft)
+            <Image
+              src={photo.image}
+              alt={photo.alt}
+              width={960}
+              height={1200}
+              fit="cover"
+              widths={[480, 800, 960, 1280]}
+              sizes="(max-width: 700px) 92vw, 30vw"
+              quality={80}
+              class="row-photo"
+            />
+          ))}
+        </div>
+      )
+    }
+
+    <Faq eyebrow={t.faq} headline={copy.questions} items={text.faq} />
+
+    {
+      cards.length > 0 && (
+        <section class="section">
+          <p class="eyebrow">{t.galleries}</p>
+          <h2 class="section-title related-title">{copy.related}</h2>
+          <div class="card-grid">
+            {cards.map((card) => (
+              <GalleryCard gallery={card} lang={lang} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .opener {
+    position: relative;
+    height: clamp(18rem, 55vh, 36rem);
+    overflow: hidden;
+  }
+
+  .opener :global(picture),
+  .opener :global(.opener-image) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* The text column at a comfortable reading width, centred */
+  .body {
+    max-width: calc(var(--measure) + 2 * var(--edge));
+    margin-inline: auto;
+  }
+
+  .article-title {
+    margin: var(--space-2) 0 var(--space-3);
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  .answer {
+    margin: 0 0 var(--space-3);
+  }
+
+  .byline {
+    margin: 0 0 var(--space-6);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--line);
+  }
+
+
+
+  .article-body :global(h2) {
+    margin: var(--space-6) 0 var(--space-2);
+    font-size: clamp(1.625rem, 3vw, 2.25rem);
+    line-height: 1.15;
+  }
+
+  .article-body :global(h3) {
+    margin: var(--space-5) 0 var(--space-1);
+    font-size: 1.375rem;
+  }
+
+  .article-body :global(p),
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin: 0 0 1.1em;
+  }
+
+  .article-body :global(li) {
+    margin-bottom: 0.4em;
+  }
+
+
+
+  .photo-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .photo-row :global(.row-photo) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  @media (max-width: 700px) {
+    .photo-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .related-title {
+    margin: var(--space-2) 0 var(--space-5);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(2.5rem, 5vw, 4.5rem) clamp(0.75rem, 1.5vw, 1.25rem);
+  }
+
+  @media (max-width: 900px) {
+    .card-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

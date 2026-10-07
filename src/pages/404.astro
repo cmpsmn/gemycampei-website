@@ -3,15 +3,30 @@
  * PAGE NOT FOUND  →  built as dist/404.html
  * The web server shows it for unknown addresses (configured in public/.htaccess:
  * "ErrorDocument 404 /404.html"). `noindex` keeps it out of search results.
+ * The server has one error page for both languages, so it speaks both.
  */
 import Base from '../layouts/Base.astro';
+import { routes } from '../i18n';
 ---
 
-<Base title="Page not found" noindex>
+<Base title="Page not found · Seite nicht gefunden" noindex cta={false}>
   <section class="section container narrow center">
-    <p class="kicker">404</p>
-    <h1 class="caps-title">This page does not exist</h1>
+    <p class="eyebrow">404</p>
+    <h1>This page does not exist</h1>
     <p>The page may have moved when the website was renewed.</p>
-    <a class="button" href="/galleries/">View the galleries</a>
+    <p lang="de">Diese Seite gibt es nicht (mehr). Vielleicht ist sie beim Umbau der Website umgezogen.</p>
+    <p class="actions">
+      <a class="button" href={routes.galleries.en}>View the galleries</a>
+      <a class="button-ghost" href={routes.galleries.de} lang="de">Zu den Galerien</a>
+    </p>
   </section>
 </Base>
+
+<style>
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+</style>

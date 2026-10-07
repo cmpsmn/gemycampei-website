@@ -1,0 +1,39 @@
+---
+/**
+ * MESSAGE NOT SENT  (src/views/MessageErrorView.astro)
+ * Shown when the contact form fails and the visitor's browser has JavaScript
+ * turned off (public/contact.php redirects here, in the language of the form).
+ */
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+import { langOf, pick, routes } from '../i18n';
+
+const lang = langOf(Astro.currentLocale);
+const copy = pick(lang, {
+  en: {
+    title: 'Message not sent',
+    eyebrow: 'Sorry',
+    heading: 'Your message could not be sent',
+    text: 'Please check that all required fields are filled in and try again, or write directly to',
+    back: 'Back to the form',
+  },
+  de: {
+    title: 'Nachricht nicht gesendet',
+    eyebrow: 'Entschuldigung',
+    heading: 'Eure Nachricht konnte nicht gesendet werden',
+    text: 'Bitte prüft, ob alle Pflichtfelder ausgefüllt sind, und versucht es noch einmal, oder schreibt direkt an',
+    back: 'Zurück zum Formular',
+  },
+});
+---
+
+<Base title={copy.title} noindex cta={false} alternates={{ en: routes.messageError.en, de: routes.messageError.de }}>
+  <section class="section container narrow center">
+    <p class="eyebrow">{copy.eyebrow}</p>
+    <h1>{copy.heading}</h1>
+    <p>
+      {copy.text} <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+    <a class="button" href={routes.contact[lang]}>{copy.back}</a>
+  </section>
+</Base>

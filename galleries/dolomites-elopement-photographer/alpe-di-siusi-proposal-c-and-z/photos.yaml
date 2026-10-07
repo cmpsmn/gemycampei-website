@@ -1,0 +1,129 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+alpe-di-siusi-proposal-c-and-z-001.jpg:
+  en: "Man kneels to propose in a wide meadow on the Alpe di Siusi, Sassolungo peaks behind"
+  de: "Mann macht auf der Seiser Alm kniend einen Antrag, dahinter der Langkofel"
+alpe-di-siusi-proposal-c-and-z-002.jpg:
+  en: "Couple embracing in the meadow after the proposal, Sassolungo and Sassopiatto in the distance"
+  de: "Paar umarmt sich nach dem Antrag auf der Wiese, Langkofel und Plattkofel in der Ferne"
+alpe-di-siusi-proposal-c-and-z-003.jpg:
+  en: "Laughing fiancée shows her engagement ring to the camera, her partner beside her"
+  de: "Lachende Verlobte zeigt ihren Verlobungsring in die Kamera, ihr Partner neben ihr"
+alpe-di-siusi-proposal-c-and-z-004.jpg:
+  en: "Black and white photo of the couple running hand in hand through the meadow"
+  de: "Schwarz-Weiß-Foto: Das Paar läuft Hand in Hand über die Wiese"
+alpe-di-siusi-proposal-c-and-z-005.jpg:
+  en: "Couple hugging and pulling faces in a green alpine meadow"
+  de: "Paar umarmt sich und schneidet Grimassen auf einer grünen Almwiese"
+alpe-di-siusi-proposal-c-and-z-006.jpg:
+  en: "Surprised woman covers her face as her partner kneels with the ring on the Alpe di Siusi"
+  de: "Überraschte Frau hält sich die Hände vors Gesicht, während ihr Partner auf der Seiser Alm kniet"
+alpe-di-siusi-proposal-c-and-z-007.jpg:
+  en: "Close-up of the couple's hands and engagement ring, lying in the grass among wildflowers"
+  de: "Nahaufnahme der Hände und des Verlobungsrings, im Gras zwischen Wildblumen"
+alpe-di-siusi-proposal-c-and-z-008.jpg:
+  en: "Newly engaged couple smiling, she holds up her ring with the Sassolungo behind them"
+  de: "Frisch verlobtes Paar lächelt, sie zeigt den Ring, dahinter der Langkofel"
+alpe-di-siusi-proposal-c-and-z-009.jpg:
+  en: "Couple sitting in a field of yellow flowers, looking towards the Sassolungo"
+  de: "Paar sitzt in einer Wiese voller gelber Blumen und blickt zum Langkofel"
+alpe-di-siusi-proposal-c-and-z-010.jpg:
+  en: "Couple dancing in the rolling meadows of the Alpe di Siusi below the Dolomites"
+  de: "Paar tanzt in den sanften Wiesen der Seiser Alm unter den Dolomiten"
+alpe-di-siusi-proposal-c-and-z-011.jpg:
+  en: "She raises her hand to show the ring against the mountains, seen over his shoulder"
+  de: "Sie hebt die Hand mit dem Ring vor den Bergen, über seine Schulter gesehen"
+alpe-di-siusi-proposal-c-and-z-012.jpg:
+  en: "Black and white photo of the couple dancing in the meadow below the Sassolungo"
+  de: "Schwarz-Weiß-Foto: Das Paar tanzt auf der Wiese unter dem Langkofel"
+alpe-di-siusi-proposal-c-and-z-013.jpg:
+  en: "The Sassolungo and Sassopiatto rising above the meadows and huts of the Alpe di Siusi"
+  de: "Langkofel und Plattkofel über den Wiesen und Hütten der Seiser Alm"
+alpe-di-siusi-proposal-c-and-z-014.jpg:
+  en: "Couple walking and laughing as she looks at her new engagement ring"
+  de: "Paar spaziert lachend, während sie ihren neuen Verlobungsring betrachtet"
+alpe-di-siusi-proposal-c-and-z-015.jpg:
+  en: "Couple seen from behind sitting in tall grass, looking at the Dolomites"
+  de: "Paar von hinten im hohen Gras sitzend, mit Blick auf die Dolomiten"
+alpe-di-siusi-proposal-c-and-z-016.jpg:
+  en: "Couple sitting in a meadow of buttercups, mountains in the background"
+  de: "Paar sitzt in einer Wiese voller Butterblumen, im Hintergrund die Berge"
+alpe-di-siusi-proposal-c-and-z-017.jpg:
+  en: "Couple smiling in the grass in front of the Sassolungo, framed with film borders"
+  de: "Paar lächelt im Gras vor dem Langkofel, mit Filmrand"
+alpe-di-siusi-proposal-c-and-z-018.jpg:
+  en: "She twirls in the meadow while he lies in the grass, Dolomites behind them"
+  de: "Sie dreht sich auf der Wiese, er liegt im Gras, dahinter die Dolomiten"
+alpe-di-siusi-proposal-c-and-z-019.jpg:
+  en: "Close-up of her hand with the engagement ring resting on his shoulder"
+  de: "Nahaufnahme ihrer Hand mit Verlobungsring auf seiner Schulter"
+alpe-di-siusi-proposal-c-and-z-020.jpg:
+  en: "Man down on one knee in front of the Sassolungo on the Alpe di Siusi"
+  de: "Mann auf einem Knie vor dem Langkofel auf der Seiser Alm"
+alpe-di-siusi-proposal-c-and-z-021.jpg:
+  en: "Wide view of the proposal on the Alpe di Siusi with the Dolomites towering behind"
+  de: "Weite Ansicht des Antrags auf der Seiser Alm vor den hohen Dolomitengipfeln"
+alpe-di-siusi-proposal-c-and-z-022.jpg:
+  en: "Wooden huts scattered across the green hills of the Alpe di Siusi"
+  de: "Holzhütten verstreut auf den grünen Hügeln der Seiser Alm"
+alpe-di-siusi-proposal-c-and-z-023.jpg:
+  en: "Couple kissing after the proposal with rocky Dolomites peaks behind"
+  de: "Paar küsst sich nach dem Antrag vor felsigen Dolomitengipfeln"
+alpe-di-siusi-proposal-c-and-z-024.jpg:
+  en: "Couple holding each other close in the meadow below the Sassolungo"
+  de: "Paar hält sich eng umschlungen auf der Wiese unter dem Langkofel"
+alpe-di-siusi-proposal-c-and-z-025.jpg:
+  en: "Black and white photo of the couple in the meadow on the Alpe di Siusi"
+  de: "Schwarz-Weiß-Foto des Paares auf der Wiese der Seiser Alm"
+alpe-di-siusi-proposal-c-and-z-026.jpg:
+  en: "Couple swinging each other round on a grassy slope below the Sassolungo"
+  de: "Paar wirbelt sich auf einem grasigen Hang unter dem Langkofel herum"
+alpe-di-siusi-proposal-c-and-z-027.jpg:
+  en: "Close-up of her hand with the engagement ring holding a tiny forget-me-not"
+  de: "Nahaufnahme ihrer Hand mit Verlobungsring und einem kleinen Vergissmeinnicht"
+alpe-di-siusi-proposal-c-and-z-028.jpg:
+  en: "Man proposing on one knee in the green meadows of the Alpe di Siusi"
+  de: "Mann macht kniend einen Antrag auf den grünen Wiesen der Seiser Alm"
+alpe-di-siusi-proposal-c-and-z-029.jpg:
+  en: "Black and white photo of the couple walking down a steep grassy slope"
+  de: "Schwarz-Weiß-Foto: Das Paar geht einen steilen Wiesenhang hinunter"
+alpe-di-siusi-proposal-c-and-z-030.jpg:
+  en: "Couple jumping playfully in a flower meadow next to a wooden hut"
+  de: "Paar springt ausgelassen auf einer Blumenwiese neben einer Holzhütte"
+alpe-di-siusi-proposal-c-and-z-031.jpg:
+  en: "She wipes away happy tears in her partner's arms at the edge of the forest"
+  de: "Sie wischt sich Freudentränen weg, in den Armen ihres Partners am Waldrand"
+alpe-di-siusi-proposal-c-and-z-032.jpg:
+  en: "Couple embracing far away in the meadows, the Sassolungo on the horizon"
+  de: "Paar umarmt sich weit entfernt auf den Wiesen, am Horizont der Langkofel"
+alpe-di-siusi-proposal-c-and-z-033.jpg:
+  en: "He kisses her forehead as she wipes a tear in the meadow"
+  de: "Er küsst ihre Stirn, während sie sich auf der Wiese eine Träne abwischt"
+alpe-di-siusi-proposal-c-and-z-034.jpg:
+  en: "Couple lying head to head in the grass among yellow flowers"
+  de: "Paar liegt Kopf an Kopf im Gras zwischen gelben Blumen"
+alpe-di-siusi-proposal-c-and-z-035.jpg:
+  en: "He lifts her piggyback style and she laughs, Dolomites peaks behind"
+  de: "Er nimmt sie huckepack und sie lacht, dahinter die Dolomitengipfel"
+alpe-di-siusi-proposal-c-and-z-036.jpg:
+  en: "He tucks a forget-me-not behind her ear"
+  de: "Er steckt ihr ein Vergissmeinnicht hinters Ohr"
+alpe-di-siusi-proposal-c-and-z-037.jpg:
+  en: "Couple kissing in a tight embrace in the meadow"
+  de: "Paar küsst sich eng umschlungen auf der Wiese"
+alpe-di-siusi-proposal-c-and-z-038.jpg:
+  en: "Couple sitting together in tall grass beside a dark forest"
+  de: "Paar sitzt zusammen im hohen Gras neben einem dunklen Wald"
+alpe-di-siusi-proposal-c-and-z-039.jpg:
+  en: "Couple lying in the meadow, the Sassolungo rising behind them"
+  de: "Paar liegt auf der Wiese, dahinter ragt der Langkofel auf"
+alpe-di-siusi-proposal-c-and-z-040.jpg:
+  en: "He does a cartwheel while she laughs in the meadow next to a hut"
+  de: "Er schlägt ein Rad, während sie auf der Wiese neben einer Hütte lacht"
+alpe-di-siusi-proposal-c-and-z-041.jpg:
+  en: "He carries her on his back, both laughing, below the Sassolungo on the Alpe di Siusi"
+  de: "Er trägt sie auf dem Rücken, beide lachen, unter dem Langkofel auf der Seiser Alm"

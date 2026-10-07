@@ -1,0 +1,69 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+la-val-couple-session-a-and-k-001.jpg:
+  en: "Couple sitting in the grass beside a wooden wayside cross above La Val"
+  de: "Paar sitzt im Gras neben einem hölzernen Wegkreuz oberhalb von La Val"
+la-val-couple-session-a-and-k-002.jpg:
+  en: "Woman in a floral dress twirling on a steep meadow in Val Badia"
+  de: "Frau im geblümten Kleid dreht sich auf einer steilen Wiese im Gadertal"
+la-val-couple-session-a-and-k-003.jpg:
+  en: "Man leaning against an old wooden hut in the Dolomites"
+  de: "Mann lehnt an einer alten Holzhütte in den Dolomiten"
+la-val-couple-session-a-and-k-004.jpg:
+  en: "She walks towards him across an alpine meadow with mountains behind"
+  de: "Sie geht über eine Almwiese auf ihn zu, dahinter die Berge"
+la-val-couple-session-a-and-k-005.jpg:
+  en: "Close-up of her hand on his arm, floral summer dress"
+  de: "Nahaufnahme ihrer Hand an seinem Arm, geblümtes Sommerkleid"
+la-val-couple-session-a-and-k-006.jpg:
+  en: "Couple under a larch tree in a green meadow below the Sas dla Crusc"
+  de: "Paar unter einer Lärche auf einer grünen Wiese unter dem Heiligkreuzkofel"
+la-val-couple-session-a-and-k-007.jpg:
+  en: "Couple walking up a green slope in La Val with pale rock walls behind"
+  de: "Paar geht einen grünen Hang in La Val hinauf, dahinter helle Felswände"
+la-val-couple-session-a-and-k-008.jpg:
+  en: "Green valley of Val Badia with forests and a winding path"
+  de: "Grünes Gadertal mit Wäldern und einem gewundenen Weg"
+la-val-couple-session-a-and-k-009.jpg:
+  en: "Black and white photo of the couple walking hand in hand through a sunlit forest"
+  de: "Schwarz-Weiß-Foto: Das Paar geht Hand in Hand durch einen sonnigen Wald"
+la-val-couple-session-a-and-k-010.jpg:
+  en: "Black and white photo of the couple sitting under a large wooden crucifix"
+  de: "Schwarz-Weiß-Foto des Paares unter einem großen Holzkreuz"
+la-val-couple-session-a-and-k-011.jpg:
+  en: "Couple walking together at the edge of a larch forest"
+  de: "Paar geht gemeinsam am Rand eines Lärchenwaldes"
+la-val-couple-session-a-and-k-012.jpg:
+  en: "Couple kissing on a grassy slope in the Dolomites"
+  de: "Paar küsst sich auf einem Wiesenhang in den Dolomiten"
+la-val-couple-session-a-and-k-013.jpg:
+  en: "Soft light over the meadows and mountains of Val Badia"
+  de: "Weiches Licht über den Wiesen und Bergen des Gadertals"
+la-val-couple-session-a-and-k-014.jpg:
+  en: "Couple running hand in hand up a meadow at golden hour"
+  de: "Paar läuft Hand in Hand zur Goldenen Stunde eine Wiese hinauf"
+la-val-couple-session-a-and-k-015.jpg:
+  en: "She laughs as she runs across the meadow, storm clouds over the mountains"
+  de: "Sie lacht beim Laufen über die Wiese, Gewitterwolken über den Bergen"
+la-val-couple-session-a-and-k-016.jpg:
+  en: "Close-up of the couple kissing, the valley glowing behind them"
+  de: "Nahaufnahme des küssenden Paares, dahinter leuchtet das Tal"
+la-val-couple-session-a-and-k-017.jpg:
+  en: "He lifts her in a wide meadow below the Sas dla Crusc rock wall"
+  de: "Er hebt sie auf einer weiten Wiese unter der Felswand des Heiligkreuzkofels hoch"
+la-val-couple-session-a-and-k-018.jpg:
+  en: "Black and white photo of the couple kissing in the meadow"
+  de: "Schwarz-Weiß-Foto: Das Paar küsst sich auf der Wiese"
+la-val-couple-session-a-and-k-019.jpg:
+  en: "Couple walking hand in hand along a sloping meadow under larches"
+  de: "Paar geht Hand in Hand über eine abfallende Wiese unter Lärchen"
+la-val-couple-session-a-and-k-020.jpg:
+  en: "Motion blur photo of the couple running hand in hand"
+  de: "Foto mit Bewegungsunschärfe: Das Paar läuft Hand in Hand"
+la-val-couple-session-a-and-k-021.jpg:
+  en: "Daisies in the grass of an alpine meadow in La Val"
+  de: "Margeriten im Gras einer Almwiese in La Val"

@@ -1,31 +1,36 @@
 /*
  * Styles for PhotoGallery.tsx.
  *
- * "Justified rows": each photo grows in proportion to its aspect ratio
- * (--ratio, set inline by the component). Rows fill the full width and the
- * photo order stays left to right, top to bottom.
+ * Rows of 2–4 photos in the gallery's order. Each photo grows in proportion
+ * to its shape (--ratio, set by the component), so all photos in a row come
+ * out exactly the same height and none is cropped. The component decides how
+ * many photos share a row, for the actual screen width.
  */
 .photo-grid {
-  --row: 340px; /* target row height */
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* An invisible last item that stops the final row from stretching huge */
-.photo-grid::after {
-  content: '';
-  flex-grow: 999;
+.photo-row {
+  display: flex;
+  gap: 12px;
 }
 
 .photo {
-  flex-grow: var(--ratio);
-  flex-basis: calc(var(--row) * var(--ratio));
-  aspect-ratio: var(--ratio);
-  max-width: 100%;
+  display: block;
+  /* grow by its ratio from a zero start: widths end up proportional to the shapes */
+  flex: var(--ratio) 1 0%;
+  min-width: 0;
+  aspect-ratio: var(--ratio); /* holds the space while the photo loads */
   overflow: hidden;
   background: var(--panel);
   cursor: zoom-in;
+}
+
+/* Invisible filler in a short last row (counts as one square photo) */
+.photo-spacer {
+  flex: 1 1 0%;
 }
 
 .photo img {
@@ -39,19 +44,41 @@
   opacity: 0.9;
 }
 
+/*
+ * A pause in the rhythm: one landscape photo across the full width. Very wide
+ * screens would make it taller than the window, so its height is capped and
+ * the photo trimmed a little at the top and bottom.
+ */
+.photo-feature {
+  margin-block: 36px;
+}
+
+.photo-feature .photo {
+  flex: none;
+  width: 100%;
+  max-height: 85vh;
+}
+
+/* The couple's review sits between the photos, with room around it */
+.photo-pause {
+  margin-block: 36px;
+}
+
 @media (max-width: 900px) {
-  .photo-grid {
-    --row: 240px;
+  .photo-grid,
+  .photo-row {
+    gap: 10px;
   }
 }
 
-/* Phones: one photo per row */
-@media (max-width: 560px) {
-  .photo-grid {
+@media (max-width: 600px) {
+  .photo-grid,
+  .photo-row {
     gap: 6px;
   }
 
-  .photo {
-    flex-basis: 100%;
+  .photo-feature,
+  .photo-pause {
+    margin-block: 20px;
   }
 }

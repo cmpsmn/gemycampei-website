@@ -1,0 +1,84 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+passo-delle-erbe-couple-session-e-and-n-001.jpg:
+  en: "Detail of the couple sitting on the wooden railing of an old mountain hut"
+  de: "Detail des Paares auf dem Holzgeländer einer alten Berghütte"
+passo-delle-erbe-couple-session-e-and-n-002.jpg:
+  en: "Black and white detail of hands, knit sweaters and a small bunch of daisies"
+  de: "Schwarz-Weiß-Detail von Händen, Strickpullovern und einem kleinen Margeritenstrauß"
+passo-delle-erbe-couple-session-e-and-n-003.jpg:
+  en: "Couple kissing on the porch of a wooden hut at Passo delle Erbe, Sass de Putia behind"
+  de: "Paar küsst sich auf der Veranda einer Holzhütte am Würzjoch, dahinter der Peitlerkofel"
+passo-delle-erbe-couple-session-e-and-n-004.jpg:
+  en: "Couple in cream sweaters smiling at each other against a soft sky"
+  de: "Paar in cremefarbenen Pullovern lächelt sich vor weichem Himmel an"
+passo-delle-erbe-couple-session-e-and-n-005.jpg:
+  en: "Couple holding hands in a golden meadow below the rock walls of Passo delle Erbe"
+  de: "Paar hält sich an den Händen auf einer goldenen Wiese unter den Felswänden am Würzjoch"
+passo-delle-erbe-couple-session-e-and-n-006.jpg:
+  en: "Couple sitting together in the golden grass of an alpine meadow"
+  de: "Paar sitzt zusammen im goldenen Gras einer Almwiese"
+passo-delle-erbe-couple-session-e-and-n-007.jpg:
+  en: "Couple sitting small in the meadow below the Sass de Putia"
+  de: "Paar sitzt klein in der Wiese unter dem Peitlerkofel"
+passo-delle-erbe-couple-session-e-and-n-008.jpg:
+  en: "Couple sitting in the grass next to a wooden mountain hut"
+  de: "Paar sitzt im Gras neben einer hölzernen Berghütte"
+passo-delle-erbe-couple-session-e-and-n-009.jpg:
+  en: "Close-up of the couple holding hands, one holding daisies, against a blue sky"
+  de: "Nahaufnahme des Paares Hand in Hand, mit Margeriten, vor blauem Himmel"
+passo-delle-erbe-couple-session-e-and-n-010.jpg:
+  en: "Couple walking across a golden meadow towards wooden huts in the Dolomites"
+  de: "Paar geht über eine goldene Wiese auf Holzhütten in den Dolomiten zu"
+passo-delle-erbe-couple-session-e-and-n-011.jpg:
+  en: "Black and white detail of her feet dangling from a wooden fence, daisies in hand"
+  de: "Schwarz-Weiß-Detail ihrer Füße über einem Holzzaun, Margeriten in der Hand"
+passo-delle-erbe-couple-session-e-and-n-012.jpg:
+  en: "Couple beside a wooden hut below the jagged Sass de Putia"
+  de: "Paar neben einer Holzhütte unter dem zackigen Peitlerkofel"
+passo-delle-erbe-couple-session-e-and-n-013.jpg:
+  en: "Couple embracing on the balcony of a hut, the Sass de Putia behind"
+  de: "Paar umarmt sich auf dem Balkon einer Hütte, dahinter der Peitlerkofel"
+passo-delle-erbe-couple-session-e-and-n-014.jpg:
+  en: "Black and white photo of the couple laughing as she takes a photo with a film camera"
+  de: "Schwarz-Weiß-Foto: Das Paar lacht, während sie mit einer Filmkamera fotografiert"
+passo-delle-erbe-couple-session-e-and-n-015.jpg:
+  en: "Black and white photo of the couple sitting in the meadow, leaning together"
+  de: "Schwarz-Weiß-Foto: Das Paar sitzt aneinandergelehnt auf der Wiese"
+passo-delle-erbe-couple-session-e-and-n-016.jpg:
+  en: "Couple kissing against the log wall of a hut below the Sass de Putia"
+  de: "Paar küsst sich an der Balkenwand einer Hütte unter dem Peitlerkofel"
+passo-delle-erbe-couple-session-e-and-n-017.jpg:
+  en: "Old wooden hut below the Sass de Putia, the couple on its porch"
+  de: "Alte Holzhütte unter dem Peitlerkofel, das Paar auf der Veranda"
+passo-delle-erbe-couple-session-e-and-n-018.jpg:
+  en: "He kisses her forehead next to a wooden hut"
+  de: "Er küsst ihre Stirn neben einer Holzhütte"
+passo-delle-erbe-couple-session-e-and-n-019.jpg:
+  en: "Couple seen from behind looking up at the Sass de Putia in golden light"
+  de: "Paar von hinten mit Blick auf den Peitlerkofel im goldenen Licht"
+passo-delle-erbe-couple-session-e-and-n-020.jpg:
+  en: "Couple embracing in the meadow as the sun sets over Passo delle Erbe"
+  de: "Paar umarmt sich auf der Wiese, während die Sonne über dem Würzjoch untergeht"
+passo-delle-erbe-couple-session-e-and-n-021.jpg:
+  en: "Black and white photo of the couple embracing in the meadow at sunset"
+  de: "Schwarz-Weiß-Foto: Das Paar umarmt sich bei Sonnenuntergang auf der Wiese"
+passo-delle-erbe-couple-session-e-and-n-022.jpg:
+  en: "Laughing couple hugging under a cloudy sky"
+  de: "Lachendes Paar umarmt sich unter wolkigem Himmel"
+passo-delle-erbe-couple-session-e-and-n-023.jpg:
+  en: "The Sass de Putia framed between the couple's silhouettes"
+  de: "Der Peitlerkofel zwischen den Silhouetten des Paares"
+passo-delle-erbe-couple-session-e-and-n-024.jpg:
+  en: "Couple on the fence of a wooden hut in the evening light"
+  de: "Paar am Zaun einer Holzhütte im Abendlicht"
+passo-delle-erbe-couple-session-e-and-n-025.jpg:
+  en: "Couple kissing on the porch of a mountain hut at Passo delle Erbe"
+  de: "Paar küsst sich auf der Veranda einer Berghütte am Würzjoch"
+passo-delle-erbe-couple-session-e-and-n-026.jpg:
+  en: "Black and white photo of the couple sitting close in the grass"
+  de: "Schwarz-Weiß-Foto des Paares eng beieinander im Gras"

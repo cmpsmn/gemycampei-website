@@ -29,8 +29,9 @@ export function galleryChecks(gallery, categories) {
 
   if (fields.draft) info('Draft: hidden on the live website. Visible in the preview. Untick "Draft" to publish.');
 
-  if (photos.length === 0) warn('No photos yet: the gallery does not appear on the website until it has photos.');
-  else if (photos.length < 10) info(`Only ${photos.length} photos. Galleries with 15 or more photos tell the story better.`);
+  const videos = gallery.videos ?? [];
+  if (photos.length === 0 && videos.length === 0) warn('No photos yet: the gallery does not appear on the website until it has photos.');
+  else if (photos.length > 0 && photos.length < 10) info(`Only ${photos.length} photos. Galleries with 15 or more photos tell the story better.`);
 
   const small = photos.filter((p) => Math.max(p.width, p.height) < MIN_LONG_EDGE);
   if (small.length) {

@@ -1,0 +1,152 @@
+---
+/**
+ * IMPRINT / IMPRESSUM  (src/views/ImprintView.astro)
+ * Used by src/pages/imprint.astro (/imprint/) and src/routes/de/impressum.astro.
+ *
+ * Impressum according to § 5 E-Commerce-Gesetz (ECG) and § 25 Mediengesetz
+ * (MedienG). The text is in German on both language versions (usual in
+ * Austria); the English page adds a short note at the top.
+ * All details come from src/content/settings.yaml → legal (manager → Settings).
+ */
+import Base from '../layouts/Base.astro';
+import { legal, site } from '../site.config';
+import { langOf, routes, useUi } from '../i18n';
+
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
+---
+
+<Base
+  title={t.imprint}
+  description={lang === 'de' ? `Impressum von ${site.name}.` : `Imprint (Impressum) of ${site.name}.`}
+  noindex
+  cta={false}
+  alternates={{ en: routes.imprint.en, de: routes.imprint.de }}
+>
+  <section class="section container narrow prose">
+    <p class="eyebrow">{lang === 'de' ? 'Rechtliches' : 'Legal'}</p>
+    <h1>Impressum</h1>
+    {lang === 'en' && <p class="note">Legal notice according to Austrian law. It is published in German.</p>}
+
+    <div lang="de">
+      <p>Informationspflicht laut § 5 E-Commerce-Gesetz und Offenlegungspflicht laut § 25 Mediengesetz.</p>
+
+      <h2>Medieninhaber und Diensteanbieter</h2>
+      <dl>
+        <dt>Name</dt>
+        <dd>
+          {legal.ownerName}
+          <br />
+          Marke: {site.name}
+        </dd>
+        <dt>Unternehmensform</dt>
+        <dd>{legal.businessForm}</dd>
+        <dt>Unternehmensgegenstand</dt>
+        <dd>{legal.businessDescription}</dd>
+        <dt>Anschrift</dt>
+        <dd>
+          {legal.street}
+          <br />
+          {legal.postalCode} {legal.city}
+          <br />
+          {legal.country}
+        </dd>
+        {
+          legal.phone && (
+            <>
+              <dt>Telefon</dt>
+              <dd>
+                <a href={`tel:${legal.phone.replace(/\s/g, '')}`}>{legal.phone}</a>
+              </dd>
+            </>
+          )
+        }
+        <dt>E-Mail</dt>
+        <dd>
+          <a href={`mailto:${legal.email}`}>{legal.email}</a>
+        </dd>
+        {
+          legal.vatId && (
+            <>
+              <dt>UID-Nummer</dt>
+              <dd>{legal.vatId}</dd>
+            </>
+          )
+        }
+        {
+          legal.tradeLicence && (
+            <>
+              <dt>Gewerbeberechtigung</dt>
+              <dd>{legal.tradeLicence}</dd>
+            </>
+          )
+        }
+        {
+          legal.tradeAuthority && (
+            <>
+              <dt>Gewerbebehörde</dt>
+              <dd>{legal.tradeAuthority}</dd>
+            </>
+          )
+        }
+        {
+          legal.chamberMembership && (
+            <>
+              <dt>Kammerzugehörigkeit</dt>
+              <dd>{legal.chamberMembership}</dd>
+            </>
+          )
+        }
+        <dt>Anwendbare Rechtsvorschriften</dt>
+        <dd>
+          Gewerbeordnung 1994 (GewO), abrufbar unter{' '}
+          <a href="https://www.ris.bka.gv.at" rel="noopener noreferrer">
+            www.ris.bka.gv.at
+          </a>
+        </dd>
+      </dl>
+
+      <h2>Grundlegende Richtung der Website</h2>
+      <p>
+        Information über die Fotografie-Leistungen von {site.name} (Hochzeits-, Elopement-, Paar- und
+        Babybauch-Fotografie) und Präsentation ausgewählter Arbeiten.
+      </p>
+
+      <h2>Verbraucherstreitbeilegung</h2>
+      <p>
+        Wir sind nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer
+        Verbraucherschlichtungsstelle teilzunehmen.
+      </p>
+
+      <h2>Urheberrecht</h2>
+      <p>
+        Alle Fotos, Videos und Texte auf dieser Website sind urheberrechtlich geschützt. Jede Verwendung,
+        Vervielfältigung oder Veröffentlichung ohne schriftliche Zustimmung ist nicht gestattet. Die abgebildeten
+        Personen haben der Veröffentlichung zugestimmt.
+      </p>
+
+      <h2>Haftung für Inhalte und Links</h2>
+      <p>
+        Die Inhalte dieser Website wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und
+        Aktualität der Inhalte, etwa Hinweise zu Orten, Gebühren oder Zufahrten in den Ratgebern, übernehmen wir
+        keine Gewähr. Diese Website enthält Links zu externen Websites, auf deren Inhalte wir keinen Einfluss haben
+        und für die wir keine Haftung übernehmen. Sobald uns rechtswidrige Inhalte bekannt werden, entfernen wir den
+        Link umgehend.
+      </p>
+
+      <p class="updated">Stand: {legal.lastUpdated}</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .note,
+  .updated {
+    color: var(--muted);
+  }
+
+  .updated {
+    margin-top: 3rem;
+    font-size: 0.9rem;
+  }
+</style>

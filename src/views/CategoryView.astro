@@ -1,0 +1,453 @@
+---
+/**
+ * ============================================================================
+ * CATEGORY PAGE  (src/views/CategoryView.astro)
+ * ============================================================================
+ *
+ * The page of one folder in galleries/, in either language:
+ *   src/pages/[category]/index.astro      → /vienna-wedding-photographer/ …
+ *   src/pages/de/[category]/index.astro   → /de/hochzeitsfotograf-wien/ …
+ *
+ * WHAT THE PAGE SHOWS (layout from the v3 design + SEO landing sections)
+ *   title + blurb + wide hero photo
+ *   intro text (the Markdown body of _category.md / _category.de.md)
+ *   · display: cards     → a card per gallery
+ *   · display: carousel  → the photos of this folder in a moving row
+ *   Super 8 films (film page)
+ *   steps    "How it works"                                          (`steps:`)
+ *   FAQ
+ *
+ * Reviews and place guides are not shown on these overview pages: reviews
+ * appear on the testimonials page and on the gallery of the couple.
+ *
+ * Everything is edited in galleries/<category>/_category.md (+ .de.md) and
+ * the gallery folders next to it; the gallery manager writes those files.
+ * ============================================================================
+ */
+import { Picture } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import GalleryCard from '../components/GalleryCard';
+import PhotoSlider from '../components/PhotoSlider';
+import PhotoCarousel from '../components/PhotoCarousel';
+import VimeoVideo from '../components/VimeoVideo.astro';
+import SectionHead from '../components/SectionHead.astro';
+import '../components/GalleryCard.css';
+import {
+  getGalleries,
+  getGalleryById,
+  toCardData,
+  toPhotoData,
+  photoAlt,
+  categoryText,
+  galleryText,
+  hrefIn,
+  type Category,
+} from '../lib/galleries';
+import { getPackagesPage } from '../lib/packages';
+import { inlineMarkdown } from '../lib/markdown';
+import { breadcrumbSchema, faqSchema, imageGallerySchema } from '../lib/seo';
+import { langOf, pick, routes, useUi } from '../i18n';
+
+interface Props {
+  category: Category;
+}
+
+const { category } = Astro.props;
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
+const text = categoryText(category, lang);
+const { data } = category; // settings (display, videos …) are the same in both languages
+const href = hrefIn(category, lang);
+
+// The intro text: the German body when _category.de.md exists, else the English one
+const { Content } = await render(lang === 'de' && category.de ? category.de : category.entry);
+
+// All galleries listed in this category, and the ones whose folder is actually here
+const listed = await getGalleries(category.id);
+const ownGalleries = listed.filter((g) => g.categoryId === category.id);
+const extraGalleries = listed.filter((g) => g.categoryId !== category.id);
+
+const showPhotos = data.display === 'slider' || data.display === 'carousel';
+
+// Cards: every listed gallery on a cards page, only the `alsoIn` ones on a photo page
+const cardGalleries = showPhotos ? extraGalleries : listed;
+const cards = await Promise.all(cardGalleries.map((g) => toCardData(g, text.menuLabel, lang)));
+
+// Photos for the slider / carousel: all photos of the galleries in this folder
+const photos = showPhotos
+  ? await Promise.all(
+      ownGalleries.flatMap((gallery) => gallery.photos.map((photo) => toPhotoData(photo.image, photoAlt(gallery, photo, lang)))),
+    )
+  : [];
+
+// Videos: from _category.md, and on a slider / carousel page also the videos
+// of its galleries (the Super 8 films live in their own gallery)
+const videos = [
+  ...category.videos.map((video, i) => ({ ...video, title: text.videoTitles[i] })),
+  ...(showPhotos ? ownGalleries : []).flatMap((gallery) =>
+    gallery.videos.map((video, i) => ({ ...video, title: (lang === 'de' && gallery.de?.data.videoTitles[i]) || video.title })),
+  ),
+];
+
+// The packages page this category links to, if set in _category.md
+const packagesPage = data.packages ? await getPackagesPage(data.packages) : undefined;
+
+const copy = pick(lang, {
+  en: {
+    explore: (label: string) => `Explore the ${label.toLowerCase()} →`,
+    enquire: (singular: string) => `Enquire about a ${singular.toLowerCase()} →`,
+    steps: 'How it works',
+    faq: `${text.menuLabel} FAQ`,
+  },
+  de: {
+    explore: (label: string) => `${label} ansehen →`,
+    enquire: () => 'Jetzt anfragen →',
+    steps: 'So läuft es ab',
+    faq: `${text.menuLabel}: häufige Fragen`,
+  },
+});
+
+// Structured data for Google
+const schema = [
+  breadcrumbSchema([
+    { name: t.breadcrumbHome, path: routes.home[lang] },
+    { name: text.menuLabel, path: href },
+  ]),
+  ...(text.faq.length ? [faqSchema(text.faq)] : []),
+  ...(photos.length
+    ? [
+        imageGallerySchema({
+          name: text.h1,
+          description: text.seoDescription,
+          path: href,
+          images: photos.map((p) => ({ url: p.full.src, caption: p.alt })),
+          lang,
+        }),
+      ]
+    : []),
+];
+
+// A German page without _category.de.md shows English text: keep it out of Google
+const noindex = !text.translated;
+---
+
+<Base
+  title={text.seoTitle}
+  description={text.seoDescription}
+  ogImage={category.hero}
+  schema={schema}
+  noindex={noindex}
+  alternates={{ en: category.href, de: category.de ? category.hrefDe : undefined }}
+>
+  <!--
+    Title row, then the photo. From tablets up the photo has the size of the
+    hero on the previous website: 91 % of the window wide (at most 1400 px),
+    1.9 : 1, but never lower than 1 cm above the bottom of the window. On
+    phones title and photo fill the first screen.
+  -->
+  <section class="top">
+    <div class="head">
+      <div>
+        <h1 class="h1-quiet">{text.h1}</h1>
+        <p class="display head-title">{text.heroTitle}</p>
+      </div>
+      {text.heroSubtitle && <p class="lede head-blurb">{text.heroSubtitle}</p>}
+    </div>
+    <div class="hero-strip">
+      <Picture
+        src={category.hero}
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1920, 2400]}
+        sizes="(min-width: 701px) min(91vw, 1400px), 100vw"
+        quality={65}
+        alt={text.h1}
+        loading="eager"
+        fetchpriority="high"
+        class="hero-image"
+      />
+    </div>
+  </section>
+
+  <!-- The intro text on the left, the link on the right: held at both ends -->
+  <section class="section intro">
+    <div class="intro-text body-text">
+      <Content />
+    </div>
+    <!-- Holds the right edge of the row: the packages page, or an invitation -->
+    <p class="packages-link">
+      {
+        packagesPage ? (
+          <a class="link-quiet" href={lang === 'de' ? packagesPage.hrefDe : packagesPage.href}>
+            {copy.explore(packagesPage.label[lang])}
+          </a>
+        ) : (
+          <a class="link-quiet" href={routes.contact[lang]}>
+            {copy.enquire(text.singular)}
+          </a>
+        )
+      }
+    </p>
+  </section>
+
+  <!--
+    client:visible = the React component's JavaScript loads only when it scrolls into view.
+    The HTML with all photos is there from the start (good for Google).
+  -->
+  {
+    data.display === 'slider' && photos.length > 0 && (
+      <section class="photos-section">
+        <PhotoSlider client:visible photos={photos} label={`${text.menuLabel} ${t.photos}`} lang={lang} />
+      </section>
+    )
+  }
+  {
+    data.display === 'carousel' && photos.length > 0 && (
+      <section class="photos-section">
+        <PhotoCarousel client:visible photos={photos} label={`${text.menuLabel} ${t.photos}`} lang={lang} />
+      </section>
+    )
+  }
+
+  <!-- Videos (Super 8 films), two per row, after the photos and before the questions -->
+  {
+    videos.length > 0 && (
+      <section class="section videos-section">
+        <SectionHead eyebrow={text.menuLabel} title={text.videosTitle} />
+        <div class="video-grid">
+          {videos.map((video) => (
+            <VimeoVideo vimeoId={video.vimeoId} title={video.title} poster={video.poster} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    cards.length > 0 && (
+      <section class="section cards-section">
+        {showPhotos && <SectionHead eyebrow={text.menuLabel} title={t.moreStories} />}
+        {/* All cards load lazily: they start below the hero photo, which must come first */}
+        <div class="card-grid">
+          {cards.map((card, i) => (
+            <GalleryCard gallery={card} number={String(i + 1).padStart(2, '0')} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- How it works: numbered steps on a quiet band -->
+  {
+    text.steps.length > 0 && (
+      <section class="section band steps-section">
+        <SectionHead eyebrow={copy.steps} title={text.stepsTitle ?? copy.steps} />
+        <ol class="steps">
+          {text.steps.map((step, i) => (
+            <li class="step" data-reveal>
+              <span class="step-number">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{step.title}</h3>
+              <p class="body-text" set:html={inlineMarkdown(step.text)} />
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  <!-- The film page shows its questions on an espresso band, as in the design -->
+  <Faq eyebrow={t.faq} headline={text.faqTitle ?? copy.faq} items={text.faq} dark={showPhotos} />
+</Base>
+
+<style>
+  /* ── First screen: title row, then the photo down to the bottom ────── */
+  .top {
+    display: flex;
+    flex-direction: column;
+    /* Down to just above the bottom of the window, so the first lines of
+       the intro still show */
+    height: calc(100vh - var(--header-h) - var(--hero-peek)); /* fallback for older browsers */
+    height: calc(100svh - var(--header-h) - var(--hero-peek));
+    min-height: 32rem;
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(1.5rem, 3.5vw, 3rem) var(--edge) clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .head-title {
+    font-size: clamp(2.25rem, 6.6vw, 5.625rem);
+  }
+
+  .head-blurb {
+    max-width: 34ch;
+  }
+
+  /* The photo takes all the height that is left */
+  .hero-strip {
+    position: relative;
+    flex: 1;
+    min-height: 16rem;
+    margin-inline: var(--edge);
+  }
+
+  .hero-strip :global(picture),
+  .hero-strip :global(.hero-image) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* From tablets up: the size of the hero on the previous website */
+  @media (min-width: 701px) {
+    /* The photo shrinks (keeping its width) when title + photo would reach
+       lower than 1 cm above the bottom of the window */
+    .top {
+      height: auto;
+      min-height: 0;
+      max-height: calc(100vh - var(--header-h) - 1cm); /* fallback for older browsers */
+      max-height: calc(100svh - var(--header-h) - 1cm);
+    }
+
+    .head {
+      flex-shrink: 0;
+    }
+
+    .head,
+    .hero-strip {
+      width: min(91%, 1400px);
+      margin-inline: auto;
+    }
+
+    .head {
+      padding-inline: 0;
+    }
+
+    .hero-strip {
+      flex: 0 1 auto;
+      height: calc(min(91vw, 1400px) / 1.9);
+      min-height: 16rem;
+    }
+  }
+
+  /* ── Intro text ────────────────────────────────────────────────────────── */
+  /* Intro text at a comfortable 65 characters, the link on the right */
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, var(--measure)) auto;
+    justify-content: space-between;
+    align-items: start;
+    gap: var(--space-4) var(--space-6);
+  }
+
+  .intro-text :global(p) {
+    margin-bottom: 1.1em;
+  }
+
+  .intro-text :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .packages-link {
+    margin: 0;
+    text-align: right;
+  }
+
+  /* Narrow screens: the link goes under the text */
+  @media (max-width: 900px) {
+    .intro {
+      grid-template-columns: 1fr;
+    }
+
+    .packages-link {
+      text-align: left;
+    }
+  }
+
+  /* ── Sections ──────────────────────────────────────────────────────────── */
+  .photos-section {
+    padding-block: clamp(1rem, 3vw, 2.5rem);
+  }
+
+  /* Two videos per row, as wide as the other sections; one per row on phones */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 700px) {
+    .video-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(2.5rem, 5vw, 4.5rem) clamp(0.75rem, 1.5vw, 1.25rem);
+  }
+
+  @media (max-width: 900px) {
+    .card-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Steps: four numbered columns on the band ─────────────────────────── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .step h3 {
+    margin: 0;
+    font-size: 1.375rem;
+  }
+
+  .step p {
+    margin: 0;
+  }
+
+  .step-number {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+  }
+
+  @media (max-width: 900px) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

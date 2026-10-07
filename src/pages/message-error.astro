@@ -1,20 +1,9 @@
 ---
 /**
- * MESSAGE NOT SENT  →  /message-error/
- * Shown when the contact form fails and the visitor's browser has JavaScript
- * turned off (public/contact.php redirects here).
+ * MESSAGE NOT SENT (contact form without JavaScript)  →  https://gemycampei.com/message-error/
+ * The page itself is src/views/MessageErrorView.astro (texts for both languages there).
  */
-import Base from '../layouts/Base.astro';
-import { site } from '../site.config';
+import MessageErrorView from '../views/MessageErrorView.astro';
 ---
 
-<Base title="Message not sent" noindex>
-  <section class="section container narrow center">
-    <h1 class="caps-title">Your message could not be sent</h1>
-    <p>
-      Please check that all required fields are filled in and try again, or write directly to{' '}
-      <a href={`mailto:${site.email}`}>{site.email}</a>.
-    </p>
-    <a class="button" href="/contact/">Back to the form</a>
-  </section>
-</Base>
+<MessageErrorView />

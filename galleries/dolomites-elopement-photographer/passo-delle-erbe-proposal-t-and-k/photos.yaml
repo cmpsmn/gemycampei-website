@@ -1,0 +1,93 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+passo-delle-erbe-proposal-t-and-k-001.jpg:
+  en: She stands on the fence of a wooden hut in a white dress, he laughs below, Sass de Putia behind
+  de: Sie steht im weißen Kleid auf dem Zaun einer Holzhütte, er lacht darunter, dahinter der Peitlerkofel
+passo-delle-erbe-proposal-t-and-k-002.jpg:
+  en: Man kneeling to propose in the meadow at Passo delle Erbe below the Sass de Putia
+  de: Mann kniet für den Antrag auf der Wiese am Würzjoch unter dem Peitlerkofel
+passo-delle-erbe-proposal-t-and-k-003.jpg:
+  en: Hand with an engagement ring holding a bouquet of white tulips against the sky
+  de: Hand mit Verlobungsring hält einen Strauß weißer Tulpen vor dem Himmel
+passo-delle-erbe-proposal-t-and-k-004.jpg:
+  en: Engagement ring in a small figurine on a wooden railing, the couple blurred behind
+  de: Verlobungsring in einer kleinen Figur auf einem Holzgeländer, das Paar unscharf dahinter
+passo-delle-erbe-proposal-t-and-k-005.jpg:
+  en: Black and white photo of the proposal in front of the Sass de Putia
+  de: Schwarz-Weiß-Foto des Antrags vor dem Peitlerkofel
+passo-delle-erbe-proposal-t-and-k-006.jpg:
+  en: Black and white photo of him lifting her after she said yes
+  de: "Schwarz-Weiß-Foto: Er hebt sie hoch, nachdem sie Ja gesagt hat"
+passo-delle-erbe-proposal-t-and-k-007.jpg:
+  en: She smiles as he holds her hand, still on one knee
+  de: Sie lächelt, während er noch kniend ihre Hand hält
+passo-delle-erbe-proposal-t-and-k-008.jpg:
+  en: Surprised moment as he kneels with the ring in the green meadow
+  de: Überraschender Moment, als er mit dem Ring auf der grünen Wiese kniet
+passo-delle-erbe-proposal-t-and-k-009.jpg:
+  en: Black and white photo of the couple spinning in the meadow after the proposal
+  de: "Schwarz-Weiß-Foto: Das Paar dreht sich nach dem Antrag auf der Wiese"
+passo-delle-erbe-proposal-t-and-k-010.jpg:
+  en: Black and white photo of the newly engaged couple laughing with a friend
+  de: "Schwarz-Weiß-Foto: Das frisch verlobte Paar lacht mit einer Freundin"
+passo-delle-erbe-proposal-t-and-k-011.jpg:
+  en: Close-up of their joined hands with the engagement ring
+  de: Nahaufnahme ihrer verbundenen Hände mit Verlobungsring
+passo-delle-erbe-proposal-t-and-k-012.jpg:
+  en: Black and white photo of the couple showing the ring and a handwritten letter
+  de: "Schwarz-Weiß-Foto: Das Paar zeigt den Ring und einen handgeschriebenen Brief"
+passo-delle-erbe-proposal-t-and-k-013.jpg:
+  en: Couple in white standing close in the meadow under a grey sky
+  de: Paar in Weiß steht eng beieinander auf der Wiese unter grauem Himmel
+passo-delle-erbe-proposal-t-and-k-014.jpg:
+  en: Couple kissing in the meadow with the Odle peaks behind
+  de: Paar küsst sich auf der Wiese, dahinter die Geislerspitzen
+passo-delle-erbe-proposal-t-and-k-015.jpg:
+  en: A wooden hut in the meadow below the Sass de Putia at Passo delle Erbe
+  de: Eine Holzhütte auf der Wiese unter dem Peitlerkofel am Würzjoch
+passo-delle-erbe-proposal-t-and-k-016.jpg:
+  en: Couple dancing in front of a wooden hut below the Sass de Putia
+  de: Paar tanzt vor einer Holzhütte unter dem Peitlerkofel
+passo-delle-erbe-proposal-t-and-k-017.jpg:
+  en: Black and white photo of the couple laughing at the wooden railing of a hut
+  de: "Schwarz-Weiß-Foto: Das Paar lacht am Holzgeländer einer Hütte"
+passo-delle-erbe-proposal-t-and-k-018.jpg:
+  en: The newly engaged couple and a friend in front of the Sass de Putia
+  de: Das frisch verlobte Paar mit einer Freundin vor dem Peitlerkofel
+passo-delle-erbe-proposal-t-and-k-019.jpg:
+  en: Couple lying in the meadow below the Sass de Putia
+  de: Paar liegt auf der Wiese unter dem Peitlerkofel
+passo-delle-erbe-proposal-t-and-k-020.jpg:
+  en: Black and white photo of her smiling in the meadow, framed by his arm
+  de: "Schwarz-Weiß-Foto: Sie lächelt auf der Wiese, eingerahmt von seinem Arm"
+passo-delle-erbe-proposal-t-and-k-021.jpg:
+  en: Black and white photo of the couple kissing with mountains behind, on film
+  de: "Schwarz-Weiß-Foto: Das Paar küsst sich vor den Bergen, auf Film"
+passo-delle-erbe-proposal-t-and-k-022.jpg:
+  en: She stands on a hut railing holding white tulips, he leans on the wall
+  de: Sie steht mit weißen Tulpen auf dem Geländer einer Hütte, er lehnt an der Wand
+passo-delle-erbe-proposal-t-and-k-023.jpg:
+  en: Couple sitting on the porch of a wooden hut, seen through the beams
+  de: Paar sitzt auf der Veranda einer Holzhütte, durch die Balken gesehen
+passo-delle-erbe-proposal-t-and-k-024.jpg:
+  en: Black and white photo of her in a white dress in the meadow near a hut
+  de: "Schwarz-Weiß-Foto: Sie im weißen Kleid auf der Wiese nahe einer Hütte"
+passo-delle-erbe-proposal-t-and-k-025.jpg:
+  en: Black and white photo of her and a friend laughing on the pass road
+  de: "Schwarz-Weiß-Foto: Sie und eine Freundin lachen an der Passstraße"
+passo-delle-erbe-proposal-t-and-k-026.jpg:
+  en: Diamond engagement ring on a small figurine beside white tulips
+  de: Diamant-Verlobungsring an einer kleinen Figur neben weißen Tulpen
+passo-delle-erbe-proposal-t-and-k-027.jpg:
+  en: Black and white photo of her sitting on his lap by a hut, both laughing
+  de: "Schwarz-Weiß-Foto: Sie sitzt lachend auf seinem Schoß an einer Hütte"
+passo-delle-erbe-proposal-t-and-k-028.jpg:
+  en: The couple and their friend celebrating in front of the Sass de Putia
+  de: Das Paar und ihre Freundin feiern vor dem Peitlerkofel
+passo-delle-erbe-proposal-t-and-k-029.jpg:
+  en: The newly engaged couple taking a selfie, she holds the letter and shows the ring
+  de: Das frisch verlobte Paar macht ein Selfie, sie hält den Brief und zeigt den Ring

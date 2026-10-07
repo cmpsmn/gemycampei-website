@@ -1,0 +1,84 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+schloss-hernstein-wedding-austria-001.jpg:
+  en: "Bride and groom by the lake with Schloss Hernstein reflected in the water"
+  de: "Brautpaar am See, Schloss Hernstein spiegelt sich im Wasser"
+schloss-hernstein-wedding-austria-002.jpg:
+  en: "Bride dancing with her bridesmaids on the castle driveway"
+  de: "Braut tanzt mit ihren Brautjungfern auf der Schlosszufahrt"
+schloss-hernstein-wedding-austria-003.jpg:
+  en: "Black and white photo of family and guests smiling in the castle hall"
+  de: "Schwarz-Weiß-Foto: Familie und Gäste lächeln im Schlosssaal"
+schloss-hernstein-wedding-austria-004.jpg:
+  en: "Black and white photo of a guest helping with the bride's shoes, on film"
+  de: "Schwarz-Weiß-Foto: Ein Gast hilft mit den Schuhen der Braut, auf Film"
+schloss-hernstein-wedding-austria-005.jpg:
+  en: "Black and white photo of guests moved to tears at the outdoor ceremony, a mother in a hanbok"
+  de: "Schwarz-Weiß-Foto: Gerührte Gäste bei der Trauung im Freien, eine Mutter im Hanbok"
+schloss-hernstein-wedding-austria-006.jpg:
+  en: "Bride with a long veil on a marble staircase with painted walls"
+  de: "Braut mit langem Schleier auf einer Marmorstiege mit bemalten Wänden"
+schloss-hernstein-wedding-austria-007.jpg:
+  en: "Bride walking with her father along the castle park path"
+  de: "Braut geht mit ihrem Vater den Weg durch den Schlosspark"
+schloss-hernstein-wedding-austria-008.jpg:
+  en: "Guests filming the couple rowing on the castle lake at Schloss Hernstein"
+  de: "Gäste filmen das Paar beim Rudern auf dem Schlossteich von Schloss Hernstein"
+schloss-hernstein-wedding-austria-009.jpg:
+  en: "Mother adjusting the bride's veil in a golden room"
+  de: "Die Mutter richtet den Schleier der Braut in einem goldenen Raum"
+schloss-hernstein-wedding-austria-010.jpg:
+  en: "Guests smiling during the outdoor ceremony"
+  de: "Gäste lächeln während der Trauung im Freien"
+schloss-hernstein-wedding-austria-011.jpg:
+  en: "Bride blowing a kiss with a hand fan at the party"
+  de: "Braut wirft beim Fest mit einem Fächer eine Kusshand"
+schloss-hernstein-wedding-austria-012.jpg:
+  en: "Bride walks towards the groom for the first look in front of Schloss Hernstein"
+  de: "Braut geht beim First Look vor Schloss Hernstein auf den Bräutigam zu"
+schloss-hernstein-wedding-austria-013.jpg:
+  en: "Guests celebrating with cigars late at night"
+  de: "Gäste feiern spät nachts mit Zigarren"
+schloss-hernstein-wedding-austria-014.jpg:
+  en: "Black and white photo of the couple hugging guests after the ceremony"
+  de: "Schwarz-Weiß-Foto: Das Paar umarmt Gäste nach der Trauung"
+schloss-hernstein-wedding-austria-015.jpg:
+  en: "Groom in a sage suit hugging an older guest at the ceremony"
+  de: "Bräutigam im salbeigrünen Anzug umarmt einen älteren Gast bei der Trauung"
+schloss-hernstein-wedding-austria-016.jpg:
+  en: "Guests laughing and raising glasses at the dinner table"
+  de: "Gäste lachen und erheben die Gläser an der Festtafel"
+schloss-hernstein-wedding-austria-017.jpg:
+  en: "Crystal chandeliers and a painted coffered ceiling in the castle hall"
+  de: "Kristallluster und eine bemalte Kassettendecke im Schlosssaal"
+schloss-hernstein-wedding-austria-018.jpg:
+  en: "Guests cheering in front of the castle facade as the couple waves from the balcony"
+  de: "Gäste jubeln vor der Schlossfassade, das Paar winkt vom Balkon"
+schloss-hernstein-wedding-austria-019.jpg:
+  en: "Black and white detail of a wedding newspaper with the couple's photo"
+  de: "Schwarz-Weiß-Detail einer Hochzeitszeitung mit dem Foto des Paares"
+schloss-hernstein-wedding-austria-020.jpg:
+  en: "Newlyweds walking across the castle lawn"
+  de: "Brautpaar geht über den Schlossrasen"
+schloss-hernstein-wedding-austria-021.jpg:
+  en: "Black and white photo of the couple embracing, framed by carved castle doors"
+  de: "Schwarz-Weiß-Foto: Das Paar umarmt sich, eingerahmt von geschnitzten Schlosstüren"
+schloss-hernstein-wedding-austria-022.jpg:
+  en: "Groom opening a tall wooden door inside Schloss Hernstein"
+  de: "Bräutigam öffnet eine hohe Holztür im Inneren von Schloss Hernstein"
+schloss-hernstein-wedding-austria-023.jpg:
+  en: "Black and white photo of the bride hugging the groom"
+  de: "Schwarz-Weiß-Foto: Die Braut umarmt den Bräutigam"
+schloss-hernstein-wedding-austria-024.jpg:
+  en: "Black and white photo of a guest reading the wedding newspaper"
+  de: "Schwarz-Weiß-Foto: Ein Gast liest die Hochzeitszeitung"
+schloss-hernstein-wedding-austria-025.jpg:
+  en: "Detail of a guest's hands during the ceremony"
+  de: "Detail der Hände eines Gastes während der Trauung"
+schloss-hernstein-wedding-austria-026.jpg:
+  en: "Newlyweds walking through guests waving ribbon wands at the castle"
+  de: "Brautpaar geht durch Gäste, die vor dem Schloss mit Bänderstäben winken"

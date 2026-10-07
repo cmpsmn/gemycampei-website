@@ -1,0 +1,63 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+maternity-session-spanish-beach-001.jpg:
+  en: Couple running along the beach, motion blur
+  de: Paar läuft am Strand entlang, mit Bewegungsunschärfe
+maternity-session-spanish-beach-002.jpg:
+  en: Expectant father in a DAD cap watching the mother-to-be by the sea
+  de: Werdender Vater mit DAD-Kappe blickt zur werdenden Mama am Meer
+maternity-session-spanish-beach-003.jpg:
+  en: Mother-to-be in a white skirt standing in the surf
+  de: Werdende Mama im weißen Rock in der Brandung
+maternity-session-spanish-beach-004.jpg:
+  en: Couple playing on a city beach lined with palm trees, on film
+  de: Paar spielt an einem Stadtstrand mit Palmen, auf Film
+maternity-session-spanish-beach-005.jpg:
+  en: Black and white detail of MUM and DAD caps held against the belly
+  de: "Schwarz-Weiß-Detail: MUM- und DAD-Kappen am Babybauch"
+maternity-session-spanish-beach-006.jpg:
+  en: He carries the mother-to-be along the shoreline
+  de: Er trägt die werdende Mama am Ufer entlang
+maternity-session-spanish-beach-007.jpg:
+  en: Black and white detail of hands on the baby bump and a flowing skirt
+  de: "Schwarz-Weiß-Detail: Hände am Babybauch und ein fließender Rock"
+maternity-session-spanish-beach-008.jpg:
+  en: Mother-to-be twirling her skirt on the beach as he watches
+  de: Werdende Mama schwingt am Strand ihren Rock, er sieht zu
+maternity-session-spanish-beach-009.jpg:
+  en: Couple embracing on the beach at sunrise
+  de: Paar umarmt sich am Strand bei Sonnenaufgang
+maternity-session-spanish-beach-010.jpg:
+  en: Couple in caps dancing hand in hand on the beach
+  de: Paar mit Kappen tanzt Hand in Hand am Strand
+maternity-session-spanish-beach-011.jpg:
+  en: Two hands raising MUM and DAD caps against a white sky
+  de: Zwei Hände heben MUM- und DAD-Kappen vor weißem Himmel
+maternity-session-spanish-beach-012.jpg:
+  en: Black and white photo of the couple kissing on the beach in the wind
+  de: "Schwarz-Weiß-Foto: Das Paar küsst sich im Wind am Strand"
+maternity-session-spanish-beach-013.jpg:
+  en: Couple running hand in hand along the beach, laughing
+  de: Paar läuft lachend Hand in Hand am Strand entlang
+maternity-session-spanish-beach-014.jpg:
+  en: He spins the mother-to-be at the edge of the sea
+  de: Er wirbelt die werdende Mama am Meer herum
+maternity-session-spanish-beach-015.jpg:
+  en: Couple in caps playing barefoot at the water's edge
+  de: Paar mit Kappen spielt barfuß am Wasser
+maternity-session-spanish-beach-016.jpg:
+  en: Couple on a wide beach beside a lone palm tree
+  de: Paar an einem weiten Strand neben einer einzelnen Palme
+maternity-session-spanish-beach-017.jpg:
+  en: Black and white photo of the couple leaning on a palm tree at the beach
+  de: "Schwarz-Weiß-Foto: Das Paar lehnt am Strand an einer Palme"
+maternity-session-spanish-beach-018.jpg:
+  en: Black and white photo of the couple reading a newspaper announcing the baby
+  de: "Schwarz-Weiß-Foto: Das Paar liest eine Zeitung, die das Baby ankündigt"
+maternity-session-spanish-beach-019.jpg:
+  en: Couple walking arm in arm on the beach, she in a crochet top
+  de: Paar geht Arm in Arm am Strand, sie im Häkeltop

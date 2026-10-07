@@ -24,8 +24,9 @@ import type { MouseEvent } from 'react';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import 'photoswipe/style.css';
 import type { PhotoData } from '../lib/galleries';
+import { ui, type Lang } from '../i18n';
 
-export function useLightbox(photos: PhotoData[]) {
+export function useLightbox(photos: PhotoData[], lang: Lang = 'en') {
   // useRef keeps the PhotoSwipe object between renders without re-rendering
   const lightboxRef = useRef<PhotoSwipeLightbox | null>(null);
 
@@ -44,6 +45,13 @@ export function useLightbox(photos: PhotoData[]) {
       showHideAnimationType: 'fade',
       loop: false,
       preload: [1, 1], // only preload one photo before and after the current one
+      // Button labels in the language of the page
+      closeTitle: ui[lang].closeLightbox,
+      zoomTitle: ui[lang].zoom,
+      arrowPrevTitle: ui[lang].previousPhoto,
+      arrowNextTitle: ui[lang].nextPhoto,
+      errorMsg: ui[lang].photoError,
+      indexIndicatorSep: ` ${ui[lang].of} `,
     });
     lightbox.init();
     lightboxRef.current = lightbox;
@@ -53,7 +61,7 @@ export function useLightbox(photos: PhotoData[]) {
       lightbox.destroy();
       lightboxRef.current = null;
     };
-  }, [photos]);
+  }, [photos, lang]);
 
   /**
    * Opens the lightbox at a photo. If PhotoSwipe isn't ready yet, the click

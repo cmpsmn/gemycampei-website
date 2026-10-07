@@ -1,0 +1,186 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+falun-wedding-sweden-001.jpg:
+  en: Groom in a dark green suit waiting in the churchyard, on film
+  de: Bräutigam im dunkelgrünen Anzug wartet auf dem Kirchhof, auf Film
+falun-wedding-sweden-002.jpg:
+  en: Bride smiles at the groom at the wheel of a vintage car beside a red Swedish house
+  de: Braut lächelt den Bräutigam am Steuer eines Oldtimers neben einem roten schwedischen Haus an
+falun-wedding-sweden-003.jpg:
+  en: Newlyweds kissing in the church doorway as guests throw confetti
+  de: Brautpaar küsst sich im Kirchenportal, während die Gäste Konfetti werfen
+falun-wedding-sweden-004.jpg:
+  en: Black and white photo of the couple kissing in the church door among soap bubbles
+  de: "Schwarz-Weiß-Foto: Das Paar küsst sich im Kirchentor zwischen Seifenblasen"
+falun-wedding-sweden-005.jpg:
+  en: Guests gathering outside the medieval stone church near Falun, on film
+  de: Gäste versammeln sich vor der mittelalterlichen Steinkirche bei Falun, auf Film
+falun-wedding-sweden-006.jpg:
+  en: Close-up of a bridesmaid's earring and diamond necklace
+  de: Nahaufnahme von Ohrring und Diamantkette einer Brautjungfer
+falun-wedding-sweden-007.jpg:
+  en: Bride hugging a guest in a pink hat outside the church
+  de: Braut umarmt vor der Kirche einen Gast mit rosa Hut
+falun-wedding-sweden-008.jpg:
+  en: Black and white photo of the couple at the altar with the bridesmaids, on film
+  de: Schwarz-Weiß-Foto des Paares am Altar mit den Brautjungfern, auf Film
+falun-wedding-sweden-009.jpg:
+  en: Black and white photo of the bride laughing with her bridesmaids
+  de: "Schwarz-Weiß-Foto: Die Braut lacht mit ihren Brautjungfern"
+falun-wedding-sweden-010.jpg:
+  en: Newlyweds walking out of the church through their guests
+  de: Brautpaar zieht durch die Gäste aus der Kirche aus
+falun-wedding-sweden-011.jpg:
+  en: Black and white photo of the priest leading the ceremony before a stained-glass window
+  de: "Schwarz-Weiß-Foto: Der Pfarrer leitet die Trauung vor einem Buntglasfenster"
+falun-wedding-sweden-012.jpg:
+  en: Black and white photo of the bride dancing with her bridesmaids at the reception
+  de: "Schwarz-Weiß-Foto: Die Braut tanzt beim Fest mit ihren Brautjungfern"
+falun-wedding-sweden-013.jpg:
+  en: Black and white photo of the couple kissing in the church doorway
+  de: "Schwarz-Weiß-Foto: Das Paar küsst sich im Kirchenportal"
+falun-wedding-sweden-014.jpg:
+  en: Bride touches the groom's shoulder for the first look in front of a red house
+  de: Braut berührt beim First Look vor einem roten Haus die Schulter des Bräutigams
+falun-wedding-sweden-015.jpg:
+  en: Black and white photo of the couple at the altar of the old church, on film
+  de: Schwarz-Weiß-Foto des Paares am Altar der alten Kirche, auf Film
+falun-wedding-sweden-016.jpg:
+  en: Wedding ceremony in the white-vaulted Swedish church, guests in the pews
+  de: Trauung in der weiß gewölbten schwedischen Kirche, Gäste in den Bänken
+falun-wedding-sweden-017.jpg:
+  en: Wedding rings, handwritten vows and a white vintage telephone
+  de: Eheringe, handgeschriebene Gelübde und ein weißes Retro-Telefon
+falun-wedding-sweden-018.jpg:
+  en: Bride and groom walking into the red brick church entrance
+  de: Braut und Bräutigam gehen durch das rote Backsteinportal in die Kirche
+falun-wedding-sweden-019.jpg:
+  en: Groom runs after the bride across the lawn, holding her hand
+  de: Bräutigam läuft der Braut Hand in Hand über den Rasen nach
+falun-wedding-sweden-020.jpg:
+  en: Black and white photo of the couple reading their vows
+  de: "Schwarz-Weiß-Foto: Das Paar liest sein Eheversprechen"
+falun-wedding-sweden-021.jpg:
+  en: Bride posing beside a vintage car under tall pines, on film
+  de: Braut posiert neben einem Oldtimer unter hohen Kiefern, auf Film
+falun-wedding-sweden-022.jpg:
+  en: A traditional red wooden house among pine trees in Dalarna
+  de: Ein traditionelles rotes Holzhaus zwischen Kiefern in Dalarna
+falun-wedding-sweden-023.jpg:
+  en: Newlyweds walking hand in hand along a gravel road through the forest
+  de: Brautpaar geht Hand in Hand einen Schotterweg durch den Wald
+falun-wedding-sweden-024.jpg:
+  en: Black and white photo of guests throwing petals and filming the couple
+  de: "Schwarz-Weiß-Foto: Gäste werfen Blütenblätter und filmen das Paar"
+falun-wedding-sweden-025.jpg:
+  en: Portrait of the bride and groom cheek to cheek
+  de: Porträt von Braut und Bräutigam Wange an Wange
+falun-wedding-sweden-026.jpg:
+  en: Newlyweds in a vintage car with a Swedish flag, guests behind
+  de: Brautpaar in einem Oldtimer mit schwedischer Flagge, dahinter die Gäste
+falun-wedding-sweden-027.jpg:
+  en: Black and white detail of a guest reading a hymn book
+  de: "Schwarz-Weiß-Detail: Ein Gast liest im Gesangbuch"
+falun-wedding-sweden-028.jpg:
+  en: Black and white photo of the bride walking with her bridesmaids
+  de: "Schwarz-Weiß-Foto: Die Braut geht mit ihren Brautjungfern"
+falun-wedding-sweden-029.jpg:
+  en: Close-up of the bride's hand with rings resting on the groom's arm
+  de: Nahaufnahme der Hand der Braut mit Ringen auf dem Arm des Bräutigams
+falun-wedding-sweden-030.jpg:
+  en: Altar with a crucifix, candles and red roses in the church
+  de: Altar mit Kruzifix, Kerzen und roten Rosen in der Kirche
+falun-wedding-sweden-031.jpg:
+  en: View over the forests and lakes of Dalarna near Falun, on film
+  de: Blick über die Wälder und Seen Dalarnas bei Falun, auf Film
+falun-wedding-sweden-032.jpg:
+  en: Bride sitting at the candlelit reception table, smiling
+  de: Braut sitzt lächelnd an der Festtafel mit Kerzenlicht
+falun-wedding-sweden-033.jpg:
+  en: Couple dancing their first dance
+  de: Das Paar tanzt den Hochzeitstanz
+falun-wedding-sweden-034.jpg:
+  en: Black and white group photo of all the guests cheering by a wooden house
+  de: Schwarz-Weiß-Gruppenfoto aller jubelnden Gäste an einem Holzhaus
+falun-wedding-sweden-035.jpg:
+  en: Groom and bride walking down the aisle of the church as guests stand
+  de: Brautpaar zieht durch den Mittelgang der Kirche, die Gäste stehen
+falun-wedding-sweden-036.jpg:
+  en: Black and white photo of the driver at the wheel of the vintage car
+  de: Schwarz-Weiß-Foto des Fahrers am Steuer des Oldtimers
+falun-wedding-sweden-037.jpg:
+  en: Group photo of the cheering guests with the couple kissing in the middle
+  de: Gruppenfoto der jubelnden Gäste, in der Mitte küsst sich das Paar
+falun-wedding-sweden-038.jpg:
+  en: Black and white photo of a guest wiping away tears in the pews
+  de: "Schwarz-Weiß-Foto: Ein Gast wischt sich in der Kirchenbank Tränen ab"
+falun-wedding-sweden-039.jpg:
+  en: Black and white photo of bridesmaids crying by the church pulpit
+  de: "Schwarz-Weiß-Foto: Brautjungfern weinen an der Kanzel"
+falun-wedding-sweden-040.jpg:
+  en: Black and white photo of guests in the church pews from above
+  de: Schwarz-Weiß-Foto der Gäste in den Kirchenbänken von oben
+falun-wedding-sweden-041.jpg:
+  en: Wedding party walking across the lawn, bridesmaids in pink, on film
+  de: Die Hochzeitsgesellschaft geht über den Rasen, Brautjungfern in Rosa, auf Film
+falun-wedding-sweden-042.jpg:
+  en: Black and white photo of bridesmaids helping the bride with her dress
+  de: "Schwarz-Weiß-Foto: Brautjungfern helfen der Braut mit dem Kleid"
+falun-wedding-sweden-043.jpg:
+  en: Newlyweds kissing against a red barn as bridesmaids rush past
+  de: Brautpaar küsst sich an einer roten Scheune, Brautjungfern eilen vorbei
+falun-wedding-sweden-044.jpg:
+  en: Black and white photo of the bride raising her bouquet as they leave the church
+  de: "Schwarz-Weiß-Foto: Die Braut hebt beim Verlassen der Kirche den Strauß"
+falun-wedding-sweden-045.jpg:
+  en: Wedding cake with a bride and groom topper and a gold cake knife, on film
+  de: Hochzeitstorte mit Brautpaar-Figur und goldenem Tortenmesser, auf Film
+falun-wedding-sweden-046.jpg:
+  en: Newlyweds walking hand in hand on the lawn by a lake
+  de: Brautpaar geht Hand in Hand über den Rasen an einem See
+falun-wedding-sweden-047.jpg:
+  en: Black and white photo of the wedding cake with its topper
+  de: Schwarz-Weiß-Foto der Hochzeitstorte mit Figur
+falun-wedding-sweden-048.jpg:
+  en: Black and white photo of the bride feeding the groom cake
+  de: "Schwarz-Weiß-Foto: Die Braut füttert den Bräutigam mit Torte"
+falun-wedding-sweden-049.jpg:
+  en: Black and white photo of a guest moved to tears during the ceremony
+  de: "Schwarz-Weiß-Foto: Ein Gast ist während der Trauung zu Tränen gerührt"
+falun-wedding-sweden-050.jpg:
+  en: Black and white photo of guests at the reception listening to speeches
+  de: "Schwarz-Weiß-Foto: Gäste beim Fest hören den Reden zu"
+falun-wedding-sweden-051.jpg:
+  en: Black and white photo of a guest wiping a tear during the speeches
+  de: "Schwarz-Weiß-Foto: Ein Gast wischt sich bei den Reden eine Träne ab"
+falun-wedding-sweden-052.jpg:
+  en: Black and white photo of the couple playing the shoe game
+  de: "Schwarz-Weiß-Foto: Das Paar spielt das Schuhspiel"
+falun-wedding-sweden-053.jpg:
+  en: Newlyweds in the back of a vintage car with the driver
+  de: Brautpaar auf der Rückbank eines Oldtimers mit dem Fahrer
+falun-wedding-sweden-054.jpg:
+  en: Black and white detail of a guest filming the ceremony on a phone
+  de: "Schwarz-Weiß-Detail: Ein Gast filmt die Trauung mit dem Handy"
+falun-wedding-sweden-055.jpg:
+  en: Bride seen through the windscreen of the vintage car by a red house
+  de: Braut durch die Windschutzscheibe des Oldtimers vor einem roten Haus
+falun-wedding-sweden-056.jpg:
+  en: Groom checking the vintage car decorated with greenery
+  de: Bräutigam prüft den mit Grün geschmückten Oldtimer
+falun-wedding-sweden-057.jpg:
+  en: Bride and groom laughing together on the lawn
+  de: Braut und Bräutigam lachen zusammen auf dem Rasen
+falun-wedding-sweden-058.jpg:
+  en: Smiling groom in a green suit by red wooden cottages, on film
+  de: Lächelnder Bräutigam im grünen Anzug bei roten Holzhütten, auf Film
+falun-wedding-sweden-059.jpg:
+  en: Black and white photo of the bride waving from the car
+  de: "Schwarz-Weiß-Foto: Die Braut winkt aus dem Auto"
+falun-wedding-sweden-060.jpg:
+  en: Black and white photo of the bride smiling at the groom during the ceremony
+  de: "Schwarz-Weiß-Foto: Die Braut lächelt den Bräutigam während der Trauung an"

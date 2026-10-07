@@ -14,6 +14,9 @@
  *
  * Photos used by a testimonial can't be deleted or moved until the review
  * uses another photo, so the website never breaks.
+ *
+ * Photo descriptions (photos.yaml, see alts.mjs) travel with their photo:
+ * they are renamed, moved, put in the trash and restored together with it.
  * ============================================================================
  */
 
@@ -22,9 +25,10 @@ import { readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { UserError, assertPhotoName, exists, galleryDir, parseGalleryId, ROOT } from './paths.mjs';
 import { readMarkdown, toPlain, writeMarkdown } from './frontmatter.mjs';
-import { photoNames, readGallery, renumberPhotos } from './galleries.mjs';
+import { markChanged, photoNames, readGallery, renumberPhotos } from './galleries.mjs';
 import { reviewsUsingPhotos } from './testimonials.mjs';
 import { moveFile, moveToTrash } from './trash.mjs';
+import { addAlts, setAlt, takeAlts } from './alts.mjs';
 import { optimisePhoto, photoName } from '../../../scripts/lib/photos.mjs';
 
 /** Photos with a long side below this are flagged: they may look soft on big screens. */
@@ -108,11 +112,14 @@ export async function deletePhotos(galleryId, names) {
   const coverDeleted = names.includes(gallery.fields.cover);
   if (coverDeleted) await setCover(galleryId, undefined);
 
+  // The descriptions go into the trash entry too, so Undo brings them back
+  const alts = await takeAlts(dir, names);
+
   return moveToTrash({
     kind: 'photos',
     label: `${names.length} photo${names.length > 1 ? 's' : ''} from "${gallery.displayTitle}"`,
     paths: names.map((name) => path.join(dir, name)),
-    extra: { galleryId, cover: coverDeleted ? gallery.fields.cover : null },
+    extra: { galleryId, cover: coverDeleted ? gallery.fields.cover : null, alts },
   });
 }
 
@@ -131,7 +138,16 @@ export async function movePhotos(fromId, toId, names) {
     await moveFile(path.join(galleryDir(from.category, from.slug), name), path.join(galleryDir(to.category, to.slug), target));
     moved[name] = target;
   }
+  // New name in the other gallery: a new version, so no old thumbnail is shown
+  await markChanged(Object.values(moved).map((name) => path.join(galleryDir(to.category, to.slug), name)));
   if (names.includes(from.fields.cover)) await setCover(fromId, undefined);
+
+  // Descriptions follow their photos under the new names
+  const alts = await takeAlts(galleryDir(from.category, from.slug), names);
+  await addAlts(
+    galleryDir(to.category, to.slug),
+    Object.fromEntries(Object.entries(alts).map(([name, alt]) => [moved[name], alt])),
+  );
   return moved;
 }
 
@@ -145,10 +161,35 @@ async function setCover(galleryId, cover) {
   await writeMarkdown(file, doc, body);
 }
 
-/** Called after photos came back from the trash: restore the cover if it was deleted. */
+/** Saves the description of one photo in both languages (from the editor). */
+export async function savePhotoAlt(galleryId, name, alt) {
+  assertPhotoName(name);
+  const gallery = await readGallery(galleryId);
+  if (!gallery.photos.some((p) => p.name === name)) throw new UserError(`"${name}" is not in this gallery.`, 404);
+  const clip = (text) => (typeof text === 'string' ? text.slice(0, 300) : undefined);
+  await setAlt(galleryDir(gallery.category, gallery.slug), name, { en: clip(alt?.en), de: clip(alt?.de) });
+}
+
+/** Called after photos came back from the trash: restore the cover and the descriptions. */
 export async function afterPhotosRestored(manifest, restoredPaths) {
-  const { galleryId, cover } = manifest.extra ?? {};
-  if (!galleryId || !cover) return;
+  const { galleryId, cover, alts } = manifest.extra ?? {};
+  if (!galleryId) return;
+  // Restored photos may take a name that another photo had in the meantime
+  await markChanged(restoredPaths.map((p) => path.join(ROOT, p)).filter((p) => /\.(jpe?g|png|webp|avif)$/i.test(p)));
+
+  // Descriptions, under the name each photo was restored as (maybe "-restored")
+  if (alts && Object.keys(alts).length) {
+    const { category, slug } = parseGalleryId(galleryId);
+    const dir = galleryDir(category, slug);
+    const entries = {};
+    for (const [index, item] of manifest.items.entries()) {
+      const original = path.basename(item.original);
+      if (alts[original]) entries[path.basename(restoredPaths[index])] = alts[original];
+    }
+    if (await exists(dir)) await addAlts(dir, entries);
+  }
+
+  if (!cover) return;
   const index = manifest.items.findIndex((item) => path.basename(item.original) === cover);
   if (index < 0) return;
   const { category, slug } = parseGalleryId(galleryId);

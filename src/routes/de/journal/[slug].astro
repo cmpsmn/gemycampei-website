@@ -1,0 +1,18 @@
+---
+/**
+ * JOURNAL ARTICLES (Deutsch)  →  https://gemycampei.com/de/journal/<slug>/
+ * Only articles with an index.de.md; the address is its `slug`.
+ */
+import type { GetStaticPaths } from 'astro';
+import ArticleView from '../../../views/ArticleView.astro';
+import { getJournalArticles, type JournalArticle } from '../../../lib/journal';
+
+export const getStaticPaths = (async () =>
+  (await getJournalArticles('de')).map((article) => ({ params: { slug: article.de!.data.slug }, props: { article } }))) satisfies GetStaticPaths;
+
+interface Props {
+  article: JournalArticle;
+}
+---
+
+<ArticleView article={Astro.props.article} />

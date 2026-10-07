@@ -7,7 +7,7 @@
  *
  *   ---
  *   names: "Annie & Huong"
- *   gallery: the-alps/val-di-funes-couple-session-a-and-h   ← optional link
+ *   gallery: dolomites-elopement-photographer/val-di-funes-couple-session-a-and-h   ← optional link
  *   galleryPhoto: val-di-funes-couple-session-a-and-h-001.jpg ← optional photo from that gallery
  *   image: ./annie-and-huong.jpg                             ← or a photo next to the file
  *   ---

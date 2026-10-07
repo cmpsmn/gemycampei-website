@@ -1,0 +1,639 @@
+---
+/**
+ * ============================================================================
+ * HOME PAGE  (src/views/HomeView.astro)
+ * ============================================================================
+ *
+ * Used by src/pages/index.astro (/) and src/pages/de/index.astro (/de/).
+ * The texts of both languages are in `copy` below, next to each other.
+ *
+ * STRUCTURE (from the v3 design, plus two SEO sections)
+ *   hero · statement · "who, where, what" (a direct answer for Google and AI
+ *   assistants, with links to the three main landing pages) · galleries ·
+ *   about · packages · film band · journal
+ *
+ * Everything else on this page comes from content that the gallery manager
+ * (npm run manage) also edits: the category folders supply the gallery tiles
+ * and the film photos, src/content/packages the package cards and
+ * src/content/journal the newest guides.
+ *
+ * WATCH OUT: when a line ends with a word and the next line starts with a tag
+ * like <em>, Astro drops the space between them. End such lines with {' '}.
+ * ============================================================================
+ */
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import portrait from '../assets/about/gemy-campei-photographer-vienna.jpg';
+import { getCategories, getGalleries, getHomeGrid1, categoryText, hrefIn, photoAlt } from '../lib/galleries';
+import { getPackagesPage } from '../lib/packages';
+import { getJournalArticles, articleText, describePhotoRef } from '../lib/journal';
+import { inlineMarkdownToText } from '../lib/markdown';
+import { websiteSchema } from '../lib/seo';
+import { getPage } from '../lib/pages';
+import { inlineMarkdown } from '../lib/markdown';
+import SectionHead from '../components/SectionHead.astro';
+import { site } from '../site.config';
+import { langOf, pick, routes } from '../i18n';
+
+const lang = langOf(Astro.currentLocale);
+const heroImage = getHomeGrid1()[0];
+
+// One tile per category. The tile photo is the cover of its first gallery
+// (already a portrait crop, and chosen in the gallery manager); if a category
+// has no gallery with a cover yet, its hero.jpg is used instead.
+const categories = await getCategories({ onlyWithGalleries: true });
+const tiles = await Promise.all(
+  categories.map(async (category) => {
+    const [first] = await getGalleries(category.id);
+    return { category, text: categoryText(category, lang), image: first?.cover ?? category.hero };
+  }),
+);
+const categoryHref = (id: string) => {
+  const category = categories.find((c) => c.id === id);
+  return category ? hrefIn(category, lang) : routes.galleries[lang];
+};
+
+// Package cards: the first three of the wedding packages page
+const weddingPackages = await getPackagesPage('wedding-photography-packages');
+const elopementPackages = await getPackagesPage('dolomites-elopement-packages');
+// Each card shows only the first sentence of its package text, as plain text:
+// the full descriptions (with their bold-italic phrases) live on the packages page.
+const firstSentence = (text: string) => inlineMarkdownToText(text).split(/(?<=[.!?])\s/)[0];
+const packageCards = (weddingPackages?.entry.data.packages ?? []).slice(0, 3).map((pkg, i) => {
+  const de = lang === 'de' ? weddingPackages?.de?.data.packages[i] : undefined;
+  return { image: pkg.image, title: de?.title ?? pkg.title, summary: firstSentence(de?.text ?? pkg.text) };
+});
+const numerals = ['I', 'II', 'III'];
+const packagesHref = (page: typeof weddingPackages) => (page ? (lang === 'de' ? page.hrefDe : page.href) : routes.contact[lang]);
+
+// Four film photos for the dark band
+const filmCategory = '35mm-film-super-8-wedding';
+const filmGalleries = await getGalleries(filmCategory);
+const filmPhotos = filmGalleries
+  .flatMap((gallery) => gallery.photos.map((photo) => ({ photo, alt: photoAlt(gallery, photo, lang) })))
+  .slice(0, 4);
+
+// The three newest journal articles
+const articles = await Promise.all(
+  (await getJournalArticles(lang))
+    .slice(0, 3)
+    .map(async (article) => ({ ...article, coverAlt: await describePhotoRef(article.coverRef, lang) })),
+);
+
+
+// The texts are in src/content/pages/home.yaml (editable in the manager → Pages)
+const copy = getPage('home', lang);
+---
+
+<Base
+  title={site.seo[lang].title}
+  description={copy.description}
+  ogImage={heroImage}
+  schema={[websiteSchema()]}
+  alternates={{ en: routes.home.en, de: routes.home.de }}
+>
+  <!-- ── Hero: statement left, photo right ───────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1 class="h1-quiet">{copy.h1}</h1>
+      <p class="display hero-title">
+        Candid souls<br /><em class="cross">×</em><br /><em>quiet elegance</em>
+      </p>
+      <p class="body-text hero-intro">{copy.intro}</p>
+      <div class="hero-actions">
+        <a class="button-ghost" href={routes.contact[lang]}>{pick(lang, { en: 'Enquire about your date', de: 'Euren Termin anfragen' })}</a>
+        <a class="link-quiet" href={routes.galleries[lang]}>{copy.viewGalleries}</a>
+      </div>
+    </div>
+    <Image
+      src={heroImage}
+      alt={copy.heroAlt}
+      widths={[480, 800, 1200]}
+      sizes="(max-width: 900px) 92vw, 44vw"
+      quality={72}
+      loading="eager"
+      fetchpriority="high"
+      class="hero-image"
+    />
+  </section>
+
+  <!-- ── Statement band ──────────────────────────────────────────────────── -->
+  <section class="section statement rule-top rule-bottom">
+    <blockquote data-reveal>
+      <Fragment set:html={inlineMarkdown(copy.statement)} />
+    </blockquote>
+  </section>
+
+  <!-- ── Who, where, what: a direct answer, and the three main landing pages ── -->
+  <section class="section answer">
+    <div class="answer-text">
+      <p class="eyebrow">{copy.answerEyebrow}</p>
+      <h2 class="section-title">{copy.answerTitle}</h2>
+      <p class="body-text">{copy.answer}</p>
+    </div>
+    <div class="destinations">
+      {
+        copy.destinations.map((destination) => (
+          <a class="destination" href={categoryHref(destination.category)} data-reveal>
+            <h3>{destination.title}</h3>
+            <p class="body-text">{destination.text}</p>
+            <span class="link-quiet">{destination.link}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── Gallery categories ──────────────────────────────────────────────── -->
+  <section class="section">
+    <SectionHead eyebrow={copy.portfolio} title={copy.galleries} link={{ href: routes.galleries[lang], label: copy.allGalleries }} />
+    <div class="tiles">
+      {
+        tiles.map(({ category, text, image }, i) => (
+          <a href={hrefIn(category, lang)} class="tile" data-reveal>
+            <Image
+              src={image}
+              alt={text.h1}
+              widths={[320, 480, 800]}
+              sizes="(max-width: 700px) 92vw, 24vw"
+              quality={72}
+              class="tile-image"
+            />
+            <span class="meta">
+              {String(i + 1).padStart(2, '0')} — {text.menuLabel}
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── About ───────────────────────────────────────────────────────────── -->
+  <section class="section band split">
+    <Image
+      src={portrait}
+      alt={copy.portraitAlt}
+      widths={[480, 800]}
+      sizes="(max-width: 900px) 92vw, 42vw"
+      class="split-image"
+      data-reveal
+    />
+    <div class="split-text">
+      <p class="eyebrow">{copy.aboutEyebrow}</p>
+      <h2>{copy.aboutTitle}</h2>
+      {copy.about.map((paragraph) => <p class="body-text">{paragraph}</p>)}
+      <a class="link-quiet" href={routes.about[lang]}>{copy.aboutLink}</a>
+    </div>
+  </section>
+
+  <!-- ── Packages preview ────────────────────────────────────────────────── -->
+  <section class="section">
+    <SectionHead
+      eyebrow={copy.packagesEyebrow}
+      title={copy.packagesTitle}
+      link={{ href: packagesHref(weddingPackages), label: copy.seePackages }}
+    />
+    <div class="cards">
+      {
+        packageCards.map((pkg, i) => (
+          <article class="card" data-reveal>
+            <Image
+              src={pkg.image}
+              alt={pkg.title}
+              widths={[320, 480, 800]}
+              sizes="(max-width: 700px) 92vw, 30vw"
+              quality={72}
+              class="card-image"
+            />
+            <p class="numeral">{numerals[i]}</p>
+            <h3>{pkg.title}</h3>
+            <p class="body-text card-text">{pkg.summary}</p>
+          </article>
+        ))
+      }
+    </div>
+    <p class="card-links">
+      {copy.eloping}{' '}
+      <a class="link-quiet" href={packagesHref(elopementPackages)}>{copy.elopementLink}</a>
+    </p>
+  </section>
+
+  <!-- ── 35mm & Super 8 band ─────────────────────────────────────────────── -->
+  {
+    filmPhotos.length > 0 && (
+      <section class="section band-dark split film">
+        <div class="split-text">
+          <p class="eyebrow">35mm &amp; Super 8</p>
+          <h2 class="film-title">{copy.filmTitle}</h2>
+          <p class="body-text film-text">{copy.filmText}</p>
+          <a class="link-quiet" href={categoryHref(filmCategory)}>
+            {copy.filmLink}
+          </a>
+        </div>
+        <div class="film-grid">
+          {filmPhotos.map(({ photo, alt }) => (
+            <Image
+              src={photo.image}
+              alt={alt}
+              widths={[240, 400, 640]}
+              sizes="(max-width: 700px) 45vw, 18vw"
+              quality={72}
+              class="film-photo"
+            />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ── Journal: the newest guides ──────────────────────────────────────── -->
+  {
+    articles.length > 0 && (
+      <section class="section">
+        <SectionHead eyebrow={copy.journalEyebrow} title={copy.journalTitle} link={{ href: routes.journal[lang], label: copy.allArticles }} />
+        <div class="articles">
+          {articles.map((article) => {
+            const text = articleText(article, lang);
+            return (
+              <a class="article" href={lang === 'de' ? article.hrefDe : article.href} data-reveal>
+                <Image
+                  src={article.cover}
+                  alt={article.coverAlt}
+                  widths={[320, 480, 800]}
+                  sizes="(max-width: 700px) 92vw, 30vw"
+                  quality={72}
+                  class="article-image"
+                />
+                <h3>{text.title}</h3>
+                <p class="body-text article-text">{text.description}</p>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )
+  }
+
+</Base>
+
+<style>
+  /* ── Hero ──────────────────────────────────────────────────────────────── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: end;
+    gap: clamp(1.75rem, 5vw, 4.5rem);
+    padding: clamp(2.25rem, 6vw, 6rem) var(--edge) clamp(2rem, 5vw, 4rem);
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    /* On short screens the gaps shrink, so everything stays on one screen */
+    gap: min(clamp(1.25rem, 3vw, 2.125rem), 3.2svh);
+    max-width: 38.75rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.75rem, 8.4vw, 7.375rem);
+    line-height: 0.92;
+  }
+
+  .cross {
+    color: var(--accent);
+  }
+
+  .hero-intro {
+    max-width: 42ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .hero :global(.hero-image) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  /*
+   * The hero fills exactly one screen. "svh" is the small viewport height,
+   * which stays stable while a phone's address bar slides in and out.
+   * --hero-space is what is left for the hero: the window minus the sticky
+   * header and the hero's own top and bottom padding.
+   */
+  .hero {
+    --hero-pad: clamp(1.5rem, 3vw, 3rem);
+    --hero-space: calc(100svh - var(--header-h) - 2 * var(--hero-pad));
+    min-height: calc(100vh - var(--header-h)); /* fallback for old browsers */
+    min-height: calc(100svh - var(--header-h));
+    padding-block: var(--hero-pad);
+  }
+
+  /* On short screens the title follows the height instead of the width */
+  .hero-title {
+    font-size: min(clamp(2.75rem, 8.4vw, 7.375rem), 13svh);
+  }
+
+  @media (min-width: 821px) {
+    /*
+     * Text and photo as two fixed columns, centred as one block: the space
+     * left of the text is the same as the space right of the photo.
+     */
+    .hero {
+      grid-template-columns: minmax(0, 36rem) min(40vw, 38rem);
+      justify-content: center;
+      align-items: stretch; /* the photo column fills the full height */
+    }
+
+    .hero-text {
+      justify-content: center;
+    }
+
+    /* An explicit height (not 100%) so the photo never makes the row taller */
+    .hero :global(.hero-image) {
+      height: var(--hero-space);
+      aspect-ratio: auto; /* the height decides, not the shape of the photo */
+    }
+  }
+
+  /* Phones: text first, then as much photo as still fits on the screen */
+  @media (max-width: 820px) {
+    .hero {
+      align-content: center;
+      gap: clamp(1rem, 4vw, 2rem);
+    }
+
+    .hero :global(.hero-image) {
+      max-height: 31svh;
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  /* ── Statement ─────────────────────────────────────────────────────────── */
+  .statement blockquote {
+    margin: 0 auto;
+    max-width: 26ch;
+    font-family: var(--font-serif);
+    font-weight: 200;
+    font-style: italic;
+    font-size: clamp(1.625rem, 4.2vw, 3.375rem);
+    line-height: 1.22;
+    text-align: center;
+    text-wrap: pretty;
+  }
+
+  .statement :global(em) {
+    font-style: normal;
+    font-weight: 300;
+  }
+
+  /* ── Gallery tiles ─────────────────────────────────────────────────────── */
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: clamp(0.75rem, 2vw, 1.625rem);
+  }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  /* Same zoom as the gallery cards (GalleryCard.css): short and even */
+  .tile :global(.tile-image) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    transform: scale(1);
+    transition: transform 0.6s ease-out;
+    will-change: transform;
+  }
+
+  .tile:hover :global(.tile-image) {
+    transform: scale(1.03);
+  }
+
+  /* The photo must not spill out while it grows */
+  .tile {
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  /* ── Split sections (about, film) ──────────────────────────────────────── */
+  /* Fixed columns, centred: the gap between text and photo is always the
+     gap itself (a stretched column left hundreds of pixels between them) */
+  .split {
+    display: grid;
+    grid-template-columns: var(--photo-text) min(32.5rem, 100% - var(--photo-text) - var(--space-7));
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-7);
+  }
+
+  /* The film band: text on the narrow side, a 2 x 2 grid of photos on the wide side */
+  .split.film {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  }
+
+  @media (max-width: 800px) {
+    .split,
+    .split.film {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .split :global(.split-image) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .split-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 32.5rem;
+  }
+
+  .split-text h2 {
+    margin: 0;
+    font-size: clamp(1.875rem, 4.4vw, 3.625rem);
+    line-height: 1.05;
+  }
+
+  .split-text .link-quiet {
+    align-self: start;
+    margin-top: 0.5rem;
+  }
+
+  /* ── Packages ──────────────────────────────────────────────────────────── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr));
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .card :global(.card-image) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .card h3 {
+    margin: 0;
+    font-size: 1.4375rem;
+  }
+
+  .card-text {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+
+  .numeral {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* "Eloping in the mountains? Dolomites elopement packages →" under the cards */
+  .card-links {
+    margin: var(--space-5) 0 0;
+    color: var(--text-soft);
+  }
+
+  /* ── Film band ─────────────────────────────────────────────────────────── */
+  .film-title {
+    font-style: italic;
+    font-size: clamp(1.625rem, 3.6vw, 2.75rem);
+    line-height: 1.15;
+  }
+
+  .film-text {
+    color: var(--on-dark-soft);
+  }
+
+  .film-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .film-grid :global(.film-photo) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  /* ── Who, where, what ──────────────────────────────────────────────────── */
+  /* The answer on the left, the three landing pages on the right */
+  .answer {
+    display: grid;
+    grid-template-columns: min(var(--measure), 100% - 24rem - var(--space-6)) minmax(0, 24rem);
+    justify-content: center;
+    align-items: start;
+    gap: var(--space-6);
+  }
+
+  .answer-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .answer-text .body-text {
+    margin: 0;
+  }
+
+  .destinations {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .destination {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+    border-top: 1px solid var(--line-strong);
+    color: var(--text);
+  }
+
+  .destination:hover {
+    color: var(--text);
+  }
+
+  .destination h3 {
+    margin: 0;
+    font-size: 1.375rem;
+  }
+
+  .destination p {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  .destination .link-quiet {
+    align-self: start;
+  }
+
+  @media (max-width: 900px) {
+    .answer {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Journal ───────────────────────────────────────────────────────────── */
+  .articles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+  }
+
+  .article {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    color: var(--text);
+  }
+
+  .article:hover {
+    color: var(--text);
+  }
+
+  .article :global(.article-image) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .article h3 {
+    margin: 0;
+    font-size: 1.4375rem;
+  }
+
+  .article-text {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  @media (max-width: 800px) {
+    .articles {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

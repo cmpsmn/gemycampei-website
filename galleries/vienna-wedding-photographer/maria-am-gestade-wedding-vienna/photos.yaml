@@ -1,0 +1,99 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+maria-am-gestade-wedding-vienna-001.jpg:
+  en: Black and white photo of the bride hugging a guest after the church ceremony
+  de: "Schwarz-Weiß-Foto: Die Braut umarmt nach der Trauung einen Gast"
+maria-am-gestade-wedding-vienna-002.jpg:
+  en: Bride leaning on the groom's shoulder in a Vienna park, calla lilies in hand
+  de: Braut lehnt in einem Wiener Park an der Schulter des Bräutigams, Callas in der Hand
+maria-am-gestade-wedding-vienna-003.jpg:
+  en: Black and white photo of the bride lifting her gown on the cobblestones, on film
+  de: "Schwarz-Weiß-Foto: Die Braut rafft ihr Kleid auf dem Kopfsteinpflaster, auf Film"
+maria-am-gestade-wedding-vienna-004.jpg:
+  en: Black and white photo of the priest blessing the couple at the altar
+  de: "Schwarz-Weiß-Foto: Der Pfarrer segnet das Paar am Altar"
+maria-am-gestade-wedding-vienna-005.jpg:
+  en: Newlyweds kissing outside Maria am Gestade as guests applaud
+  de: Brautpaar küsst sich vor Maria am Gestade, die Gäste applaudieren
+maria-am-gestade-wedding-vienna-006.jpg:
+  en: Couple on the balcony of a grand marble staircase with a crystal chandelier in Vienna
+  de: Paar auf dem Balkon eines prachtvollen Marmorstiegenhauses mit Kristallluster in Wien
+maria-am-gestade-wedding-vienna-007.jpg:
+  en: Close-up of the bride's pearl necklace with a small pendant
+  de: Nahaufnahme der Perlenkette der Braut mit kleinem Anhänger
+maria-am-gestade-wedding-vienna-008.jpg:
+  en: Couple kissing on the steps beside the Gothic tower of Maria am Gestade
+  de: Paar küsst sich auf den Stufen neben dem gotischen Turm von Maria am Gestade
+maria-am-gestade-wedding-vienna-009.jpg:
+  en: Black and white photo of the bride being helped into her gown by the window
+  de: "Schwarz-Weiß-Foto: Der Braut wird am Fenster ins Kleid geholfen"
+maria-am-gestade-wedding-vienna-010.jpg:
+  en: View down the nave of Maria am Gestade during the wedding mass
+  de: Blick durch das Kirchenschiff von Maria am Gestade während der Trauungsmesse
+maria-am-gestade-wedding-vienna-011.jpg:
+  en: Bride in a silk robe getting ready, light falling through the blinds
+  de: Braut im Seidenmantel beim Getting Ready, Licht fällt durch die Jalousien
+maria-am-gestade-wedding-vienna-012.jpg:
+  en: Portrait of the bride under her veil
+  de: Porträt der Braut unter ihrem Schleier
+maria-am-gestade-wedding-vienna-013.jpg:
+  en: Plates of Viennese beef tartare served at the wedding dinner
+  de: Teller mit Wiener Beef Tatar beim Hochzeitsdinner
+maria-am-gestade-wedding-vienna-014.jpg:
+  en: Couple kissing in a wood-panelled lift, reflected in the mirror
+  de: Paar küsst sich in einem holzvertäfelten Lift, im Spiegel reflektiert
+maria-am-gestade-wedding-vienna-015.jpg:
+  en: Groom smiling as he waits at the altar of Maria am Gestade
+  de: Bräutigam wartet lächelnd am Altar von Maria am Gestade
+maria-am-gestade-wedding-vienna-016.jpg:
+  en: Bride sitting in her gown on the lawn in front of a Viennese palace, the groom behind
+  de: Braut sitzt im Kleid auf dem Rasen vor einem Wiener Palais, der Bräutigam dahinter
+maria-am-gestade-wedding-vienna-017.jpg:
+  en: Bride on the grand staircase balcony, the groom waiting below
+  de: Braut auf dem Balkon des Stiegenhauses, der Bräutigam wartet darunter
+maria-am-gestade-wedding-vienna-018.jpg:
+  en: Black and white photo of the mother of the bride at the window, the dress hanging nearby
+  de: Schwarz-Weiß-Foto der Brautmutter am Fenster, daneben hängt das Kleid
+maria-am-gestade-wedding-vienna-019.jpg:
+  en: Bride and groom walking down the aisle of the Gothic church Maria am Gestade
+  de: Brautpaar im Mittelgang der gotischen Kirche Maria am Gestade
+maria-am-gestade-wedding-vienna-020.jpg:
+  en: Groom running after the bride across the lawn, her veil flying
+  de: Bräutigam läuft der Braut über den Rasen nach, ihr Schleier fliegt
+maria-am-gestade-wedding-vienna-021.jpg:
+  en: Small orchestra of violinists playing for the wedding guests
+  de: Ein kleines Orchester mit Geigern spielt für die Hochzeitsgäste
+maria-am-gestade-wedding-vienna-022.jpg:
+  en: Witnesses signing the marriage register in the church
+  de: Trauzeugen unterschreiben in der Kirche das Trauungsbuch
+maria-am-gestade-wedding-vienna-023.jpg:
+  en: Bride and groom before the golden high altar of Maria am Gestade
+  de: Brautpaar vor dem goldenen Hochaltar von Maria am Gestade
+maria-am-gestade-wedding-vienna-024.jpg:
+  en: Newlyweds leaving the ornate Gothic portal of Maria am Gestade, guests lining the steps
+  de: Brautpaar verlässt das gotische Portal von Maria am Gestade, Gäste säumen die Stufen
+maria-am-gestade-wedding-vienna-025.jpg:
+  en: Bridal shoes, a pearl necklace and a red lipstick on marble
+  de: Brautschuhe, Perlenkette und roter Lippenstift auf Marmor
+maria-am-gestade-wedding-vienna-026.jpg:
+  en: Couple kissing in the park, her long veil swirling around them
+  de: Paar küsst sich im Park, ihr langer Schleier weht um sie herum
+maria-am-gestade-wedding-vienna-027.jpg:
+  en: Bride and groom kneeling at the altar during the church ceremony
+  de: Brautpaar kniet während der kirchlichen Trauung am Altar
+maria-am-gestade-wedding-vienna-028.jpg:
+  en: Wedding rings on a card reading Nothing Fancy, Just Love
+  de: Eheringe auf einer Karte mit der Aufschrift Nothing Fancy, Just Love
+maria-am-gestade-wedding-vienna-029.jpg:
+  en: Couple kissing at the foot of the grand staircase with red carpet and chandeliers
+  de: Paar küsst sich am Fuß des Prunkstiegenhauses mit rotem Teppich und Lustern
+maria-am-gestade-wedding-vienna-030.jpg:
+  en: Detail of the groom's hand on the bride's waist at a stone balustrade
+  de: "Detail: die Hand des Bräutigams an der Taille der Braut an einer Steinbalustrade"
+maria-am-gestade-wedding-vienna-031.jpg:
+  en: Gothic wall painting of a saint inside Maria am Gestade
+  de: Gotisches Wandbild eines Heiligen in Maria am Gestade

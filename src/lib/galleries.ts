@@ -7,7 +7,7 @@
  * It turns the folder structure in `galleries/` into data the pages can use:
  *
  *   galleries/
- *     weddings/                      ← a CATEGORY  (needs _category.md)
+ *     vienna-wedding-photographer/                      ← a CATEGORY  (needs _category.md)
  *       _category.md
  *       hero.jpg
  *       palais-daun-kinsky-.../      ← a GALLERY   (gallery.md is optional)
@@ -19,13 +19,26 @@
  *    and imports it. An imported image is an `ImageMetadata` object with
  *    src, width and height, which Astro can resize and convert.
  * 2. From the file paths we know which galleries exist, e.g.
- *    "/galleries/weddings/palais/001.jpg" → category "weddings", gallery "palais".
+ *    "/galleries/vienna-wedding-photographer/palais/001.jpg" → category "vienna-wedding-photographer", gallery "palais".
  * 3. The optional `gallery.md` settings are read from the content collection
  *    "galleryMeta" (see src/content.config.ts) and merged with the photos.
  *
  * MULTIPLE CATEGORIES
  * A gallery's folder is its MAIN category (it decides the URL). With
- * `alsoIn: [the-alps]` in gallery.md it is listed in more categories too.
+ * `alsoIn: [dolomites-elopement-photographer]` in gallery.md it is listed in more categories too.
+ *
+ * GERMAN VERSION
+ * The German texts come from the "*.de.md" files next to the English ones
+ * (see src/i18n/index.ts). categoryText() and galleryText() return the texts
+ * of one language, falling back to English where no German text exists.
+ *
+ * PHOTO DESCRIPTIONS (alt texts)
+ * A gallery folder may contain `photos.yaml` with a description per photo:
+ *   lago-di-braies-elopement-s-and-j-001.jpg:
+ *     en: Bride and groom on a rowing boat at Lago di Braies at dawn
+ *     de: Brautpaar im Ruderboot am Pragser Wildsee im Morgengrauen
+ * The gallery manager keeps the file in step when photos are renamed,
+ * moved or deleted. Photos without a description get a generic one.
  *
  * WHO USES IT
  * Pages in src/pages/ call getCategories(), getGalleries() ... and pass the
@@ -37,6 +50,9 @@
 import type { ImageMetadata } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
+import { parse as parseYaml } from 'yaml';
+import type { Lang } from '../i18n';
+import { freshInPreview } from './freshImages';
 
 // ---------------------------------------------------------------------------
 // 1. Collect image files
@@ -46,21 +62,51 @@ import { getImage } from 'astro:assets';
  * Every photo in every gallery folder.
  * Accepted file types: jpg, jpeg, png, webp, avif (also in upper case, as cameras export them).
  * `eager: true` imports them immediately, `import: 'default'` gives us the
- * ImageMetadata directly. Result: { "/galleries/weddings/x/001.jpg": ImageMetadata, ... }
+ * ImageMetadata directly. Result: { "/galleries/vienna-wedding-photographer/x/001.jpg": ImageMetadata, ... }
  *
  * Note: the pattern must be written literally here. Vite reads it before the
  * code runs, so it cannot be built from variables.
  */
-const photoFiles = import.meta.glob<ImageMetadata>(
-  '/galleries/*/*/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}',
-  { eager: true, import: 'default' },
+const photoFiles = freshInPreview(
+  import.meta.glob<ImageMetadata>('/galleries/*/*/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}', {
+    eager: true,
+    import: 'default',
+  }),
 );
 
-/** Images directly inside a category folder, e.g. galleries/weddings/hero.jpg */
-const categoryFiles = import.meta.glob<ImageMetadata>(
-  '/galleries/*/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}',
-  { eager: true, import: 'default' },
+/** Video preview images: galleries/<category>/<gallery>/posters/*.jpg (not counted as photos) */
+const posterFiles = freshInPreview(
+  import.meta.glob<ImageMetadata>('/galleries/*/*/posters/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}', {
+    eager: true,
+    import: 'default',
+  }),
 );
+
+/** Images directly inside a category folder, e.g. galleries/vienna-wedding-photographer/hero.jpg */
+const categoryFiles = freshInPreview(
+  import.meta.glob<ImageMetadata>('/galleries/*/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}', {
+    eager: true,
+    import: 'default',
+  }),
+);
+
+/**
+ * Photo descriptions: galleries/<category>/<gallery>/photos.yaml, as raw text.
+ * Parsed below into { "<file name>": { en, de } }.
+ */
+const altFiles = import.meta.glob<string>('/galleries/*/*/photos.yaml', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+});
+
+/** Photo descriptions of one gallery ("<category>/<slug>"). */
+function altsFor(galleryId: string): Record<string, { en?: string; de?: string }> {
+  const raw = altFiles[`/galleries/${galleryId}/photos.yaml`];
+  if (!raw) return {};
+  const data = parseYaml(raw);
+  return data && typeof data === 'object' ? data : {};
+}
 
 /** Home page photos, two grids with the statement text in between. */
 const homeGrid1 = import.meta.glob<ImageMetadata>(
@@ -82,6 +128,17 @@ function sortedImages(files: Record<string, ImageMetadata>): ImageMetadata[] {
     .map((path) => files[path]);
 }
 
+/**
+ * A gallery photo by its path inside galleries/, e.g.
+ * "dolomites-elopement-photographer/lago-di-braies-elopement-s-and-j/lago-di-braies-elopement-s-and-j-009.jpg".
+ * Used by journal articles, so their photos are never stored twice.
+ */
+export function galleryPhoto(ref: string): ImageMetadata {
+  const image = photoFiles[`/galleries/${ref}`];
+  if (!image) throw new Error(`The photo "galleries/${ref}" does not exist.`);
+  return image;
+}
+
 export const getHomeGrid1 = () => sortedImages(homeGrid1);
 export const getHomeGrid2 = () => sortedImages(homeGrid2);
 
@@ -96,17 +153,25 @@ export interface Photo {
   /** File name, e.g. "palais-daun-kinsky-wedding-vienna-006.jpg" */
   name: string;
   image: ImageMetadata;
+  /** Description from photos.yaml, per language (may be missing) */
+  alt: { en?: string; de?: string };
 }
 
 /** A category = one folder in galleries/ with a _category.md file. */
 export interface Category {
-  /** Folder name and URL segment, e.g. "weddings" */
+  /** Folder name and URL segment, e.g. "vienna-wedding-photographer" */
   id: string;
   href: string;
   data: CollectionEntry<'categories'>['data'];
   /** The _category.md entry, rendered later by the page (intro text) */
   entry: CollectionEntry<'categories'>;
   hero: ImageMetadata;
+  /** Vimeo videos from _category.md with their preview image loaded */
+  videos: { vimeoId: string; title: string; poster: ImageMetadata }[];
+  /** German texts from _category.de.md, if the file exists */
+  de?: CollectionEntry<'categoriesDe'>;
+  /** German address, e.g. "/de/hochzeitsfotograf-wien/" */
+  hrefDe: string;
 }
 
 /** A gallery = one folder inside a category folder. */
@@ -142,6 +207,12 @@ export interface Gallery {
   hasPage: boolean;
   /** The gallery.md entry (for rendering the story text), if the file exists */
   entry?: CollectionEntry<'galleryMeta'>;
+  /** German texts from gallery.de.md, if the file exists */
+  de?: CollectionEntry<'galleryMetaDe'>;
+  /** German address, e.g. "/de/hochzeitsfotograf-wien/palais-daun-kinsky-wedding-vienna/" */
+  hrefDe: string;
+  /** Vimeo videos from gallery.md (`videos:`), with their preview image loaded */
+  videos: { vimeoId: string; title: string; poster: ImageMetadata }[];
 }
 
 // ---------------------------------------------------------------------------
@@ -160,6 +231,10 @@ function titleFromFolder(slug: string): string {
 }
 
 export const categoryHref = (categoryId: string) => `/${categoryId}/`;
+
+/** German category address: the `slug` of _category.de.md, or the English folder name */
+const categoryHrefDe = (categoryId: string, de?: CollectionEntry<'categoriesDe'>) =>
+  `/de/${de?.data.slug ?? categoryId}/`;
 
 /** Newest date first, then by folder name. Used for galleries not in a galleryOrder list. */
 const byNewest = (a: Gallery, b: Gallery) =>
@@ -189,15 +264,22 @@ function loadAllGalleries(): Promise<Gallery[]> {
     const metaById = new Map(metaEntries.map((entry) => [entry.id, entry]));
     const categoryEntries = await getCollection('categories');
     const categoryById = new Map(categoryEntries.map((c) => [c.id, c]));
+    const metaDeById = new Map((await getCollection('galleryMetaDe')).map((entry) => [entry.id, entry]));
+    const categoryDeById = new Map((await getCollection('categoriesDe')).map((entry) => [entry.id, entry]));
 
     // Group photo files by gallery folder
     const photosByGallery = new Map<string, Photo[]>();
     for (const [path, image] of Object.entries(photoFiles)) {
-      // path looks like "/galleries/weddings/palais-daun-kinsky-wedding-vienna/x-001.jpg"
+      // path looks like "/galleries/vienna-wedding-photographer/palais-daun-kinsky-wedding-vienna/x-001.jpg"
       const [, , categoryId, slug, name] = path.split('/');
       const id = `${categoryId}/${slug}`;
       if (!photosByGallery.has(id)) photosByGallery.set(id, []);
-      photosByGallery.get(id)!.push({ name, image });
+      photosByGallery.get(id)!.push({ name, image, alt: {} });
+    }
+
+    // Galleries with videos only (e.g. Super 8 films) have no photo files: add them too
+    for (const entry of metaEntries) {
+      if (entry.data.videos.length && !photosByGallery.has(entry.id)) photosByGallery.set(entry.id, []);
     }
 
     const galleries: Gallery[] = [];
@@ -209,11 +291,13 @@ function loadAllGalleries(): Promise<Gallery[]> {
       if (!category) {
         throw new Error(
           `The folder "galleries/${categoryId}/" has no _category.md file. ` +
-            `Copy one from another category folder (e.g. galleries/weddings/_category.md) and adjust it.`,
+            `Copy one from another category folder (e.g. galleries/vienna-wedding-photographer/_category.md) and adjust it.`,
         );
       }
 
       photos.sort((a, b) => naturalSort(a.name, b.name));
+      const alts = altsFor(id);
+      for (const photo of photos) photo.alt = alts[photo.name] ?? {};
       const entry = metaById.get(id);
       const meta = entry?.data;
 
@@ -229,8 +313,19 @@ function loadAllGalleries(): Promise<Gallery[]> {
       }
       const categoryIds = [categoryId, ...alsoIn];
 
-      // Cover: 1) the file named in gallery.md, 2) a file called cover.*, 3) the first photo
-      let cover = photos[0].image;
+      // Video preview images live in the gallery's posters/ folder
+      const videos = (meta?.videos ?? []).map((video) => {
+        const poster = posterFiles[`/galleries/${id}/posters/${video.poster}`];
+        if (!poster) {
+          throw new Error(`galleries/${id}/gallery.md: the poster "${video.poster}" of "${video.title}" was not found in galleries/${id}/posters/.`);
+        }
+        return { ...video, poster };
+      });
+
+      // Cover: 1) the file named in gallery.md, 2) a file called cover.*, 3) the first photo,
+      // 4) for a gallery of videos only: the first preview image
+      let cover = photos[0]?.image ?? videos[0]?.poster;
+      if (!cover) throw new Error(`galleries/${id}/ has neither photos nor videos.`);
       if (meta?.cover) {
         const found = photos.find((p) => p.name === meta.cover);
         if (!found) {
@@ -264,8 +359,14 @@ function loadAllGalleries(): Promise<Gallery[]> {
         legacyUrls: meta?.legacyUrls ?? [],
         photos,
         cover,
-        hasPage: categoryIds.some((c) => categoryById.get(c)!.data.display === 'cards'),
+        hasPage: categoryIds.some((c) => {
+          const { display, galleryPages } = categoryById.get(c)!.data;
+          return display === 'cards' || galleryPages;
+        }),
         entry,
+        de: metaDeById.get(id),
+        hrefDe: `${categoryHrefDe(categoryId, categoryDeById.get(categoryId))}${slug}/`,
+        videos,
       });
     }
 
@@ -327,6 +428,7 @@ export const isVisible = (gallery: Gallery) => showDrafts || !gallery.draft;
 export async function getCategories(options: { onlyWithGalleries?: boolean } = {}): Promise<Category[]> {
   const entries = await getCollection('categories');
   const visible = await getGalleries();
+  const deById = new Map((await getCollection('categoriesDe')).map((entry) => [entry.id, entry]));
 
   const categories: Category[] = entries.map((entry) => {
     const heroPath = `/galleries/${entry.id}/${entry.data.hero}`;
@@ -334,7 +436,25 @@ export async function getCategories(options: { onlyWithGalleries?: boolean } = {
     if (!hero) {
       throw new Error(`galleries/${entry.id}/_category.md: the hero image "${entry.data.hero}" was not found in galleries/${entry.id}/.`);
     }
-    return { id: entry.id, href: categoryHref(entry.id), data: entry.data, entry, hero };
+    // Video preview images live next to hero.jpg in the category folder
+    const videos = entry.data.videos.map((video) => {
+      const poster = categoryFiles[`/galleries/${entry.id}/${video.poster}`];
+      if (!poster) {
+        throw new Error(`galleries/${entry.id}/_category.md: the poster "${video.poster}" of "${video.title}" was not found in galleries/${entry.id}/.`);
+      }
+      return { ...video, poster };
+    });
+    const de = deById.get(entry.id);
+    return {
+      id: entry.id,
+      href: categoryHref(entry.id),
+      data: entry.data,
+      entry,
+      hero,
+      videos,
+      de,
+      hrefDe: categoryHrefDe(entry.id, de),
+    };
   });
 
   return categories
@@ -354,10 +474,107 @@ export const regionLabel: Record<Region, string> = {
   destination: 'Europe',
 };
 
-/** "Elopement at Lago di Braies, Dolomites, Italy": used for alt texts and descriptions. */
-export function describeGallery(gallery: Gallery): string {
+/** The address of a category or gallery in one language */
+export const hrefIn = (item: { href: string; hrefDe: string }, lang: Lang) => (lang === 'de' ? item.hrefDe : item.href);
+
+/**
+ * German words for the kinds of shoot and the places used in the gallery files.
+ * gallery.de.md can always set its own `type` and `location` instead.
+ */
+const typeDe: Record<string, string> = {
+  Wedding: 'Hochzeit',
+  Elopement: 'Elopement',
+  'Couple Session': 'Paarshooting',
+  Proposal: 'Heiratsantrag',
+  'Maternity Session': 'Babybauch-Shooting',
+  'Film Photography': 'Analogfotografie',
+  'Pre Wedding': 'Pre-Wedding-Shooting',
+  'Honeymoon Session': 'Flitterwochen-Shooting',
+};
+const placeWordsDe: [RegExp, string][] = [
+  [/\bDolomites\b/g, 'Dolomiten'],
+  [/\bItaly\b/g, 'Italien'],
+  [/\bVienna\b/g, 'Wien'],
+  [/\bLower Austria\b/g, 'Niederösterreich'],
+  [/\bAustria\b/g, 'Österreich'],
+  [/\bSweden\b/g, 'Schweden'],
+  [/\bMorocco\b/g, 'Marokko'],
+  [/\bEurope\b/g, 'Europa'],
+  [/\bSouth Tyrol\b/g, 'Südtirol'],
+];
+const translatePlace = (place: string) => placeWordsDe.reduce((text, [rx, de]) => text.replace(rx, de), place);
+export const translateType = (type: string, lang: Lang) => (lang === 'de' ? (typeDe[type] ?? type) : type);
+
+/** The texts of a gallery in one language (German falls back to English + word lists). */
+export function galleryText(gallery: Gallery, lang: Lang) {
   const place = gallery.location ?? regionLabel[gallery.region];
-  return `${gallery.typeLabel} at ${gallery.title}, ${place}`;
+  if (lang === 'en') {
+    return {
+      title: gallery.title,
+      typeLabel: gallery.typeLabel,
+      place,
+      seoTitle: gallery.seoTitle,
+      seoDescription: gallery.seoDescription,
+      translated: true,
+    };
+  }
+  const de = gallery.de?.data;
+  return {
+    title: de?.title ?? gallery.title,
+    typeLabel: de?.type ?? translateType(gallery.typeLabel, 'de'),
+    place: de?.location ?? translatePlace(place),
+    seoTitle: de?.seoTitle,
+    seoDescription: de?.seoDescription,
+    /** false = no gallery.de.md yet: the page shows the English story and is kept out of Google */
+    translated: Boolean(gallery.de),
+  };
+}
+
+/** "Lago di Braies, Dolomites, Italy" next to the title "Lago di Braies" → "Dolomites, Italy" */
+export function placeWithoutTitle(place: string, title: string): string {
+  if (!place.startsWith(title)) return place;
+  return place.slice(title.length).replace(/^,\s*/, '') || place;
+}
+
+/**
+ * "Elopement at Lago di Braies, Dolomites, Italy" / "Elopement am Lago di Braies, Dolomiten, Italien":
+ * used for alt texts and descriptions. The title is not repeated when the place starts with it.
+ */
+export function describeGallery(gallery: Gallery, lang: Lang = 'en'): string {
+  const { title, typeLabel, place } = galleryText(gallery, lang);
+  const rest = placeWithoutTitle(place, title);
+  const where = rest === title ? title : place.startsWith(title) ? `${title}, ${rest}` : `${title}, ${place}`;
+  return lang === 'de' ? `${typeLabel}: ${where}` : `${typeLabel} at ${where}`;
+}
+
+/**
+ * The description of one photo: its entry in photos.yaml, or the gallery
+ * description (the same for every photo, but never "photo 12").
+ */
+export function photoAlt(gallery: Gallery, photo: Photo, lang: Lang = 'en'): string {
+  return photo.alt[lang] ?? (lang === 'de' ? photo.alt.en : undefined) ?? describeGallery(gallery, lang);
+}
+
+/** The texts of a category in one language (German falls back to English). */
+export function categoryText(category: Category, lang: Lang) {
+  const en = category.data;
+  const de = lang === 'de' ? category.de?.data : undefined;
+  return {
+    menuLabel: de?.menuLabel ?? en.menuLabel,
+    singular: de?.singular ?? translateType(en.singular, lang),
+    heroTitle: de?.heroTitle ?? en.heroTitle,
+    heroSubtitle: de?.heroSubtitle ?? en.heroSubtitle,
+    h1: de?.h1 ?? en.h1,
+    seoTitle: de?.seoTitle ?? en.seoTitle,
+    seoDescription: de?.seoDescription ?? en.seoDescription,
+    videosTitle: de?.videosTitle ?? en.videosTitle,
+    videoTitles: category.videos.map((video, i) => de?.videoTitles[i] ?? video.title),
+    faq: de ? de.faq : en.faq,
+    faqTitle: de ? de.faqTitle : en.faqTitle,
+    steps: de ? de.steps : en.steps,
+    stepsTitle: de ? de.stepsTitle : en.stepsTitle,
+    translated: lang === 'en' || Boolean(category.de),
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -386,6 +603,8 @@ export interface CardData {
   href: string;
   title: string;
   couple?: string;
+  /** Small line under the title, e.g. "Elopement · Lago di Braies" */
+  meta: string;
   /** Every category the gallery is listed in (used by the filter) */
   categoryIds: string[];
   categoryLabel: string;
@@ -448,8 +667,11 @@ export function focusToPosition(focus: string | undefined, imageRatio: number, c
  * @param focus the spot that must stay visible when cropping, e.g. "50% 30%" (default: centre)
  */
 export async function coverImage(image: ImageMetadata, focus?: string): Promise<ResponsiveImage> {
+  // The same 3 : 4 shape as the card frame (GalleryCard.css), so the browser
+  // never has to enlarge the photo to fill the frame (that made cards soft).
+  // 1200 px wide is the most a landscape photo of 2400 x 1600 allows at 3 : 4.
   const width = 1200;
-  const height = 1160;
+  const height = 1600;
   const position = focusToPosition(focus, image.width / image.height, width / height);
   const result = await getImage({
     src: image,
@@ -457,22 +679,26 @@ export async function coverImage(image: ImageMetadata, focus?: string): Promise<
     height,
     fit: 'cover', // crop instead of squeezing
     position, // which part of the photo to keep when cropping (from the focus point)
-    widths: [320, 480, 640, 960, 1200],
+    widths: [480, 640, 800, 960, 1080, 1200],
     format: 'webp',
-    quality: 75,
+    quality: 80,
   });
   return { src: result.src, srcSet: result.srcSet.attribute, width, height };
 }
 
-export async function toCardData(gallery: Gallery, categoryLabel: string): Promise<CardData> {
+export async function toCardData(gallery: Gallery, categoryLabel: string, lang: Lang = 'en'): Promise<CardData> {
+  const text = galleryText(gallery, lang);
+  const coverPhoto = gallery.photos.find((p) => p.image === gallery.cover);
   return {
     id: gallery.id,
-    href: gallery.href,
-    title: gallery.title,
+    href: hrefIn(gallery, lang),
+    title: text.title,
     couple: gallery.couple,
+    // "Elopement · Lago di Braies" — only the place, not the whole address
+    meta: [text.typeLabel, gallery.location ? text.place.split(',')[0]?.trim() : undefined].filter(Boolean).join(' · '),
     categoryIds: gallery.categoryIds,
     categoryLabel,
-    alt: describeGallery(gallery),
+    alt: coverPhoto ? photoAlt(gallery, coverPhoto, lang) : describeGallery(gallery, lang),
     cover: await coverImage(gallery.cover, gallery.coverFocus),
   };
 }

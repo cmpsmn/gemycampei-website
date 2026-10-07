@@ -27,6 +27,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { PhotoData } from '../lib/galleries';
 import { useLightbox } from './useLightbox';
+import { ui, type Lang } from '../i18n';
 import { atEnd, closestSlide, scrollToSlide } from './carousel';
 import './PhotoCarousel.css';
 
@@ -35,15 +36,17 @@ interface Props {
   label: string;
   /** Seconds between automatic moves. 0 = no autoplay. */
   interval?: number;
+  lang?: Lang;
 }
 
 /** Slide heights from PhotoCarousel.css, used to calculate `sizes` */
 const HEIGHT_DESKTOP = 618;
 const HEIGHT_PHONE = 300;
 
-export default function PhotoCarousel({ photos, label, interval = 3 }: Props) {
+export default function PhotoCarousel({ photos, label, interval = 3, lang = 'en' }: Props) {
+  const t = ui[lang];
   const trackRef = useRef<HTMLDivElement>(null);
-  const openLightbox = useLightbox(photos);
+  const openLightbox = useLightbox(photos, lang);
   const [playing, setPlaying] = useState(interval > 0);
 
   // Reasons to pause. Refs, because changing them must not re-render the component.
@@ -113,7 +116,7 @@ export default function PhotoCarousel({ photos, label, interval = 3 }: Props) {
               className="carousel-slide"
               role="group"
               aria-roledescription="slide"
-              aria-label={`${index + 1} of ${photos.length}`}
+              aria-label={`${index + 1} ${t.of} ${photos.length}`}
             >
               <a href={photo.full.src} onClick={(event) => openLightbox(event, index)}>
                 <img
@@ -136,10 +139,10 @@ export default function PhotoCarousel({ photos, label, interval = 3 }: Props) {
       </div>
 
       <div className="carousel-controls">
-        <button type="button" className="carousel-arrow" onClick={() => userMove(-1)} aria-label="Previous photos">
+        <button type="button" className="carousel-arrow" onClick={() => userMove(-1)} aria-label={t.previousPhotos}>
           ←
         </button>
-        <button type="button" className="carousel-arrow" onClick={() => userMove(1)} aria-label="Next photos">
+        <button type="button" className="carousel-arrow" onClick={() => userMove(1)} aria-label={t.nextPhotos}>
           →
         </button>
       </div>

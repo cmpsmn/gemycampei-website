@@ -1,0 +1,86 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# SITE SETTINGS  (src/content/settings.yaml)
+# Business details used on many pages: contact, social links, the data sent to
+# Google and the legal details for the imprint. Edit them in the gallery
+# manager (npm run manage → Settings) or here. src/site.config.ts reads this file.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# German version of the website (/de/…). false = only English is built.
+# The German texts stay in their files, so switching it back on is enough.
+german: false
+
+# Short brand line, shown on the home page and in the footer
+tagline: "Candid souls × quiet elegance"
+
+# Public contact email (also shown on the contact page and in the footer)
+email: "info@gemycampei.com"
+
+# Social media profiles: footer links and "sameAs" for Google
+social:
+  instagram: "https://www.instagram.com/gemycampei/"
+  tiktok: "https://www.tiktok.com/@gemycampei"
+  pinterest: "https://www.pinterest.com/gemysvisuals0261/"
+
+# Default title and description for search engines (pages without their own).
+# Titles under about 60 characters, descriptions under about 155.
+seo:
+  en:
+    title: "Vienna Wedding & Dolomites Elopement Photographer"
+    description: "Wedding and elopement photographer based in Vienna and the Dolomites: documentary weddings, intimate elopements and destination weddings across Europe."
+  de:
+    title: "Hochzeitsfotograf Wien & Elopement Dolomiten"
+    description: "Hochzeitsfotograf in Wien und den Dolomiten: natürliche Hochzeitsreportagen, Elopements in den Bergen und Destination Weddings in ganz Europa."
+
+# Places you work in (sent to Google as "areaServed", helps local results)
+areaServed:
+  - Vienna
+  - Lower Austria
+  - Austria
+  - Dolomites
+  - South Tyrol
+  - Trentino
+  - Veneto
+  - Italy
+  - Europe
+
+# The photographer as a person, for Google and AI answers
+person:
+  name: "Gemy Campei"
+  jobTitle: "Wedding and elopement photographer"
+  # Languages you offer shoots in. TODO: add every language you speak
+  languages:
+    - English
+
+# Kinds of shoot you offer (sent to Google as services, no prices)
+services:
+  - Wedding photography
+  - Destination wedding photography
+  - Elopement photography
+  - Couple and engagement photography
+  - Surprise proposal photography
+  - Maternity photography
+  - 35mm film photography and Super 8 film
+
+# Legal details for the imprint and privacy policy (§ 5 ECG, § 25 MedienG, GDPR).
+# Both pages are in German, so these values are German too.
+# Leave empty ("") what does not apply: that line then disappears from the imprint.
+legal:
+  ownerName: "Rashagorn Pihusuut"
+  businessForm: "Einzelunternehmen"
+  businessDescription: "Fotografie (Hochzeits-, Elopement-, Paar- und Babybauch-Fotografie)"
+  street: "Grimmelshausengasse 12/11"
+  postalCode: "1030"
+  city: "Wien"
+  country: "Österreich"
+  # Not shown in the imprint (email only). Fill in to show it.
+  phone: ""
+  email: "info@gemycampei.com"
+  vatId: "ATU80828115"
+  tradeLicence: "Berufsfotograf (freies Gewerbe)"
+  tradeAuthority: "Magistratisches Bezirksamt für den 3. Bezirk"
+  chamberMembership: "Wirtschaftskammer Wien, Landesinnung Berufsfotografie"
+  # Web hosting, named in the privacy policy (from the Hostinger contract)
+  hosting: "Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaca, Zypern"
+  hostingLocation: "Deutschland (EU)"
+  # "Stand" at the bottom of both pages
+  lastUpdated: "Oktober 2026"

@@ -25,8 +25,8 @@ interface Props {
   onChange: (focus: string) => void;
 }
 
-/** Shape of the card image on the website (1200 × 1160, see coverImage in galleries.ts) */
-const CARD_RATIO = 1200 / 1160;
+/** Shape of the card image on the website (3 : 4 portrait, 1200 × 1600, see coverImage in galleries.ts) */
+const CARD_RATIO = 1200 / 1600;
 
 /** Same logic as focusToPosition() on the website, returned as CSS background-position */
 export function previewPosition(focus: string, width: number, height: number): string {

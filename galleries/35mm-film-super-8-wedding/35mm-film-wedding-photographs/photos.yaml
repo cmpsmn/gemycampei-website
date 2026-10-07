@@ -1,0 +1,123 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+35mm-film-wedding-photographs-001.jpg:
+  en: Newlyweds laughing in the back of a vintage car, on 35mm film
+  de: Brautpaar lacht auf der Rückbank eines Oldtimers, auf 35-mm-Film
+35mm-film-wedding-photographs-002.jpg:
+  en: White bridal bouquet on a gilded piano, on 35mm film
+  de: Weißer Brautstrauß auf einem vergoldeten Klavier, auf 35-mm-Film
+35mm-film-wedding-photographs-003.jpg:
+  en: Couple rowing on the lake in front of Schloss Hernstein, on 35mm film
+  de: Paar rudert auf dem See vor Schloss Hernstein, auf 35-mm-Film
+35mm-film-wedding-photographs-004.jpg:
+  en: Korean paebaek ceremony in a green palace room, on 35mm film
+  de: Koreanische Paebaek-Zeremonie in einem grünen Salon, auf 35-mm-Film
+35mm-film-wedding-photographs-005.jpg:
+  en: Chauffeur's gloved hand on a vintage car dashboard, on 35mm film
+  de: Die behandschuhte Hand des Chauffeurs am Armaturenbrett eines Oldtimers, auf 35-mm-Film
+35mm-film-wedding-photographs-006.jpg:
+  en: Close-up of hands with an engagement ring on a white dress, on 35mm film
+  de: Nahaufnahme von Händen mit Verlobungsring auf einem weißen Kleid, auf 35-mm-Film
+35mm-film-wedding-photographs-007.jpg:
+  en: Bride in a white hanbok during the Korean ceremony, on 35mm film
+  de: Braut im weißen Hanbok bei der koreanischen Zeremonie, auf 35-mm-Film
+35mm-film-wedding-photographs-008.jpg:
+  en: Couple in hanbok kneeling during the paebaek ceremony with guests, on 35mm film
+  de: Paar im Hanbok kniet mit Gästen bei der Paebaek-Zeremonie, auf 35-mm-Film
+35mm-film-wedding-photographs-009.jpg:
+  en: Bride getting ready in a silk slip, on 35mm film
+  de: Braut beim Getting Ready im Seidenunterkleid, auf 35-mm-Film
+35mm-film-wedding-photographs-010.jpg:
+  en: Guests laughing together at a wedding party, on 35mm film
+  de: Gäste lachen zusammen bei einem Hochzeitsfest, auf 35-mm-Film
+35mm-film-wedding-photographs-011.jpg:
+  en: Bride and groom in front of Schloss Hernstein, on 35mm film
+  de: Brautpaar vor Schloss Hernstein, auf 35-mm-Film
+35mm-film-wedding-photographs-012.jpg:
+  en: Guests reading cards and laughing at the dinner table, on 35mm film
+  de: Gäste lesen Karten und lachen an der Festtafel, auf 35-mm-Film
+35mm-film-wedding-photographs-013.jpg:
+  en: Couple laughing by a wooden mountain hut after a proposal, on 35mm film
+  de: Paar lacht nach einem Heiratsantrag an einer hölzernen Berghütte, auf 35-mm-Film
+35mm-film-wedding-photographs-014.jpg:
+  en: Couple lying close together, laughing, on 35mm film
+  de: Paar liegt lachend eng beieinander, auf 35-mm-Film
+35mm-film-wedding-photographs-015.jpg:
+  en: Family of the bride and groom in suits and hanbok in the castle park, on 35mm film
+  de: Familie des Brautpaares in Anzügen und Hanbok im Schlosspark, auf 35-mm-Film
+35mm-film-wedding-photographs-016.jpg:
+  en: Newly engaged couple arm in arm below the Sass de Putia, on 35mm film
+  de: Frisch verlobtes Paar Arm in Arm unter dem Peitlerkofel, auf 35-mm-Film
+35mm-film-wedding-photographs-017.jpg:
+  en: Crystal chandelier over a grand staircase, on 35mm film
+  de: Kristallluster über einem Prunkstiegenhaus, auf 35-mm-Film
+35mm-film-wedding-photographs-018.jpg:
+  en: Guests singing karaoke at the wedding party, on 35mm film
+  de: Gäste singen Karaoke beim Hochzeitsfest, auf 35-mm-Film
+35mm-film-wedding-photographs-019.jpg:
+  en: Bride in a lace gown by a painting in a palace room, on 35mm film
+  de: Braut im Spitzenkleid neben einem Gemälde in einem Palaissaal, auf 35-mm-Film
+35mm-film-wedding-photographs-020.jpg:
+  en: Bride and groom walking by Schloss Hernstein, on 35mm film
+  de: Brautpaar spaziert an Schloss Hernstein vorbei, auf 35-mm-Film
+35mm-film-wedding-photographs-021.jpg:
+  en: Bride dancing with guests at the reception, on 35mm film
+  de: Braut tanzt beim Fest mit Gästen, auf 35-mm-Film
+35mm-film-wedding-photographs-022.jpg:
+  en: Grand palace staircase with a chandelier, on 35mm film
+  de: Prunkstiegenhaus eines Palais mit Luster, auf 35-mm-Film
+35mm-film-wedding-photographs-023.jpg:
+  en: White tulip bouquet on a wooden bench, on 35mm film
+  de: Weißer Tulpenstrauß auf einer Holzbank, auf 35-mm-Film
+35mm-film-wedding-photographs-024.jpg:
+  en: Couple embracing in a meadow, on 35mm film
+  de: Paar umarmt sich auf einer Wiese, auf 35-mm-Film
+35mm-film-wedding-photographs-025.jpg:
+  en: Couple sitting together on the steps of a wooden hut, on 35mm film
+  de: Paar sitzt zusammen auf den Stufen einer Holzhütte, auf 35-mm-Film
+35mm-film-wedding-photographs-026.jpg:
+  en: Bride kissing the groom's cheek on a palace sofa, on 35mm film
+  de: Braut küsst den Bräutigam auf einem Palaissofa auf die Wange, auf 35-mm-Film
+35mm-film-wedding-photographs-027.jpg:
+  en: Couple rowing on Lago di Braies in autumn, on 35mm film
+  de: Paar rudert im Herbst auf dem Pragser Wildsee, auf 35-mm-Film
+35mm-film-wedding-photographs-028.jpg:
+  en: Bride lying in front of a gilded painting, on 35mm film
+  de: Braut liegt vor einem vergoldeten Gemälde, auf 35-mm-Film
+35mm-film-wedding-photographs-029.jpg:
+  en: Close-up of hands with an engagement ring, on 35mm film
+  de: Nahaufnahme von Händen mit Verlobungsring, auf 35-mm-Film
+35mm-film-wedding-photographs-030.jpg:
+  en: Guests talking at the wedding dinner, on 35mm film
+  de: Gäste unterhalten sich beim Hochzeitsdinner, auf 35-mm-Film
+35mm-film-wedding-photographs-031.jpg:
+  en: Couple in hanbok with their families in a palace room, on 35mm film
+  de: Paar im Hanbok mit seinen Familien in einem Palaissaal, auf 35-mm-Film
+35mm-film-wedding-photographs-032.jpg:
+  en: Couple on the porch of a wooden mountain hut, on 35mm film
+  de: Paar auf der Veranda einer hölzernen Berghütte, auf 35-mm-Film
+35mm-film-wedding-photographs-033.jpg:
+  en: Bride and groom in front of a marble statue in a niche, on 35mm film
+  de: Brautpaar vor einer Marmorstatue in einer Nische, auf 35-mm-Film
+35mm-film-wedding-photographs-034.jpg:
+  en: Bride in hanbok during the Korean ceremony with guests watching, on 35mm film
+  de: Braut im Hanbok bei der koreanischen Zeremonie, die Gäste sehen zu, auf 35-mm-Film
+35mm-film-wedding-photographs-035.jpg:
+  en: Bride in a white coat and groom walking at night, on 35mm film
+  de: Braut im weißen Mantel und Bräutigam spazieren nachts, auf 35-mm-Film
+35mm-film-wedding-photographs-036.jpg:
+  en: Bride singing karaoke with friends, on 35mm film
+  de: Braut singt mit Freundinnen Karaoke, auf 35-mm-Film
+35mm-film-wedding-photographs-037.jpg:
+  en: Newly engaged couple below the Dolomites peaks, on 35mm film
+  de: Frisch verlobtes Paar unter den Dolomitengipfeln, auf 35-mm-Film
+35mm-film-wedding-photographs-038.jpg:
+  en: Couple laughing in a white rowing boat on the castle lake, on 35mm film
+  de: Paar lacht in einem weißen Ruderboot auf dem Schlossteich, auf 35-mm-Film
+35mm-film-wedding-photographs-039.jpg:
+  en: Wedding guests gathered in the castle courtyard, on 35mm film
+  de: Hochzeitsgäste versammeln sich im Schlosshof, auf 35-mm-Film

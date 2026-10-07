@@ -82,7 +82,7 @@ export default function CategoryOrder({ state, notify, onChanged }: Props) {
                 {g.couple && <small>{g.couple}</small>}
                 <strong>{g.title}</strong>
                 <small>
-                  {g.photoCount} {g.photoCount === 1 ? 'photo' : 'photos'} {g.category !== categoryId && `· main category: ${state.categories.find((c) => c.id === g.category)?.label}`}
+                  {g.videoCount && !g.photoCount ? `${g.videoCount} ${g.videoCount === 1 ? 'video' : 'videos'}` : `${g.photoCount} ${g.photoCount === 1 ? 'photo' : 'photos'}`} {g.category !== categoryId && `· main category: ${state.categories.find((c) => c.id === g.category)?.label}`}
                 </small>
               </span>
               {g.draft && <em className="tag draft">Draft</em>}

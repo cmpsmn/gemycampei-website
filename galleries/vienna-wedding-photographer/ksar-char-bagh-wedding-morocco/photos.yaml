@@ -1,0 +1,345 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+ksar-char-bagh-wedding-morocco-001.jpg:
+  en: Detail of a pleated burgundy gown
+  de: Detail eines plissierten bordeauxroten Kleides
+ksar-char-bagh-wedding-morocco-002.jpg:
+  en: Long dinner table set between cypress trees at Ksar Char Bagh in Marrakech
+  de: Lange Dinnertafel zwischen Zypressen im Ksar Char Bagh in Marrakesch
+ksar-char-bagh-wedding-morocco-003.jpg:
+  en: Waiter setting the welcome dinner table beside the palace walls
+  de: Kellner deckt die Tafel für das Willkommensdinner an den Palastmauern
+ksar-char-bagh-wedding-morocco-004.jpg:
+  en: Bridal sandals on a stone floor, on film
+  de: Brautsandalen auf einem Steinboden, auf Film
+ksar-char-bagh-wedding-morocco-005.jpg:
+  en: Square dinner table set in a courtyard with a carved wooden door and palm trees
+  de: Quadratische Tafel in einem Innenhof mit geschnitzter Holztür und Palmen
+ksar-char-bagh-wedding-morocco-006.jpg:
+  en: Welcome sign reading The Night Before between candles and cypresses, on film
+  de: Willkommensschild The Night Before zwischen Kerzen und Zypressen, auf Film
+ksar-char-bagh-wedding-morocco-007.jpg:
+  en: Black and white photo of the bride fastening her sandals
+  de: "Schwarz-Weiß-Foto: Die Braut schließt ihre Sandalen"
+ksar-char-bagh-wedding-morocco-008.jpg:
+  en: Black and white photo of the groom kissing the bride's neck
+  de: "Schwarz-Weiß-Foto: Der Bräutigam küsst den Hals der Braut"
+ksar-char-bagh-wedding-morocco-009.jpg:
+  en: Musicians playing at the courtyard dinner table, on film
+  de: Musiker spielen an der Tafel im Innenhof, auf Film
+ksar-char-bagh-wedding-morocco-010.jpg:
+  en: Black and white photo of guests at the drinks bar in the garden
+  de: "Schwarz-Weiß-Foto: Gäste an der Bar im Garten"
+ksar-char-bagh-wedding-morocco-011.jpg:
+  en: Black and white photo of guests hugging at the welcome party
+  de: "Schwarz-Weiß-Foto: Gäste umarmen sich bei der Willkommensfeier"
+ksar-char-bagh-wedding-morocco-012.jpg:
+  en: Black and white photo of guests gathering in the garden at dusk
+  de: "Schwarz-Weiß-Foto: Gäste versammeln sich in der Dämmerung im Garten"
+ksar-char-bagh-wedding-morocco-013.jpg:
+  en: Guests in evening wear arriving along a cypress-lined path, on film
+  de: Gäste in Abendgarderobe kommen einen Zypressenweg entlang, auf Film
+ksar-char-bagh-wedding-morocco-014.jpg:
+  en: Guest reading the welcome dinner menu with a cigarette in hand
+  de: Gast liest die Menükarte des Willkommensdinners, eine Zigarette in der Hand
+ksar-char-bagh-wedding-morocco-015.jpg:
+  en: Candlelit dinner table stretching between cypress trees at dusk
+  de: Kerzenbeleuchtete Tafel zwischen Zypressen in der Dämmerung
+ksar-char-bagh-wedding-morocco-016.jpg:
+  en: Black and white photo of guests posing at the dinner
+  de: "Schwarz-Weiß-Foto: Gäste posieren beim Dinner"
+ksar-char-bagh-wedding-morocco-017.jpg:
+  en: Black and white photo of a waiter lifting a tagine lid at the table
+  de: "Schwarz-Weiß-Foto: Ein Kellner hebt den Deckel einer Tajine"
+ksar-char-bagh-wedding-morocco-018.jpg:
+  en: Candlelit courtyard dinner with guests raising a toast
+  de: Dinner im kerzenbeleuchteten Innenhof, Gäste stoßen an
+ksar-char-bagh-wedding-morocco-019.jpg:
+  en: Black and white photo of guests along the long dinner table
+  de: "Schwarz-Weiß-Foto: Gäste an der langen Tafel"
+ksar-char-bagh-wedding-morocco-020.jpg:
+  en: Long dinner table set in front of the arched palace wall and cypresses
+  de: Lange Dinnertafel vor der Palastmauer mit Bogen und Zypressen
+ksar-char-bagh-wedding-morocco-021.jpg:
+  en: Black and white photo of the candlelit courtyard table under the moon
+  de: "Schwarz-Weiß-Foto: Die kerzenbeleuchtete Tafel im Innenhof unter dem Mond"
+ksar-char-bagh-wedding-morocco-022.jpg:
+  en: Black and white photo of a guest serving from Moroccan dishes
+  de: "Schwarz-Weiß-Foto: Ein Gast bedient sich aus marokkanischen Schalen"
+ksar-char-bagh-wedding-morocco-023.jpg:
+  en: Bridal sandals hanging on a wooden balcony above the garden
+  de: Brautsandalen hängen an einem Holzbalkon über dem Garten
+ksar-char-bagh-wedding-morocco-024.jpg:
+  en: Wedding rings on the stem of a calla lily
+  de: Eheringe am Stiel einer Calla
+ksar-char-bagh-wedding-morocco-025.jpg:
+  en: Groom's black double monk shoes on a cream wall
+  de: Die schwarzen Doppelmonks des Bräutigams an einer cremefarbenen Wand
+ksar-char-bagh-wedding-morocco-026.jpg:
+  en: Couple walking hand in hand past cypresses, the bride in a white embroidered kaftan
+  de: Paar geht Hand in Hand an Zypressen vorbei, die Braut im weißen bestickten Kaftan
+ksar-char-bagh-wedding-morocco-027.jpg:
+  en: Black and white photo of mint tea being poured in the traditional way
+  de: "Schwarz-Weiß-Foto: Minztee wird traditionell eingeschenkt"
+ksar-char-bagh-wedding-morocco-028.jpg:
+  en: Families gathered in a salon with a Moorish arched window for the civil wedding
+  de: Familien in einem Salon mit maurischem Bogenfenster bei der standesamtlichen Trauung
+ksar-char-bagh-wedding-morocco-029.jpg:
+  en: Silver tray with dates, rose petals and incense for the Moroccan ceremony
+  de: Silbertablett mit Datteln, Rosenblättern und Weihrauch für die marokkanische Zeremonie
+ksar-char-bagh-wedding-morocco-030.jpg:
+  en: Couple relaxing under a canopy on the terrace, the bride in a kaftan
+  de: Paar entspannt unter einem Baldachin auf der Terrasse, die Braut im Kaftan
+ksar-char-bagh-wedding-morocco-031.jpg:
+  en: Bride in a white kaftan and groom on a rooftop terrace overlooking the palm grove
+  de: Braut im weißen Kaftan und Bräutigam auf einer Dachterrasse über dem Palmenhain
+ksar-char-bagh-wedding-morocco-032.jpg:
+  en: Groom lifts the bride against the blue Marrakech sky
+  de: Bräutigam hebt die Braut vor dem blauen Himmel von Marrakesch hoch
+ksar-char-bagh-wedding-morocco-033.jpg:
+  en: Bride in an embroidered white kaftan on the crenellated rooftop
+  de: Braut im bestickten weißen Kaftan auf der zinnenbewehrten Dachterrasse
+ksar-char-bagh-wedding-morocco-034.jpg:
+  en: Couple by the crenellated walls of Ksar Char Bagh
+  de: Paar an den zinnenbewehrten Mauern des Ksar Char Bagh
+ksar-char-bagh-wedding-morocco-035.jpg:
+  en: Couple standing in a narrow earth-coloured passage
+  de: Paar in einem schmalen, erdfarbenen Durchgang
+ksar-char-bagh-wedding-morocco-036.jpg:
+  en: Bridal jewellery laid out beside a turquoise pool
+  de: Brautschmuck neben einem türkisen Pool
+ksar-char-bagh-wedding-morocco-037.jpg:
+  en: Couple on a spiral staircase seen through a window in the palace walls
+  de: Paar auf einer Wendeltreppe, durch ein Fenster in den Palastmauern gesehen
+ksar-char-bagh-wedding-morocco-038.jpg:
+  en: White wrought-iron ceremony chairs with fans in the palace garden
+  de: Weiße schmiedeeiserne Trauungsstühle mit Fächern im Palastgarten
+ksar-char-bagh-wedding-morocco-039.jpg:
+  en: Groomsmen helping the laughing groom get dressed
+  de: Trauzeugen helfen dem lachenden Bräutigam beim Anziehen
+ksar-char-bagh-wedding-morocco-040.jpg:
+  en: Wedding dress hanging in front of a tall garden window
+  de: Brautkleid hängt vor einem hohen Fenster zum Garten
+ksar-char-bagh-wedding-morocco-041.jpg:
+  en: View over the lawn and palm grove of Ksar Char Bagh
+  de: Blick über den Rasen und den Palmenhain des Ksar Char Bagh
+ksar-char-bagh-wedding-morocco-042.jpg:
+  en: Calla lily bouquet, perfume and jewellery laid out on lace
+  de: Callastrauß, Parfum und Schmuck auf Spitze arrangiert
+ksar-char-bagh-wedding-morocco-043.jpg:
+  en: Guest in a green hat sitting under a white parasol in the garden
+  de: Gast mit grünem Hut unter einem weißen Sonnenschirm im Garten
+ksar-char-bagh-wedding-morocco-044.jpg:
+  en: Tea master in a fez preparing Moroccan mint tea on the lawn
+  de: Teemeister mit Fes bereitet auf dem Rasen marokkanischen Minztee zu
+ksar-char-bagh-wedding-morocco-045.jpg:
+  en: Parents of the couple sitting together in an elegant lounge
+  de: Die Eltern des Paares sitzen zusammen in einer eleganten Lounge
+ksar-char-bagh-wedding-morocco-046.jpg:
+  en: Lounge area with poufs and a white parasol on the garden lawn
+  de: Lounge mit Sitzkissen und weißem Sonnenschirm auf dem Gartenrasen
+ksar-char-bagh-wedding-morocco-047.jpg:
+  en: Ceremony aisle lined with flowers along the water basin of the Moorish courtyard
+  de: Mit Blumen gesäumter Mittelgang am Wasserbecken des maurischen Innenhofs
+ksar-char-bagh-wedding-morocco-048.jpg:
+  en: Carved Moorish archway and wooden doors decorated with white flowers
+  de: Geschnitzter maurischer Bogen und Holztüren mit weißen Blumen geschmückt
+ksar-char-bagh-wedding-morocco-049.jpg:
+  en: Name card tied with a green ribbon to a white ceremony chair
+  de: Namenskarte mit grünem Band an einem weißen Trauungsstuhl
+ksar-char-bagh-wedding-morocco-050.jpg:
+  en: White floral arrangements at the ceremony entrance
+  de: Weiße Blumenarrangements am Eingang zur Trauung
+ksar-char-bagh-wedding-morocco-051.jpg:
+  en: Black and white photo of a guest arranging poufs on the lawn
+  de: "Schwarz-Weiß-Foto: Ein Gast richtet Sitzkissen auf dem Rasen"
+ksar-char-bagh-wedding-morocco-052.jpg:
+  en: Black and white photo of the father of the bride waiting under the arcades
+  de: "Schwarz-Weiß-Foto: Der Brautvater wartet unter den Arkaden"
+ksar-char-bagh-wedding-morocco-053.jpg:
+  en: Groom walks down the aisle with his mother through the Moorish arch
+  de: Bräutigam geht mit seiner Mutter durch den maurischen Bogen zum Altar
+ksar-char-bagh-wedding-morocco-054.jpg:
+  en: Guests seated along the water basin in the courtyard
+  de: Gäste sitzen am Wasserbecken im Innenhof
+ksar-char-bagh-wedding-morocco-055.jpg:
+  en: Black and white photo of the groom's mother kissing him before the ceremony
+  de: "Schwarz-Weiß-Foto: Die Mutter küsst den Bräutigam vor der Trauung"
+ksar-char-bagh-wedding-morocco-056.jpg:
+  en: Groom in a cream suit waiting beside white hydrangeas
+  de: Bräutigam im cremefarbenen Anzug wartet neben weißen Hortensien
+ksar-char-bagh-wedding-morocco-057.jpg:
+  en: Bride entering with her father through the carved Moorish arch
+  de: Braut kommt mit ihrem Vater durch den geschnitzten maurischen Bogen
+ksar-char-bagh-wedding-morocco-058.jpg:
+  en: Black and white photo of the bride and her father walking down the aisle
+  de: "Schwarz-Weiß-Foto: Braut und Vater gehen durch den Mittelgang"
+ksar-char-bagh-wedding-morocco-059.jpg:
+  en: Black and white photo of guests moved during the ceremony
+  de: "Schwarz-Weiß-Foto: Gerührte Gäste während der Trauung"
+ksar-char-bagh-wedding-morocco-060.jpg:
+  en: Ceremony in the Moorish courtyard of Ksar Char Bagh under a blue sky
+  de: Trauung im maurischen Innenhof des Ksar Char Bagh unter blauem Himmel
+ksar-char-bagh-wedding-morocco-061.jpg:
+  en: Guests with white parasols watching the ceremony
+  de: Gäste mit weißen Sonnenschirmen verfolgen die Trauung
+ksar-char-bagh-wedding-morocco-062.jpg:
+  en: Guests watching the couple during the outdoor ceremony
+  de: Gäste blicken während der Trauung im Freien auf das Paar
+ksar-char-bagh-wedding-morocco-063.jpg:
+  en: Bride holding a slim bouquet of calla lilies
+  de: Braut hält einen schlanken Callastrauß
+ksar-char-bagh-wedding-morocco-064.jpg:
+  en: Groom dips and kisses the bride at the end of the aisle
+  de: Bräutigam neigt die Braut am Ende des Mittelgangs und küsst sie
+ksar-char-bagh-wedding-morocco-065.jpg:
+  en: Black and white photo of the first kiss in the courtyard
+  de: Schwarz-Weiß-Foto des ersten Kusses im Innenhof
+ksar-char-bagh-wedding-morocco-066.jpg:
+  en: Garden lounge with daybeds and palm trees
+  de: Gartenlounge mit Liegen und Palmen
+ksar-char-bagh-wedding-morocco-067.jpg:
+  en: Table setting with white flowers, candles and a calligraphy menu
+  de: Tischdekoration mit weißen Blumen, Kerzen und kalligrafierter Menükarte
+ksar-char-bagh-wedding-morocco-068.jpg:
+  en: Long reflecting pool lined with palms leading to the tower of Ksar Char Bagh
+  de: Langes Wasserbecken mit Palmen, das zum Turm des Ksar Char Bagh führt
+ksar-char-bagh-wedding-morocco-069.jpg:
+  en: Round dinner table set beside the pool under palm trees
+  de: Runde Dinnertafel am Pool unter Palmen
+ksar-char-bagh-wedding-morocco-070.jpg:
+  en: Guests gathered below the crenellated tower of Ksar Char Bagh
+  de: Gäste unter dem zinnenbewehrten Turm des Ksar Char Bagh
+ksar-char-bagh-wedding-morocco-071.jpg:
+  en: Black and white detail of a waiter's monogrammed napkin
+  de: Schwarz-Weiß-Detail einer Serviette mit Monogramm
+ksar-char-bagh-wedding-morocco-072.jpg:
+  en: Dinner tables with olive-green linen by the pool
+  de: Dinnertafeln mit olivgrünem Leinen am Pool
+ksar-char-bagh-wedding-morocco-073.jpg:
+  en: Black and white photo of the live band playing
+  de: Schwarz-Weiß-Foto der Liveband
+ksar-char-bagh-wedding-morocco-074.jpg:
+  en: Live band with saxophone playing on the lawn in the afternoon
+  de: Liveband mit Saxofon spielt am Nachmittag auf dem Rasen
+ksar-char-bagh-wedding-morocco-075.jpg:
+  en: Grilled meat and vegetables hanging over the barbecue, on film
+  de: Gegrilltes Fleisch und Gemüse hängen über dem Grill, auf Film
+ksar-char-bagh-wedding-morocco-076.jpg:
+  en: Black and white photo of a guest in sunglasses at the reception
+  de: Schwarz-Weiß-Foto eines Gastes mit Sonnenbrille beim Empfang
+ksar-char-bagh-wedding-morocco-077.jpg:
+  en: Dinner tables around the palm-lined pool of Ksar Char Bagh
+  de: Dinnertafeln rund um den palmengesäumten Pool des Ksar Char Bagh
+ksar-char-bagh-wedding-morocco-078.jpg:
+  en: Black and white photo of the bride laughing with guests
+  de: "Schwarz-Weiß-Foto: Die Braut lacht mit Gästen"
+ksar-char-bagh-wedding-morocco-079.jpg:
+  en: Barbecue station with hanging vegetables and skewers on the grill
+  de: Grillstation mit hängendem Gemüse und Spießen auf dem Rost
+ksar-char-bagh-wedding-morocco-080.jpg:
+  en: Guests gathering at a drinks cart under tall palm trees
+  de: Gäste versammeln sich an einem Getränkewagen unter hohen Palmen
+ksar-char-bagh-wedding-morocco-081.jpg:
+  en: Tables set around the pool with palm trees against a clear sky
+  de: Um den Pool gedeckte Tische mit Palmen vor klarem Himmel
+ksar-char-bagh-wedding-morocco-082.jpg:
+  en: Black and white photo of guests chatting at the reception
+  de: "Schwarz-Weiß-Foto: Gäste unterhalten sich beim Empfang"
+ksar-char-bagh-wedding-morocco-083.jpg:
+  en: Couple embracing under the bride's long veil by the pool
+  de: Paar umarmt sich unter dem langen Schleier der Braut am Pool
+ksar-char-bagh-wedding-morocco-084.jpg:
+  en: Black and white photo of the groom lifting the bride among palm trees
+  de: "Schwarz-Weiß-Foto: Der Bräutigam hebt die Braut zwischen Palmen hoch"
+ksar-char-bagh-wedding-morocco-085.jpg:
+  en: Bride under her long veil holding calla lilies in the evening light
+  de: Braut unter ihrem langen Schleier mit Callas im Abendlicht
+ksar-char-bagh-wedding-morocco-086.jpg:
+  en: Black and white photo of the bride in her lace gown by a leather sofa
+  de: Schwarz-Weiß-Foto der Braut im Spitzenkleid an einem Ledersofa
+ksar-char-bagh-wedding-morocco-087.jpg:
+  en: Black and white photo of the couple on a Chesterfield sofa
+  de: Schwarz-Weiß-Foto des Paares auf einem Chesterfield-Sofa
+ksar-char-bagh-wedding-morocco-088.jpg:
+  en: Black and white photo of the groomsmen lifting the groom
+  de: "Schwarz-Weiß-Foto: Die Trauzeugen heben den Bräutigam hoch"
+ksar-char-bagh-wedding-morocco-089.jpg:
+  en: Bride with a long cape walking across the lawn towards the palace
+  de: Braut mit langem Cape geht über den Rasen zum Palast
+ksar-char-bagh-wedding-morocco-090.jpg:
+  en: Black and white group photo of the groom and his groomsmen
+  de: Schwarz-Weiß-Gruppenfoto des Bräutigams mit seinen Trauzeugen
+ksar-char-bagh-wedding-morocco-091.jpg:
+  en: Illustrated wedding favours stacked on a table
+  de: Illustrierte Gastgeschenke auf einem Tisch gestapelt
+ksar-char-bagh-wedding-morocco-092.jpg:
+  en: Candlelit dinner by the reflecting pool at dusk
+  de: Dinner bei Kerzenlicht am Wasserbecken in der Dämmerung
+ksar-char-bagh-wedding-morocco-093.jpg:
+  en: Waiter serving plates of lamb at the wedding dinner
+  de: Kellner serviert Teller mit Lamm beim Hochzeitsdinner
+ksar-char-bagh-wedding-morocco-094.jpg:
+  en: Dinner table seen from above with plates and flowers, on film
+  de: Dinnertafel von oben mit Tellern und Blumen, auf Film
+ksar-char-bagh-wedding-morocco-095.jpg:
+  en: Couple holding hands across the dinner table
+  de: Paar hält sich über den Tisch an den Händen
+ksar-char-bagh-wedding-morocco-096.jpg:
+  en: Guests at dinner under palm trees at dusk, on film
+  de: Gäste beim Dinner unter Palmen in der Dämmerung, auf Film
+ksar-char-bagh-wedding-morocco-097.jpg:
+  en: Bride changing her shoes during the party
+  de: Braut wechselt während des Festes die Schuhe
+ksar-char-bagh-wedding-morocco-098.jpg:
+  en: Bride in a Moroccan kaftan carried on the Amaria by men in traditional dress
+  de: Braut im marokkanischen Kaftan auf der Amaria, getragen von Männern in Tracht
+ksar-char-bagh-wedding-morocco-099.jpg:
+  en: Black and white photo of the couple kissing on the raised Amaria thrones
+  de: "Schwarz-Weiß-Foto: Das Paar küsst sich auf den erhobenen Amaria-Thronen"
+ksar-char-bagh-wedding-morocco-100.jpg:
+  en: Couple in white Moroccan outfits entering the party
+  de: Paar in weißer marokkanischer Kleidung betritt das Fest
+ksar-char-bagh-wedding-morocco-101.jpg:
+  en: Guests dancing and playing tambourines at night
+  de: Gäste tanzen nachts und spielen Tamburin
+ksar-char-bagh-wedding-morocco-102.jpg:
+  en: Bride and groom carried on the Amaria above the dancing guests
+  de: Braut und Bräutigam werden auf der Amaria über den tanzenden Gästen getragen
+ksar-char-bagh-wedding-morocco-103.jpg:
+  en: Guests cheering as the Amaria carries the couple in
+  de: Gäste jubeln, als die Amaria das Paar hereinträgt
+ksar-char-bagh-wedding-morocco-104.jpg:
+  en: Black and white photo of the crowd dancing at night
+  de: Schwarz-Weiß-Foto der tanzenden Menge in der Nacht
+ksar-char-bagh-wedding-morocco-105.jpg:
+  en: Black and white photo of guests celebrating on the dance floor
+  de: "Schwarz-Weiß-Foto: Gäste feiern auf der Tanzfläche"
+ksar-char-bagh-wedding-morocco-106.jpg:
+  en: Black and white photo of a violinist playing at the party
+  de: Schwarz-Weiß-Foto eines Geigers beim Fest
+ksar-char-bagh-wedding-morocco-107.jpg:
+  en: Seating chart written on white plates, with hydrangeas, on film
+  de: Sitzplan auf weißen Tellern mit Hortensien, auf Film
+ksar-char-bagh-wedding-morocco-108.jpg:
+  en: Terracotta favours tied with green ribbons, on film
+  de: Gastgeschenke aus Terrakotta mit grünen Bändern, auf Film
+ksar-char-bagh-wedding-morocco-109.jpg:
+  en: Couple dancing their first dance surrounded by guests at night, on film
+  de: Paar tanzt nachts umringt von Gästen den Hochzeitstanz, auf Film
+ksar-char-bagh-wedding-morocco-110.jpg:
+  en: Black and white photo of the couple feeding each other cake among sparklers
+  de: "Schwarz-Weiß-Foto: Das Paar füttert sich zwischen Funkenfontänen mit Torte"
+ksar-char-bagh-wedding-morocco-111.jpg:
+  en: Black and white photo of the couple beside the wedding cake
+  de: Schwarz-Weiß-Foto des Paares neben der Hochzeitstorte
+ksar-char-bagh-wedding-morocco-112.jpg:
+  en: Groom dipping the bride on the dance floor
+  de: Bräutigam neigt die Braut auf der Tanzfläche
+ksar-char-bagh-wedding-morocco-113.jpg:
+  en: Couple cutting the wedding cake between sparklers
+  de: Paar schneidet die Hochzeitstorte zwischen Funkenfontänen an

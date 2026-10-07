@@ -1,0 +1,27 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Texts of the contact page  (src/content/pages/contact.yaml)
+# Edit them in the gallery manager (npm run manage → Pages) or here.
+# en = English, de = German (only shown when the German version is switched on).
+# *italic* and **bold** work in most texts. Layout and photos are in src/views/.
+# ─────────────────────────────────────────────────────────────────────────────
+
+en:
+  title: Contact · Wedding & Elopement Photographer
+  description: Enquire about your wedding, elopement, proposal or couple session in Vienna, the Dolomites or abroad. Check availability and share your plans.
+  display: Every story deserves to be remembered *beautifully*
+  lede: I can't wait to hear yours.
+  reply: Reply
+  replyText: I do my best to respond to every inquiry within 48 hours. If you don't hear from me by then, please check your spam folder.
+  email: Email
+  elsewhere: Elsewhere
+  photoAlt: Wedding photography by Gemy Campei
+de:
+  title: Kontakt · Hochzeitsfotograf Wien & Dolomiten
+  description: Fragt euren Termin für Hochzeit, Elopement, Heiratsantrag oder Paarshooting in Wien, den Dolomiten oder im Ausland an und erzählt mir von euren Plänen.
+  display: Jede Geschichte verdient es, *wunderschön erinnert zu werden*
+  lede: Ich freue mich auf eure.
+  reply: Antwort
+  replyText: Ich antworte auf jede Anfrage so schnell wie möglich, meist innerhalb von 48 Stunden. Falls ihr bis dahin nichts von mir hört, schaut bitte in euren Spam-Ordner.
+  email: E-Mail
+  elsewhere: Auch hier
+  photoAlt: Hochzeitsfotografie von Gemy Campei

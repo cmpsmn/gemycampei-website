@@ -1,0 +1,138 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+la-val-elopement-r-and-d-001.jpg:
+  en: Groom lifts the laughing bride with her wildflower bouquet at the forest edge
+  de: Bräutigam hebt die lachende Braut mit Wildblumenstrauß am Waldrand hoch
+la-val-elopement-r-and-d-002.jpg:
+  en: Groom spins the bride in a meadow below sunlit Dolomites peaks at La Val
+  de: Bräutigam wirbelt die Braut auf einer Wiese unter sonnigen Dolomitengipfeln in La Val
+la-val-elopement-r-and-d-003.jpg:
+  en: Detail of the lace wedding gown blowing in the wind above the valley
+  de: Detail des Spitzenbrautkleids, das über dem Tal im Wind weht
+la-val-elopement-r-and-d-004.jpg:
+  en: Bride resting against the groom on a rock in the tall grass, on film
+  de: Braut lehnt an ihrem Bräutigam auf einem Felsen im hohen Gras, auf Film
+la-val-elopement-r-and-d-005.jpg:
+  en: Bride and groom close together in the grass, mountains behind
+  de: Braut und Bräutigam eng beieinander im Gras, dahinter die Berge
+la-val-elopement-r-and-d-006.jpg:
+  en: Wildflower bouquet thrown into the blue sky, on film
+  de: Wildblumenstrauß in den blauen Himmel geworfen, auf Film
+la-val-elopement-r-and-d-007.jpg:
+  en: Bride and groom walking through a meadow at golden hour in Val Badia
+  de: Brautpaar geht zur Goldenen Stunde über eine Wiese im Gadertal
+la-val-elopement-r-and-d-008.jpg:
+  en: Groom looks at the view as the bride smiles behind him, mountains all around
+  de: Bräutigam blickt in die Ferne, die Braut lächelt hinter ihm, rundum Berge
+la-val-elopement-r-and-d-009.jpg:
+  en: Portrait of the bride and groom in a meadow with larches, holding wildflowers
+  de: Porträt des Brautpaares auf einer Wiese mit Lärchen, mit Wildblumen
+la-val-elopement-r-and-d-010.jpg:
+  en: Smiling groom in the foreground, bride with veil and bouquet behind him
+  de: Lächelnder Bräutigam im Vordergrund, dahinter die Braut mit Schleier und Strauß
+la-val-elopement-r-and-d-011.jpg:
+  en: Groom lifts the bride and they kiss with the Dolomites behind
+  de: Bräutigam hebt die Braut hoch und sie küssen sich vor den Dolomiten
+la-val-elopement-r-and-d-012.jpg:
+  en: Bride and groom reading their vows to each other in the mountains of La Val
+  de: Braut und Bräutigam lesen sich in den Bergen von La Val ihr Eheversprechen vor
+la-val-elopement-r-and-d-013.jpg:
+  en: Bride and groom lying head to head in the grass, laughing
+  de: Braut und Bräutigam liegen Kopf an Kopf lachend im Gras
+la-val-elopement-r-and-d-014.jpg:
+  en: Black and white photo of the couple lying in the grass, kissing, on film
+  de: "Schwarz-Weiß-Foto: Das Paar liegt küssend im Gras, auf Film"
+la-val-elopement-r-and-d-015.jpg:
+  en: He reaches for her hand as she walks through the meadow in her gown
+  de: Er greift nach ihrer Hand, während sie im Kleid über die Wiese geht
+la-val-elopement-r-and-d-016.jpg:
+  en: Groom running after the laughing bride across a steep meadow
+  de: Bräutigam läuft der lachenden Braut über eine steile Wiese nach
+la-val-elopement-r-and-d-017.jpg:
+  en: Black and white photo of the bride leaning on the groom among larches
+  de: "Schwarz-Weiß-Foto: Die Braut lehnt sich zwischen Lärchen an den Bräutigam"
+la-val-elopement-r-and-d-018.jpg:
+  en: Wedding shoes and a daisy bouquet lying in the grass
+  de: Brautschuhe und ein Margeritenstrauß im Gras
+la-val-elopement-r-and-d-019.jpg:
+  en: Bride walking towards the groom for their first look in an alpine meadow
+  de: Braut geht auf einer Almwiese zum First Look auf den Bräutigam zu
+la-val-elopement-r-and-d-020.jpg:
+  en: Groom twirls the bride under tall larches in the evening light
+  de: Bräutigam dreht die Braut unter hohen Lärchen im Abendlicht
+la-val-elopement-r-and-d-021.jpg:
+  en: Curious calves next to the bride in her white gown
+  de: Neugierige Kälber neben der Braut im weißen Kleid
+la-val-elopement-r-and-d-022.jpg:
+  en: Bride holding a bouquet of daisies and purple wildflowers
+  de: Braut hält einen Strauß aus Margeriten und lila Wildblumen
+la-val-elopement-r-and-d-023.jpg:
+  en: Groom kisses the bride as they lie in the meadow, peaks in the distance
+  de: Bräutigam küsst die Braut, während sie auf der Wiese liegen, Gipfel in der Ferne
+la-val-elopement-r-and-d-024.jpg:
+  en: Bride and groom holding hands in sunlight under a larch
+  de: Brautpaar hält sich im Sonnenlicht unter einer Lärche an den Händen
+la-val-elopement-r-and-d-025.jpg:
+  en: Close-up of the groom's and bride's eyes side by side
+  de: Nahaufnahme der Augen von Bräutigam und Braut nebeneinander
+la-val-elopement-r-and-d-026.jpg:
+  en: Bride with a long train standing with the groom in a meadow by the forest
+  de: Braut mit langer Schleppe steht mit dem Bräutigam auf einer Wiese am Wald
+la-val-elopement-r-and-d-027.jpg:
+  en: Smiling bride in a lace veil reading her vows
+  de: Lächelnde Braut mit Spitzenschleier liest ihr Eheversprechen vor
+la-val-elopement-r-and-d-028.jpg:
+  en: Bride and groom sitting below a tall wooden crucifix in the meadow
+  de: Brautpaar sitzt unter einem hohen Holzkreuz auf der Wiese
+la-val-elopement-r-and-d-029.jpg:
+  en: Daisy bouquet on a rock with a small butterfly on the wedding gown
+  de: Margeritenstrauß auf einem Felsen, ein kleiner Schmetterling auf dem Brautkleid
+la-val-elopement-r-and-d-030.jpg:
+  en: Groom carries the bride up a meadow among larches, her veil flying
+  de: Bräutigam trägt die Braut eine Wiese zwischen Lärchen hinauf, ihr Schleier weht
+la-val-elopement-r-and-d-031.jpg:
+  en: Bride and groom walking a path below the Sas dla Crusc in Val Badia
+  de: Brautpaar geht einen Weg unter dem Heiligkreuzkofel im Gadertal entlang
+la-val-elopement-r-and-d-032.jpg:
+  en: Close-up of their hands with a small butterfly on her hand
+  de: Nahaufnahme ihrer Hände mit einem kleinen Schmetterling auf ihrer Hand
+la-val-elopement-r-and-d-033.jpg:
+  en: Bride and groom kissing in a meadow with mountains on the horizon
+  de: Brautpaar küsst sich auf einer Wiese, am Horizont die Berge
+la-val-elopement-r-and-d-034.jpg:
+  en: Bride and groom exchanging vows in the tall grass of a mountain meadow
+  de: Brautpaar gibt sich im hohen Gras einer Bergwiese das Ja-Wort
+la-val-elopement-r-and-d-035.jpg:
+  en: Groom waiting alone in the meadow beside a large larch
+  de: Bräutigam wartet allein auf der Wiese neben einer großen Lärche
+la-val-elopement-r-and-d-036.jpg:
+  en: Bride leads the groom by the hand under a larch at golden hour
+  de: Braut führt den Bräutigam zur Goldenen Stunde an der Hand unter einer Lärche
+la-val-elopement-r-and-d-037.jpg:
+  en: Bride and groom raise their joined hands in celebration against the mountains
+  de: Brautpaar hebt jubelnd die verbundenen Hände vor den Bergen
+la-val-elopement-r-and-d-038.jpg:
+  en: Close-up of joined hands and a bouquet of daisies and knapweed
+  de: Nahaufnahme verbundener Hände und eines Straußes aus Margeriten und Flockenblumen
+la-val-elopement-r-and-d-039.jpg:
+  en: Laughing bride shows her ring while the groom dips her
+  de: Lachende Braut zeigt ihren Ring, während der Bräutigam sie nach hinten neigt
+la-val-elopement-r-and-d-040.jpg:
+  en: Bride touches the groom's shoulder for the first look
+  de: Braut berührt beim First Look die Schulter des Bräutigams
+la-val-elopement-r-and-d-041.jpg:
+  en: Black and white photo of the groom dipping and kissing the bride
+  de: "Schwarz-Weiß-Foto: Der Bräutigam neigt die Braut und küsst sie"
+la-val-elopement-r-and-d-042.jpg:
+  en: Black and white photo of the groom holding the bride from behind
+  de: "Schwarz-Weiß-Foto: Der Bräutigam hält die Braut von hinten umarmt"
+la-val-elopement-r-and-d-043.jpg:
+  en: Bride in the meadow seen through the groom's arms
+  de: Braut auf der Wiese, durch die Arme des Bräutigams gesehen
+la-val-elopement-r-and-d-044.jpg:
+  en: Bride puts the wedding ring on the groom's finger
+  de: Braut steckt dem Bräutigam den Ehering an

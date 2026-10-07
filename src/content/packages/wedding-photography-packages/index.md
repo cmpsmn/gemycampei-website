@@ -9,8 +9,8 @@
 menuLabel: "Wedding Packages"
 
 # Browser tab + Google result
-seoTitle: "Wedding Photography Packages & Pricing | Vienna & Europe"
-seoDescription: "Wedding photography packages for civil ceremonies, full wedding days and multi-day destination weddings in Vienna, the Dolomites and across Europe."
+seoTitle: "Wedding Photography Packages | Vienna & Europe"
+seoDescription: "Wedding photography packages for civil ceremonies, full wedding days and multi-day destination weddings. Based in Vienna, available worldwide."
 
 # The one H1 of the page (contains the search phrase)
 h1: "Wedding Photography Packages in Vienna & Across Europe"
@@ -19,6 +19,10 @@ h1: "Wedding Photography Packages in Vienna & Across Europe"
 tagline: "Your day deserves more than a template"
 buttonLabel: "Request pricing"
 order: 1
+
+# Layout from the design: wide rows of photo + text (see PackagesPage.astro)
+layout: rows
+faqHeadline: "Everything couples ask before booking"
 
 legacyUrls:
   - /pricing/
@@ -55,7 +59,6 @@ faq:
 ---
 
 Your wedding is a true reflection of your style and story.
-As a wedding photographer based in **Vienna**, I document celebrations across ***Europe and worldwide***, from quiet civil ceremonies in Viennese palaces to full wedding days and destination weddings abroad.
-My approach blends real, candid moments with rich atmosphere, thoughtful art, and the warm texture of film.
+As a wedding photographer based in **Vienna** and the **Dolomites**, I document celebrations across ***Europe and worldwide***, from quiet civil ceremonies to full wedding days and destination weddings abroad.
 
 Share your *date*, *venue*, and *vision* below. Once you reach out, I'll send over my complete collection guide with customizable options tailored to your celebration.

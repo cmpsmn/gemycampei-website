@@ -1,4 +1,36 @@
+# robots.txt: which crawlers may read the site.
+# Everything is open, apart from the mail script folder. The AI search crawlers
+# are named explicitly so it is clear they are welcome: being read by them is
+# how the site gets quoted and recommended in ChatGPT, Perplexity, Gemini and
+# Google's AI answers.
+
 User-agent: *
+Allow: /
+Disallow: /_mail/
+
+# OpenAI (ChatGPT search and training)
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+Allow: /
+Disallow: /_mail/
+
+# Perplexity
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+Allow: /
+Disallow: /_mail/
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+Allow: /
+Disallow: /_mail/
+
+# Google Gemini and AI answers, Apple Intelligence
+User-agent: Google-Extended
+User-agent: Applebot-Extended
 Allow: /
 Disallow: /_mail/
 

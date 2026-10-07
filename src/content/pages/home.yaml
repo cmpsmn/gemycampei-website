@@ -1,0 +1,95 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Texts of the home page  (src/content/pages/home.yaml)
+# Edit them in the gallery manager (npm run manage → Pages) or here.
+# en = English, de = German (only shown when the German version is switched on).
+# *italic* and **bold** work in most texts. Layout and photos are in src/views/.
+# ─────────────────────────────────────────────────────────────────────────────
+
+en:
+  description: Wedding and elopement photographer based in Vienna and the Dolomites. Candid, editorial photos of weddings, elopements, proposals and destination weddings.
+  h1: Wedding & Elopement Photographer
+  intro: Combining high-end design with an effortless documentary approach, I preserve the true essence of your wedding day with understated luxury.
+  viewGalleries: View galleries
+  heroAlt: Wedding and elopement photography by Gemy Campei
+  statement: "I believe the most beautiful photos happen when you *feel completely natural*: intimate moments, genuine laughter, and real connection."
+  answerEyebrow: Wedding & elopement photographer
+  answerTitle: Vienna, the Dolomites and wherever you say yes
+  answer: "I'm Gemy Campei, a wedding and elopement photographer based in Vienna, Austria, and in the Italian Dolomites. I photograph weddings in Vienna's palaces, churches and gardens, elopements, proposals and couple sessions in the Dolomites of South Tyrol and Trentino, and destination weddings across Europe and beyond. My style is candid and editorial: real moments, gentle direction, and a touch of film."
+  destinations:
+    - title: Elopements in the Dolomites
+      text: Sunrise vows above the clouds, alpine lakes and quiet meadows. I help you choose the place, the season and the light.
+      link: Dolomites elopements →
+      category: dolomites-elopement-photographer
+    - title: Weddings in Vienna
+      text: Palace ceremonies, civil weddings and long summer celebrations in a city built on art and romance, where I live.
+      link: Vienna weddings →
+      category: vienna-wedding-photographer
+    - title: Destination weddings
+      text: Multi-day celebrations across Europe and beyond, from a Swedish countryside wedding to a desert-sun ceremony in Marrakech.
+      link: Destination weddings →
+      category: vienna-wedding-photographer
+  portfolio: Portfolio
+  galleries: Galleries
+  allGalleries: All galleries →
+  portraitAlt: Gemy Campei, wedding and elopement photographer based in Vienna
+  aboutEyebrow: Behind the lens
+  aboutTitle: Hi, I'm Gemy
+  about:
+    - I was raised between the quiet majesty of the Italian Dolomites and the vibrancy of Bangkok, and today I call Vienna home. Living in a city built on art, romance, and history constantly shapes how I view light, composition, and human connection.
+    - My love for photography deepened when I planned my own wedding. Experiencing that day from the inside gave me a profound appreciation for how fast moments move and how rare it is to find imagery that captures both how a day looked and how it actually felt.
+  aboutLink: About
+  packagesEyebrow: Wedding packages
+  packagesTitle: Your day deserves more than a template
+  seePackages: See the packages →
+  eloping: Eloping in the mountains?
+  elopementLink: Dolomites elopement packages →
+  filmTitle: The Romance of Analog
+  filmText: Candid 35mm frames and cinematic Super 8 film, capturing the effortless rhythm and movement of your day.
+  filmLink: View the film gallery
+  journalEyebrow: Journal
+  journalTitle: Guides for planning your day
+  allArticles: All guides →
+de:
+  description: "Hochzeitsfotograf in Wien und den Dolomiten: natürliche, elegante Fotos von Hochzeiten, Elopements, Heiratsanträgen und Destination Weddings in ganz Europa."
+  h1: Hochzeits- & Elopement-Fotograf
+  intro: "Hochwertiges Design und ein unaufdringlicher, dokumentarischer Blick: So bewahre ich das Wesentliche eures Hochzeitstages, mit leiser Eleganz."
+  viewGalleries: Galerien ansehen
+  heroAlt: Hochzeits- und Elopement-Fotografie von Gemy Campei
+  statement: "Die schönsten Fotos entstehen, wenn ihr euch *ganz natürlich fühlt*: innige Momente, echtes Lachen und echte Verbindung."
+  answerEyebrow: Hochzeits- & Elopement-Fotograf
+  answerTitle: Wien, die Dolomiten und überall, wo ihr Ja sagt
+  answer: "Ich bin Gemy Campei, Hochzeitsfotograf mit Sitz in Wien und in den italienischen Dolomiten. Ich fotografiere Hochzeiten in Wiener Palais, Kirchen und Gärten, Elopements, Heiratsanträge und Paarshootings in den Dolomiten in Südtirol und im Trentino sowie Destination Weddings in ganz Europa und darüber hinaus. Mein Stil ist natürlich und editorial: echte Momente, behutsame Anleitung und ein Hauch von Film."
+  destinations:
+    - title: Elopements in den Dolomiten
+      text: Ein Ja-Wort bei Sonnenaufgang über den Wolken, Bergseen und stille Almwiesen. Ich helfe euch, Ort, Jahreszeit und Licht zu wählen.
+      link: Elopements in den Dolomiten →
+      category: dolomites-elopement-photographer
+    - title: Hochzeiten in Wien
+      text: Trauungen im Palais, standesamtliche Hochzeiten und lange Sommerfeste in einer Stadt voller Kunst und Romantik, in der ich lebe.
+      link: Hochzeiten in Wien →
+      category: vienna-wedding-photographer
+    - title: Destination Weddings
+      text: Mehrtägige Feste in ganz Europa und darüber hinaus, von einer Landhochzeit in Schweden bis zur Trauung in der Wüstensonne von Marrakesch.
+      link: Destination Weddings →
+      category: vienna-wedding-photographer
+  portfolio: Portfolio
+  galleries: Galerien
+  allGalleries: Alle Galerien →
+  portraitAlt: Gemy Campei, Hochzeits- und Elopement-Fotograf in Wien
+  aboutEyebrow: Hinter der Kamera
+  aboutTitle: Hallo, ich bin Gemy
+  about:
+    - Aufgewachsen bin ich zwischen der stillen Erhabenheit der italienischen Dolomiten und dem lebendigen Bangkok, heute ist Wien mein Zuhause. In einer Stadt voller Kunst, Romantik und Geschichte zu leben, prägt jeden Tag, wie ich Licht, Komposition und menschliche Nähe sehe.
+    - Meine Liebe zur Fotografie wurde tiefer, als ich meine eigene Hochzeit geplant habe. Diesen Tag selbst zu erleben, hat mir gezeigt, wie schnell Momente vergehen und wie selten Bilder sind, die festhalten, wie ein Tag aussah und wie er sich wirklich anfühlte.
+  aboutLink: Über mich
+  packagesEyebrow: Hochzeitspakete
+  packagesTitle: Euer Tag verdient mehr als eine Vorlage
+  seePackages: Zu den Paketen →
+  eloping: Ihr möchtet in den Bergen heiraten?
+  elopementLink: Elopement-Pakete Dolomiten →
+  filmTitle: Die Romantik des Analogen
+  filmText: Natürliche 35-mm-Aufnahmen und cineastischer Super-8-Film, die den leichten Rhythmus und die Bewegung eures Tages festhalten.
+  filmLink: Zur Film-Galerie
+  journalEyebrow: Journal
+  journalTitle: Ratgeber für die Planung
+  allArticles: Alle Ratgeber →

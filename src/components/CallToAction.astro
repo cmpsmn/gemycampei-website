@@ -1,0 +1,43 @@
+---
+/**
+ * ============================================================================
+ * CALL TO ACTION  (src/components/CallToAction.astro)
+ * ============================================================================
+ *
+ * The closing band above the footer, as in the design:
+ *
+ *        I CAN'T WAIT TO HEAR YOURS
+ *        Every story deserves to be
+ *          remembered beautifully
+ *        [ ENQUIRE ABOUT YOUR DATE ]
+ *
+ * src/layouts/Base.astro shows it on every page except the contact page
+ * (a page passes cta={false} to hide it).
+ * ============================================================================
+ */
+import { langOf, routes, useUi } from '../i18n';
+
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
+---
+
+<section class="cta rule-top">
+  <p class="eyebrow">{t.ctaEyebrow}</p>
+  <h2 class="cta-title">{t.ctaTitle}</h2>
+  <a class="button" href={routes.contact[lang]}>{t.enquire}</a>
+</section>
+
+<style>
+  .cta {
+    padding: clamp(2.5rem, 6vw, 5.5rem) var(--edge);
+    text-align: center;
+  }
+
+  .cta-title {
+    max-width: 18ch;
+    margin: 0 auto 1.5rem;
+    font-size: clamp(2rem, 5.8vw, 4.875rem);
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+</style>

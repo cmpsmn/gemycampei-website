@@ -22,7 +22,7 @@
  * Because the old address is stored inside the gallery folder, moving a
  * gallery to another category automatically updates its redirect target.
  * If you rename a gallery folder that is already live, add its previous
- * address (e.g. /weddings/old-folder-name/) to `legacyUrls` in its gallery.md.
+ * address (e.g. /vienna-wedding-photographer/old-folder-name/) to `legacyUrls` in its gallery.md.
  * ============================================================================
  */
 import type { APIRoute } from 'astro';

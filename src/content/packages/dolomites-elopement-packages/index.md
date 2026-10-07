@@ -4,14 +4,18 @@
 
 menuLabel: "Dolomites Elopement Packages"
 
-seoTitle: "Dolomites Elopement Packages & Pricing"
+seoTitle: "Dolomites Elopement & Proposal Packages"
 seoDescription: "Elopement, proposal and couple session packages in the Italian Dolomites: planning support, location guidance, travel included and a private online gallery."
 
 h1: "Dolomites Elopement & Couple Photography Packages"
 
-tagline: "Candid souls × editorial grain × epic backdrops"
-buttonLabel: "Request pricing"
+tagline: "Candid souls × epic backdrops"
+buttonLabel: "Request the elopement guide"
 order: 2
+
+# Same layout as the wedding packages: rows of portrait photo + text
+layout: rows
+faqHeadline: "Eloping in the Dolomites"
 
 legacyUrls:
   - /DolomitesPackages/
@@ -25,6 +29,7 @@ packages:
       - "8 h coverage"
       - "1 video call & 1:1 planning support and follow-ups"
       - "400+ edited images in a private online gallery"
+      - "35mm film photos"
       - "Guidance on location, outfits, vendor recommendations & local travel tips"
       - "Photographer travel included"
       - "Full personal usage rights"
@@ -56,7 +61,7 @@ packages:
     image: ./the-quiet-hour.jpg
     text: "For couples wanting natural, unposed moments, ideal for couple sessions, pre-wedding shoots or honeymoons."
     included:
-      - "2 h coverage"
+      - "Up to 2 hours together"
       - "70+ edited images in a private online gallery"
       - "Guidance on location, outfits & local travel tips"
       - "Photographer travel included"
@@ -85,11 +90,13 @@ faq:
   - question: "Do you deliver raw unedited images?"
     answer: "I don't deliver raw files. Every photograph is intentionally refined to reflect the cinematic and emotionally honest aesthetic I'm known for. Raw files are just the starting point. The true magic is in the careful curation and subtle editing that tells your story in a timeless way."
   - question: "When is an assistant needed, and do you offer one?"
-    answer: "Absolutely. A professional assistant can accompany us to ensure every detail flows seamlessly: rowing the boat at Lago di Braies, carrying your wedding dress, preparing a styled picnic or scenic setup, or discreetly capturing authentic behind-the-scenes moments on iPhone. This service is available for elopements or surprise proposals, with support starting from **€50/h**."
+    answer: "Absolutely. A professional assistant can accompany us to ensure every detail flows seamlessly: rowing a boat across an alpine lake, carrying your wedding dress, preparing a styled picnic or scenic setup, or discreetly capturing authentic behind-the-scenes moments on iPhone. This service is available for elopements and surprise proposals: just mention it when you enquire."
   - question: "Are additional location fees included?"
     answer: "Additional costs such as cable cars, parking or entrance tickets **are not included** in the packages. These are considered extras and depend on the locations we select for your elopement or proposal."
 ---
 
-Dreaming of saying your vows at sunrise above the clouds? As a **Dolomites elopement photographer**, I document intimate elopements, surprise proposals and couple sessions in the most iconic places of the Italian Alps, from **Lago di Braies** and **Val di Funes** to **Alpe di Siusi**, **Passo Gardena** and **Cadini di Misurina**.
+Dreaming of saying your vows at sunrise above the clouds?
+As a **Dolomites elopement photographer**, I document intimate elopements, surprise proposals and couple sessions in the Italian Alps.
+Based in the **Dolomites** and **Vienna**, I am just as happy to travel wherever your story takes place, worldwide and especially across **Europe**.
 
 Every collection includes planning support, honest guidance on locations and timing, and a gallery edited with subtle 35mm analog grain.

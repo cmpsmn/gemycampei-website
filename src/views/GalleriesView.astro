@@ -1,0 +1,128 @@
+---
+/**
+ * ============================================================================
+ * ALL GALLERIES  (src/views/GalleriesView.astro)
+ * Used by src/pages/galleries/index.astro (/galleries/) and
+ * src/pages/de/galerien.astro (/de/galerien/).
+ * ============================================================================
+ *
+ * Overview of every gallery that has its own page, with filter buttons per
+ * category. The GALLERIES menu item links here.
+ *
+ * The filter is a React component. `client:load` makes Astro send its
+ * JavaScript to the browser so the buttons work. The data (cards) is prepared
+ * here at build time and passed in as props.
+ *
+ * A gallery listed in several categories (via `alsoIn`) appears once, and
+ * shows up under each of its filter buttons.
+ *
+ * Categories with `display: slider` or `carousel` and without `galleryPages`
+ * show their photos only on their own page; they are linked below the grid.
+ * ============================================================================
+ */
+import Base from '../layouts/Base.astro';
+import GalleryFilter from '../components/GalleryFilter';
+import { getCategories, getGalleries, toCardData, categoryText, hrefIn } from '../lib/galleries';
+import { breadcrumbSchema } from '../lib/seo';
+import { langOf, pick, routes, useUi } from '../i18n';
+
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
+const categories = await getCategories({ onlyWithGalleries: true });
+// Categories whose galleries have their own pages get a filter button (also the
+// film category, whose page shows a photo row but whose galleries have pages)
+const hasGalleryPages = (c: (typeof categories)[number]) => c.data.display === 'cards' || c.data.galleryPages;
+const cardCategories = categories.filter(hasGalleryPages);
+const photoCategories = categories.filter((c) => !hasGalleryPages(c));
+const labelOf = (id: string) => {
+  const category = categories.find((c) => c.id === id);
+  return category ? categoryText(category, lang).menuLabel : id;
+};
+
+// One card per gallery with its own page, labelled with its main category
+const galleries = (await getGalleries()).filter((g) => g.hasPage);
+const cards = await Promise.all(galleries.map((g) => toCardData(g, labelOf(g.categoryId), lang)));
+
+// Filter buttons only for categories that have cards
+const filterOptions = cardCategories.map((c) => ({ id: c.id, label: labelOf(c.id) }));
+
+const copy = pick(lang, {
+  en: {
+    title: 'Wedding & Elopement Portfolio · Vienna & Dolomites',
+    description:
+      'A curated archive of candid wedding stories, mountain elopements, proposals and couple sessions across Vienna, the Italian Dolomites and European destinations.',
+    h1: 'Wedding & Elopement Portfolio',
+    display: 'Beyond the day, preserved in time',
+    also: 'Also explore',
+    and: ' and ',
+  },
+  de: {
+    title: 'Hochzeits- & Elopement-Portfolio · Wien & Dolomiten',
+    description:
+      'Natürliche Hochzeitsreportagen, Elopements in den Bergen, Heiratsanträge und Paarshootings in Wien, den Dolomiten und an Destinationen in ganz Europa.',
+    h1: 'Hochzeits- & Elopement-Portfolio',
+    display: 'Über den Tag hinaus, für immer bewahrt',
+    also: 'Entdeckt auch',
+    and: ' und ',
+  },
+});
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  schema={[
+    breadcrumbSchema([
+      { name: t.breadcrumbHome, path: routes.home[lang] },
+      { name: t.galleries, path: routes.galleries[lang] },
+    ]),
+  ]}
+  alternates={{ en: routes.galleries.en, de: routes.galleries.de }}
+>
+  <section class="section">
+    <header class="intro">
+      <div>
+        <h1 class="h1-quiet">{copy.h1}</h1>
+        <p class="display intro-title">{copy.display}</p>
+      </div>
+    </header>
+
+    <GalleryFilter client:load galleries={cards} categories={filterOptions} lang={lang} />
+
+    {
+      photoCategories.length > 0 && (
+        <p class="more center">
+          {copy.also}{' '}
+          {photoCategories.map((c, i) => (
+            <>
+              {i > 0 && copy.and}
+              <a href={hrefIn(c, lang)}>{labelOf(c.id)}</a>
+            </>
+          ))}
+          .
+        </p>
+      )
+    }
+  </section>
+</Base>
+
+<style>
+  /* The page title row */
+  .intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 0.75rem clamp(1.5rem, 4vw, 3rem);
+    margin-bottom: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .intro-title {
+    font-size: clamp(2.25rem, 6.4vw, 5rem);
+  }
+
+  .more {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    font-size: 0.9rem;
+  }
+</style>

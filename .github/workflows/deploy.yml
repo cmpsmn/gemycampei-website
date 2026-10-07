@@ -2,34 +2,39 @@
 # AUTOMATIC DEPLOYMENT  (.github/workflows/deploy.yml)
 # =============================================================================
 #
-# GitHub Actions runs this file on GitHub's computers every time you push to
-# the `main` branch (or when you click "Run workflow" in the Actions tab):
+# Publishes the website to Hostinger every time something arrives on the
+# `master` branch: a merged pull request, or a direct push. Work on a feature
+# branch never publishes (that branch is only tested, see check.yml).
 #
 #   1. download the code          (checkout)
 #   2. install Node.js + packages (setup-node, npm ci)
-#   3. build the site             (npm run build → dist/)
-#   4. upload dist/ to Hostinger  (rsync over SSH)
+#   3. check and build the site   (npm run check, npm run build → dist/)
+#   4. upload dist/ to Hostinger  (rsync over SSH, only changed files)
 #
-# Required repository secrets (GitHub > Settings > Secrets and variables > Actions):
-#   SSH_HOST         e.g. 123.45.67.89          (hPanel > Advanced > SSH Access)
+# A failing check or build stops here: the live website stays as it was.
+#
+# Required repository secrets (GitHub › Settings › Secrets and variables › Actions):
+#   SSH_HOST         e.g. 123.45.67.89          (hPanel › Advanced › SSH Access)
 #   SSH_PORT         e.g. 65002
 #   SSH_USER         e.g. u523573211
-#   SSH_PRIVATE_KEY  private key whose public key is added in hPanel > SSH Access
-#
-# Optional repository variable:
-#   DEPLOY_PATH      default: domains/gemycampei.com/public_html
+#   SSH_PRIVATE_KEY  private key whose public key is added in hPanel › SSH Access
+# Optional:
+#   SSH_KNOWN_HOSTS  (secret) the server's host key, see docs/DEPLOYMENT.md.
+#                    Without it the key is fetched at every run.
+#   DEPLOY_PATH      (variable) default: domains/gemycampei.com/public_html
 #
 # Secrets are never shown in logs. `${{ secrets.NAME }}` inserts them at run time.
+# Step by step setup: docs/DEPLOYMENT.md
 # =============================================================================
 
 name: Deploy to Hostinger
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch: # adds a "Run workflow" button in the Actions tab
 
-# Never run two deployments at the same time
+# Never run two deployments at the same time; a newer one waits for the older
 concurrency:
   group: deploy
   cancel-in-progress: false
@@ -37,6 +42,11 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # Shows the live address on the repository page under "Deployments"
+    environment:
+      name: production
+      url: https://gemycampei.com
     env:
       DEPLOY_PATH: ${{ vars.DEPLOY_PATH || 'domains/gemycampei.com/public_html' }}
 
@@ -53,6 +63,7 @@ jobs:
 
       # Astro keeps optimised images in node_modules/.astro. Caching that folder
       # means only NEW or CHANGED photos are processed, which keeps builds fast.
+      # (Restored after `npm ci`, which would otherwise delete it again.)
       - name: Cache optimized images
         uses: actions/cache@v4
         with:
@@ -60,6 +71,7 @@ jobs:
           key: astro-assets-${{ hashFiles('galleries/**', 'src/assets/**', 'src/content/**') }}
           restore-keys: astro-assets-
 
+      - run: npm run check
       - run: npm run build
 
       - name: Set up SSH
@@ -67,13 +79,23 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
-          ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+          if [ -n "${{ secrets.SSH_KNOWN_HOSTS }}" ]; then
+            echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          else
+            ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+          fi
 
       # rsync only uploads changed files. --delete removes files that no longer
-      # exist in the build. contact-config.php lives outside public_html, so it
-      # is never touched.
+      # exist in the build, except:
+      #   .well-known/  used by Hostinger for the free SSL certificate
+      # contact-config.php lives next to public_html (not inside), so it is never touched.
       - name: Upload with rsync
         run: |
           rsync -az --delete --stats \
+            --exclude '.well-known/' \
             -e "ssh -i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT }}" \
             dist/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${DEPLOY_PATH}/"
+
+      - name: Remove the key
+        if: always()
+        run: rm -f ~/.ssh/id_deploy

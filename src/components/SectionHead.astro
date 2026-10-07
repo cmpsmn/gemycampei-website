@@ -1,0 +1,62 @@
+---
+/**
+ * ============================================================================
+ * SECTION HEAD  (src/components/SectionHead.astro)
+ * ============================================================================
+ *
+ * The one way a section introduces itself, used on every page:
+ *
+ *   KIND WORDS                                   ALL TESTIMONIALS →
+ *   What my clients say
+ *
+ * Small terracotta line, the section title, and an optional link on the
+ * right that holds the other end of the row.
+ *
+ * Usage:
+ *   <SectionHead eyebrow="Kind words" title="What my clients say"
+ *                link={{ href: '/testimonials/', label: 'All testimonials →' }} />
+ * ============================================================================
+ */
+interface Props {
+  /** Small line above the title */
+  eyebrow?: string;
+  title: string;
+  /** Optional link on the right */
+  link?: { href: string; label: string };
+}
+
+const { eyebrow, title, link } = Astro.props;
+---
+
+<div class="section-head">
+  <div>
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h2 class="section-title">{title}</h2>
+  </div>
+  {
+    link && (
+      <a class="link-quiet" href={link.href}>
+        {link.label}
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+    margin-bottom: var(--space-5);
+  }
+
+  .eyebrow {
+    margin: 0 0 var(--space-1);
+  }
+
+  .link-quiet {
+    flex: none;
+  }
+</style>

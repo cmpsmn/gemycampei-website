@@ -82,7 +82,11 @@ export default function ChangesPanel() {
 
           <div className="card">
             <h3>Publish</h3>
-            <p className="small">Happy with everything? Run these in a terminal in the project folder. GitHub then updates the website.</p>
+            <p className="small">
+              Happy with everything? Run these in a terminal in the project folder. On a feature branch GitHub only tests the
+              change; merge the pull request into <code>master</code> to publish. On <code>master</code> the push publishes
+              directly (docs/DEPLOYMENT.md).
+            </p>
             <pre className="commands">
               {`git add .\ngit commit -m "Update galleries"\ngit push`}
             </pre>

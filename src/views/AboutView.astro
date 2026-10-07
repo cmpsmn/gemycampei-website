@@ -1,0 +1,348 @@
+---
+/**
+ * ============================================================================
+ * ABOUT PAGE  (src/views/AboutView.astro)
+ * ============================================================================
+ *
+ * Used by src/pages/about.astro (/about/) and src/pages/de/ueber-mich.astro
+ * (/de/ueber-mich/). Edit the texts of both languages in `copy` below.
+ *
+ * Layout: title and story beside the portrait; the approach as three numbered
+ * points on a quiet band; where I work; how we work together; a photo strip.
+ * The portrait lives in src/assets/about/, the strip photos come from
+ * src/assets/home/grid-2/.
+ *
+ * WHY SO MUCH TEXT? Google and AI assistants recommend photographers they can
+ * describe: who you are, where you work, how you work. This page is where they
+ * learn it (together with the "Person" data in src/lib/seo.ts).
+ * Old address /ABOUT/ is redirected here (see src/pages/redirects.json.ts).
+ * ============================================================================
+ */
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import portrait from '../assets/about/gemy-campei-photographer-vienna.jpg';
+import { getCategories, getHomeGrid2, hrefIn } from '../lib/galleries';
+import { breadcrumbSchema } from '../lib/seo';
+import { getPage } from '../lib/pages';
+import { inlineMarkdown } from '../lib/markdown';
+import { langOf, routes, useUi } from '../i18n';
+
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
+const strip = getHomeGrid2().slice(0, 4);
+const categories = await getCategories({ onlyWithGalleries: true });
+const categoryHref = (id: string) => {
+  const category = categories.find((c) => c.id === id);
+  return category ? hrefIn(category, lang) : routes.galleries[lang];
+};
+
+// The texts are in src/content/pages/about.yaml (editable in the manager → Pages)
+const copy = getPage('about', lang);
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  ogImage={portrait}
+  schema={[
+    breadcrumbSchema([
+      { name: t.breadcrumbHome, path: routes.home[lang] },
+      { name: t.about, path: routes.about[lang] },
+    ]),
+  ]}
+  alternates={{ en: routes.about.en, de: routes.about.de }}
+>
+  <!-- ── Title and portrait ──────────────────────────────────────────────── -->
+  <section class="intro">
+    <div class="intro-text">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1 set:html={inlineMarkdown(copy.h1)} />
+      <p class="body-text lead">{copy.lead}</p>
+
+      <!-- The story sits beside the portrait, so the page opens full -->
+      <div class="intro-story">
+        <h2 class="story-title">{copy.storyTitle}</h2>
+        {copy.story.map((paragraph) => <p class="body-text">{paragraph}</p>)}
+      </div>
+    </div>
+    <!-- The frame takes the height of the text; the photo fills it (see the styles) -->
+    <div class="portrait-frame">
+      <Image
+        src={portrait}
+        alt={copy.portraitAlt}
+        widths={[480, 800, 1000]}
+        sizes="(max-width: 900px) 92vw, 400px"
+        loading="eager"
+        class="portrait"
+      />
+    </div>
+  </section>
+
+  <!-- ── My approach ─────────────────────────────────────────────────────── -->
+  <section class="section band approach">
+    <p class="eyebrow">{copy.approachEyebrow}</p>
+    <p class="approach-statement">
+      <Fragment set:html={inlineMarkdown(copy.approach)} />
+    </p>
+    <div class="points">
+      {
+        copy.points.map((point, i) => (
+          <div class="point" data-reveal>
+            <span class="number">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{point.title}</h3>
+            <p class="body-text">{point.text}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── Where I work ────────────────────────────────────────────────────── -->
+  <section class="section where">
+    <p class="eyebrow">{copy.whereEyebrow}</p>
+    <h2 class="section-title where-title">{copy.whereTitle}</h2>
+    <div class="points">
+      {
+        copy.where.map((place) => (
+          <div class="point" data-reveal>
+            <h3>{place.title}</h3>
+            <p class="body-text">{place.text}</p>
+            <a class="link-quiet" href={categoryHref(place.category)}>{place.link}</a>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── Working together ────────────────────────────────────────────────── -->
+  <section class="section band together">
+    <div class="together-head">
+      <p class="eyebrow">{copy.togetherEyebrow}</p>
+      <h2 class="section-title">{copy.togetherTitle}</h2>
+      <a class="link-quiet" href={routes.contact[lang]}>{copy.contactLink}</a>
+    </div>
+    <ul class="together-list">
+      {copy.together.map((item) => <li class="body-text">{item}</li>)}
+    </ul>
+  </section>
+
+  <!-- ── Photo strip ─────────────────────────────────────────────────────── -->
+  <!-- Cropped to 3:4 when the files are made, so landscape photos stay sharp in the portrait frames -->
+  <section class="section strip">
+    {
+      strip.map((image) => (
+        <Image
+          src={image}
+          alt={copy.stripAlt}
+          width={900}
+          height={1200}
+          fit="cover"
+          widths={[400, 640, 960, 1200]}
+          sizes="(max-width: 700px) 46vw, 25vw"
+          quality={82}
+          loading="lazy"
+          class="strip-photo"
+        />
+      ))
+    }
+  </section>
+</Base>
+
+<style>
+  /* Text on the wide side, portrait capped at --photo-text on the right */
+  /* Fixed columns, centred: the gap between text and photo is always the
+     gap itself (a stretched column left hundreds of pixels between them) */
+  .intro {
+    display: grid;
+    grid-template-columns: min(var(--measure), 100% - var(--photo-text) - var(--space-6)) var(--photo-text);
+    justify-content: center;
+    align-items: start;
+    gap: var(--space-6);
+    padding: clamp(1.5rem, 3.5vw, 3rem) var(--edge) var(--space-6);
+  }
+
+  .intro-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: var(--measure);
+  }
+
+  .intro h1 {
+    margin: 0;
+    font-size: clamp(2.5rem, 7vw, 6rem);
+    line-height: 0.96;
+  }
+
+  .lead {
+    max-width: 40ch;
+    margin: 0;
+  }
+
+  /*
+   * The portrait lines up with the text at the top and the bottom. The frame
+   * is stretched to the height of the text column; the photo is placed inside
+   * it absolutely, so its own shape can never make the row taller, and
+   * object-fit: cover crops it to fill the frame.
+   */
+  .portrait-frame {
+    position: relative;
+    align-self: stretch;
+    min-height: 22rem;
+  }
+
+  .portrait-frame :global(.portrait) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* One column on phones: the portrait keeps its own shape below the text */
+  @media (max-width: 800px) {
+    .portrait-frame {
+      aspect-ratio: 4 / 5;
+      min-height: 0;
+    }
+  }
+
+  /* ── Story, beside the portrait ────────────────────────────────────────── */
+  .intro-story {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-4);
+  }
+
+  .story-title {
+    margin: 0;
+    font-style: italic;
+    font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+    line-height: 1.25;
+  }
+
+  .intro-story p {
+    margin: 0;
+  }
+
+  @media (max-width: 800px) {
+    .intro {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Approach ──────────────────────────────────────────────────────────── */
+  .approach-statement {
+    max-width: 28ch;
+    margin: 0 0 clamp(1.625rem, 4vw, 3rem);
+    font-family: var(--font-serif);
+    font-weight: 200;
+    font-size: clamp(1.5rem, 3.2vw, 2.5rem);
+    line-height: 1.2;
+  }
+
+  .points {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr));
+    gap: clamp(1.375rem, 3vw, 3rem);
+  }
+
+  .point {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-top: 1px solid var(--line-strong);
+    padding-top: 1.125rem;
+  }
+
+  .point h3 {
+    margin: 0;
+    font-size: 1.375rem;
+  }
+
+  .point p {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.75;
+  }
+
+  .number {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+  }
+
+
+  /* ── Photo strip ───────────────────────────────────────────────────────── */
+  .strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: clamp(0.625rem, 1.5vw, 1.125rem);
+  }
+
+  .strip :global(.strip-photo) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  /* ── Where I work ──────────────────────────────────────────────────────── */
+  .where-title {
+    max-width: 22ch;
+    margin: var(--space-2) 0 clamp(1.625rem, 4vw, 3rem);
+  }
+
+  .where .link-quiet {
+    align-self: start;
+    margin-top: auto;
+  }
+
+  /* ── Working together: heading left, list right ────────────────────────── */
+  .together {
+    display: grid;
+    grid-template-columns: minmax(0, 22rem) min(var(--measure), 100% - 22rem - var(--space-6));
+    justify-content: center;
+    gap: var(--space-6);
+  }
+
+  .together-head {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--space-2);
+  }
+
+  .together-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: item;
+  }
+
+  .together-list li {
+    position: relative;
+    margin: 0;
+    padding: var(--space-2) 0 var(--space-2) var(--space-5);
+    border-top: 1px solid var(--line-strong);
+    counter-increment: item;
+  }
+
+  .together-list li::before {
+    content: counter(item, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: calc(var(--space-2) + 0.3em);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+  }
+
+  @media (max-width: 800px) {
+    .together {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

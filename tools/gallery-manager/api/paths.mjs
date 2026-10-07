@@ -17,6 +17,8 @@ import path from 'node:path';
 export const ROOT = path.resolve(import.meta.dirname, '..', '..', '..');
 export const GALLERIES = path.join(ROOT, 'galleries');
 export const TESTIMONIALS = path.join(ROOT, 'src', 'content', 'testimonials');
+/** Packages pages keep their own photos next to the Markdown */
+export const PACKAGES = path.join(ROOT, 'src', 'content', 'packages');
 /** Deleted items go here and can be restored. Ignored by Git, never uploaded. */
 export const TRASH = path.join(ROOT, '.trash');
 /** Generated thumbnails for the manager (inside node_modules, so never committed) */
@@ -49,7 +51,7 @@ export function assertPhotoName(value) {
   return value;
 }
 
-/** "weddings/palais-kinsky" → { category, slug } (both checked) */
+/** "vienna-wedding-photographer/palais-kinsky" → { category, slug } (both checked) */
 export function parseGalleryId(id) {
   const [category, slug, extra] = String(id).split('/');
   if (extra !== undefined) throw new UserError(`Invalid gallery id "${id}".`);
@@ -65,7 +67,7 @@ export const rel = (absolute) => path.relative(ROOT, absolute).split(path.sep).j
  * Turns a project-relative path from the browser back into an absolute path,
  * but only if it lies inside one of the allowed folders.
  */
-export function resolveInside(relative, allowedRoots = [GALLERIES, TESTIMONIALS]) {
+export function resolveInside(relative, allowedRoots = [GALLERIES, TESTIMONIALS, PACKAGES]) {
   const absolute = path.resolve(ROOT, String(relative));
   const allowed = allowedRoots.some((root) => absolute === root || absolute.startsWith(root + path.sep));
   if (!allowed) throw new UserError('Access to this file is not allowed.', 403);

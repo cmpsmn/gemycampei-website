@@ -1,90 +1,103 @@
 /*
- * Styles for GalleryCard.tsx and the grid that holds the cards.
+ * Styles for GalleryCard.tsx.
  * Imported by the component, so they are only loaded on pages that use cards.
+ * The grid itself lives in the pages (card-grid), because the two pages that
+ * show cards use slightly different column widths.
  */
 
-/* Two columns of cards, like the category pages of the original site */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 8vw, 8rem);
-  max-width: 1200px;
-  margin-inline: auto;
-}
-
-/* A single card is centred instead of sitting in the left column */
-.card-grid:has(> .card:only-child) {
-  grid-template-columns: minmax(0, 560px);
-  justify-content: center;
-}
-
-/* One column on phones */
-@media (max-width: 700px) {
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.card-link {
-  display: block;
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
   text-decoration: none;
 }
 
-/* Fixed shape so the page doesn't jump while images load */
-.card-image {
-  overflow: hidden;
-  aspect-ratio: 1200 / 1160;
-  background: var(--panel);
+/* The text does not change on hover (the site's link colour would recolour
+   the whole card): the only hover effect is the slight zoom of the photo. */
+.card,
+.card:hover {
+  color: var(--text);
 }
 
+/* Fixed shape so the page doesn't jump while images load. The frame is its
+   own layer and clips the zoom, so nothing around it is repainted. */
+.card-image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background: var(--panel);
+  isolation: isolate;
+  transform: translateZ(0);
+}
+
+/* The photo sits in the frame without taking part in the layout */
 .card-image img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform: scale(1);
+  transition: transform 0.6s ease-out;
+  will-change: transform;
 }
 
-/* Slow, subtle zoom on hover */
-.card-link:hover .card-image img {
-  transform: scale(1.025);
+/* A short, even zoom on hover. The earlier 1.2 s curve spent most of its time
+   on sub-pixel steps, which made detailed photos shimmer ("jiggle"). */
+.card:hover .card-image img {
+  transform: scale(1.03);
 }
 
-.card-body {
-  padding-top: 2rem;
-  text-align: center;
+/* Title row with the number on the right, separated by a hairline */
+.card-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 1px solid var(--line-strong);
+  padding-top: 0.75rem;
 }
 
-.card-category {
-  font-size: 0.7rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 0 0 0.5rem;
+.card-names {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 0;
 }
 
-/* "S & J" in spaced serif capitals */
+/* "S & J" above the title */
 .card-couple {
-  font-family: var(--font-serif);
-  font-size: 1.05rem;
-  letter-spacing: 0.3em;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  margin: 0 0 0.2rem;
+  color: var(--accent);
 }
 
 .card-title {
-  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
-  margin: 0 0 0.9rem;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+  line-height: 1.1;
 }
 
-/* Darker than the original light beige so it is readable (WCAG AA contrast) */
-.card-cta {
-  font-size: 0.85rem;
+.card-meta {
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--muted);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s, color 0.2s;
 }
 
-.card-link:hover .card-cta {
+.card-number {
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
   color: var(--accent);
-  border-bottom-color: currentColor;
 }
+
+.card-cta {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+

@@ -28,3 +28,6 @@ inspo/
 
 # personal Claude Code settings
 .claude/settings.local.json
+
+# design hand-off bundle from Claude Design (reference, like inspo/)
+gemycampei-website-redesign/

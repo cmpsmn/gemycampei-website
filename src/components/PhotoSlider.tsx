@@ -29,6 +29,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import type { PhotoData } from '../lib/galleries';
 import { useLightbox } from './useLightbox';
+import { ui, type Lang } from '../i18n';
 import { closestSlide, scrollToSlide } from './carousel';
 import './PhotoSlider.css';
 
@@ -36,13 +37,15 @@ interface Props {
   photos: PhotoData[];
   /** Name for screen readers, e.g. "Maternity photos" */
   label: string;
+  lang?: Lang;
 }
 
 /** Tallest the large photo gets on desktop (matches .slider-slide img in the CSS) */
 const STAGE_HEIGHT = 760;
 const STAGE_MAX_WIDTH = 1100;
 
-export default function PhotoSlider({ photos, label }: Props) {
+export default function PhotoSlider({ photos, label, lang = 'en' }: Props) {
+  const t = ui[lang];
   const [active, setActive] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const thumbsRef = useRef<HTMLDivElement>(null);
@@ -53,7 +56,7 @@ export default function PhotoSlider({ photos, label }: Props) {
    * going, so those in-between positions don't reset the counter.
    */
   const target = useRef<number | null>(null);
-  const openLightbox = useLightbox(photos);
+  const openLightbox = useLightbox(photos, lang);
 
   /** Update the counter while swiping. requestAnimationFrame limits it to once per screen refresh. */
   function handleScroll() {
@@ -120,7 +123,7 @@ export default function PhotoSlider({ photos, label }: Props) {
               className="slider-slide"
               role="group"
               aria-roledescription="slide"
-              aria-label={`${index + 1} of ${photos.length}`}
+              aria-label={`${index + 1} ${t.of} ${photos.length}`}
             >
               <a href={photo.full.src} onClick={(event) => openLightbox(event, index)}>
                 <img
@@ -141,7 +144,7 @@ export default function PhotoSlider({ photos, label }: Props) {
       </div>
 
       <div className="slider-controls">
-        <button type="button" className="slider-arrow" onClick={() => step(-1)} disabled={active === 0} aria-label="Previous photo">
+        <button type="button" className="slider-arrow" onClick={() => step(-1)} disabled={active === 0} aria-label={t.previousPhoto}>
           ←
         </button>
         {/* aria-live announces the new number to screen readers */}
@@ -153,7 +156,7 @@ export default function PhotoSlider({ photos, label }: Props) {
           className="slider-arrow"
           onClick={() => step(1)}
           disabled={active === photos.length - 1}
-          aria-label="Next photo"
+          aria-label={t.nextPhoto}
         >
           →
         </button>
@@ -166,7 +169,7 @@ export default function PhotoSlider({ photos, label }: Props) {
             type="button"
             className="slider-thumb"
             aria-current={index === active}
-            aria-label={`Show photo ${index + 1}`}
+            aria-label={`${t.showPhoto} ${index + 1}`}
             onClick={() => goTo(index)}
           >
             <img

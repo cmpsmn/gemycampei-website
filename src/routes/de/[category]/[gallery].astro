@@ -1,0 +1,19 @@
+---
+/**
+ * ============================================================================
+ * GALLERY PAGES, GERMAN  (src/pages/de/[category]/[gallery].astro)
+ *   →  /de/hochzeitsfotograf-wien/palais-daun-kinsky-wedding-vienna/ …
+ * ============================================================================
+ * The German twin of src/pages/[category]/[gallery].astro. The category part
+ * of the address is the `slug` of _category.de.md; the gallery part stays the
+ * folder name.
+ * ============================================================================
+ */
+import type { GetStaticPaths } from 'astro';
+import GalleryView from '../../../views/GalleryView.astro';
+import { galleryPaths } from '../../../lib/galleryPaths';
+
+export const getStaticPaths = (async () => galleryPaths('de')) satisfies GetStaticPaths;
+---
+
+<GalleryView {...Astro.props} />

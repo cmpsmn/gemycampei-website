@@ -5,6 +5,12 @@
  *
  * Styles that apply to the whole site. Loaded once in src/layouts/Base.astro.
  *
+ * The look follows the "v3" design made in Claude Design
+ * (gemycampei-website-redesign/project/GemyCampei_Site_v3.dc.html):
+ * warm off-white paper, espresso ink, a terracotta accent, light serif
+ * display type (Newsreader) over a quiet sans (Jost), and full-width
+ * sections instead of one narrow centred column.
+ *
  * Components have their own styles too:
  *   - .astro files: a <style> block at the bottom. Astro "scopes" it, so those
  *     rules only affect that component.
@@ -14,10 +20,11 @@
  *   1. Fonts
  *   2. Colours and sizes (CSS variables)
  *   3. Base elements (body, links, headings)
- *   4. Layout helpers (.container, .section)
- *   5. Typography patterns from the original site
- *   6. Buttons, frames, dividers
- *   7. Long text pages (imprint, privacy)
+ *   4. Layout helpers (sections, container)
+ *   5. Typography patterns (eyebrow, display, quotes)
+ *   6. Buttons and links
+ *   7. Scroll reveal
+ *   8. Long text pages (imprint, privacy)
  * ============================================================================
  */
 
@@ -26,45 +33,106 @@
  * Bundled from npm packages (@fontsource) and served from our own server.
  * Loading them from Google Fonts would send visitor IP addresses to Google,
  * which is a GDPR problem in the EU.
+ *
+ * Both are "variable" fonts: one file covers every weight, so the light
+ * display weights of the design cost no extra downloads.
  * ------------------------------------------------------------------------- */
-@import '@fontsource-variable/playfair-display'; /* serif: logo and headings */
-@import '@fontsource/poppins/300.css'; /* sans-serif: body text */
-@import '@fontsource/poppins/300-italic.css';
-@import '@fontsource/poppins/400.css';
-@import '@fontsource/poppins/600.css';
-@import '@fontsource/poppins/600-italic.css';
+@import '@fontsource-variable/newsreader'; /* serif: display type, quotes */
+@import '@fontsource-variable/newsreader/wght-italic.css'; /* serif italics (weight axis only: 65 KB instead of 147 KB) */
+@import '@fontsource-variable/jost'; /* sans-serif: body text, labels, menu */
 
 /* ---------------------------------------------------------------------------
  * 2. COLOURS AND SIZES
  * CSS variables ("custom properties") are defined once here and used
  * everywhere as var(--name). Change a colour here to change it site-wide.
  *
- * Palette "Warm White, Espresso & Black":
- * a calm, slightly warm white that lets the photos stand out, soft black for
- * text, dark espresso for buttons and the About page boxes.
- * All text colours meet the WCAG AA contrast minimum (4.5:1); the ratios
- * are noted next to each colour.
+ * The colours are written in oklch(lightness chroma hue), the same notation
+ * as the design file. The first number is brightness (0 = black, 1 = white),
+ * so related shades are easy to read and adjust.
+ * All text colours meet the WCAG AA contrast minimum (4.5:1).
  * ------------------------------------------------------------------------- */
 :root {
-  --bg: #faf8f4; /* page background: warm white */
-  --panel: #f1ece5; /* photo frames, contact panel, dropdown: warm off-white */
-  --line: #ddd5ca; /* dividers and input underlines */
-  --text: #1c1917; /* body text: soft black, 16.5:1 on --bg */
-  --muted: #6a5f57; /* secondary text: warm grey-brown, 5.8:1 on --bg, 5.3:1 on --panel */
-  --accent: #2e1f18; /* buttons, links on hover, focus: dark espresso, white text on it 15.8:1 */
-  --accent-dark: #4a3429; /* button hover: slightly lighter espresso, so the change is visible */
-  --dark: #2e1f18; /* About page boxes and photo frames: dark espresso (same as the buttons) */
+  --bg: oklch(0.955 0.012 85); /* page background: warm paper */
+  --panel: oklch(0.925 0.014 82); /* quiet bands (about, FAQ, packages) */
+  --surface: oklch(0.965 0.01 85); /* dropdown menus, cards on the page */
+  --text: oklch(0.28 0.012 60); /* headings and body: deep espresso */
+  --text-soft: oklch(0.36 0.012 60); /* longer body copy */
+  --muted: oklch(0.5 0.01 60); /* labels, captions, meta lines */
+  /* terracotta: eyebrows, links, details. Dark enough for small text on the
+   * beige bands too (about 5.4 : 1; the old 0.52 came to 4.4 : 1, under AA) */
+  --accent: oklch(0.47 0.06 48);
+  --dark: oklch(0.28 0.012 60); /* dark full-width bands and buttons */
+  --on-dark: oklch(0.95 0.012 85); /* text on dark bands */
+  --on-dark-soft: oklch(0.86 0.01 85); /* body text on dark bands */
+  --accent-on-dark: oklch(0.78 0.05 60); /* eyebrow on dark bands */
+  --line: oklch(0.28 0.012 60 / 0.12); /* hairlines between sections and cards */
+  --line-strong: oklch(0.28 0.012 60 / 0.25); /* form fields, stronger rules */
   --white: #ffffff;
-  --error: #9b3a2c;
-  --success: #4f6b4a;
+  --error: oklch(0.5 0.14 25);
+  --success: oklch(0.52 0.07 145);
 
   /* Font stacks: the first available font is used */
-  --font-serif: 'Playfair Display Variable', 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Newsreader Variable', 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Jost Variable', 'Jost', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
-  --max: 1400px; /* maximum content width */
-  /* clamp(min, preferred, max): grows with the screen width but stays in range */
-  --gutter: clamp(1rem, 4vw, 3rem);
+  /* Side padding of every section: 16px on phones, up to 40px on desktop */
+  --gutter: clamp(1rem, 3vw, 2.5rem);
+  /*
+   * Height of the sticky header. The header itself uses it as its minimum
+   * height, so pages can subtract it to fill exactly one screen
+   * (see the home page hero).
+   */
+  --header-h: 4.25rem;
+  /* How much of the text below a hero stays visible on the first screen */
+  --hero-peek: 8rem;
+  /* Vertical rhythm between sections: enough to separate, not to empty the page */
+  --section-y: clamp(1.75rem, 4vw, 4rem);
+
+  /*
+   * Spacing scale. Every gap in the site is one of these steps, so the
+   * distances stay related instead of being invented per component:
+   * 8/12/16/24 inside a block · 32/48 between blocks · 64 between sections.
+   */
+  --space-1: 0.5rem; /* 8px */
+  --space-2: 0.75rem; /* 12px */
+  --space-3: 1rem; /* 16px */
+  --space-4: 1.5rem; /* 24px */
+  --space-5: 2rem; /* 32px */
+  --space-6: 3rem; /* 48px */
+  --space-7: 4rem; /* 64px */
+
+  /*
+   * How wide a photograph may become. A photo next to text never grows past
+   * --photo-text; only heroes, grids and bands run the full width. Without
+   * this a portrait photo in a half-width column becomes 650 × 820 px.
+   */
+  --photo-text: 25rem; /* 400px, e.g. package and about portraits */
+  --photo-quote: 23.75rem; /* 380px, next to a review */
+
+  /*
+   * The width of a text column: about 65 characters of body text, the
+   * comfortable line length. A fixed rem value rather than "65ch": ch depends
+   * on the font, and a column laid out before the web font had loaded kept
+   * the fallback font's width (one review came out 70px narrower).
+   */
+  --measure: 40rem; /* 640px */
+  --max: 1600px; /* widest a .container ever gets */
+
+  /*
+   * The content never gets wider than --content; on bigger screens the
+   * sections keep their full-width background and pad the content inwards.
+   * --edge is that side padding: the normal gutter, or more on wide screens.
+   * (The % is resolved where --edge is used, against that element's width.)
+   */
+  --content: 90rem; /* 1440px */
+  --edge: max(var(--gutter), calc((100% - var(--content)) / 2));
+}
+
+/* On phones the header is a little taller, because the menu button is 44px high */
+@media (max-width: 820px) {
+  :root {
+    --header-h: 4.8125rem;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -87,11 +155,11 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  font-weight: 300;
-  font-size: 0.9375rem; /* 15px */
-  line-height: 1.85;
+  font-weight: 350; /* 300 rendered faint in the soft text colour */
+  font-size: clamp(0.9375rem, 1.3vw, 1.0625rem); /* 15px → 17px */
+  line-height: 1.8;
   -webkit-font-smoothing: antialiased;
-  /* Full-width elements (the film carousel) must never cause sideways page scrolling */
+  /* Full-width elements (the film carousel) must never cause sideways scrolling */
   overflow-x: clip;
 }
 
@@ -103,34 +171,60 @@ img {
 
 a {
   color: inherit;
-  text-decoration-color: var(--line);
-  text-underline-offset: 0.25em;
-  transition: color 0.2s, text-decoration-color 0.2s;
+  text-decoration: none;
+  transition: color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
 }
 
 a:hover {
   color: var(--accent);
 }
 
+/*
+ * Links inside running text (stories, intros, FAQ answers, guides) must look
+ * like links: accent colour and a thin underline. Links with their own class
+ * (buttons, "link-quiet", menu, cards) are styled elsewhere and not affected.
+ */
+main :is(p, li, dd, blockquote, figcaption) a:not([class]) {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in oklch, var(--accent) 45%, transparent);
+  transition: text-decoration-color 0.2s ease;
+}
+
+main :is(p, li, dd, blockquote, figcaption) a:not([class]):hover {
+  text-decoration-color: var(--accent);
+}
+
+/* On dark bands the accent is too dark: light text with a light underline */
+.band-dark :is(p, li, dd, blockquote, figcaption) a:not([class]) {
+  color: var(--on-dark);
+  text-decoration-color: color-mix(in oklch, var(--on-dark) 50%, transparent);
+}
+
+/* Display headings: light serif, tight line height, slightly negative tracking */
 h1,
 h2,
 h3 {
   font-family: var(--font-serif);
-  font-weight: 400;
-  line-height: 1.2;
-  margin: 0 0 0.6em;
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
 }
 
 h1 {
-  font-size: clamp(1.9rem, 3.6vw, 2.5rem);
+  font-size: clamp(2.25rem, 6vw, 5rem);
 }
 
 h2 {
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-size: clamp(1.75rem, 3.6vw, 3rem);
 }
 
 h3 {
-  font-size: 1.5rem;
+  font-weight: 300;
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
 }
 
 p {
@@ -139,7 +233,11 @@ p {
 
 strong,
 b {
-  font-weight: 600;
+  font-weight: 500;
+}
+
+em {
+  font-style: italic;
 }
 
 /* Visible outline when navigating with the keyboard (Tab key) */
@@ -150,9 +248,22 @@ b {
 
 /* ---------------------------------------------------------------------------
  * 4. LAYOUT HELPERS
+ *
+ * The design has no narrow centred column: sections run the full width of the
+ * window with a side gutter. `.section` provides that gutter plus vertical
+ * space; `.container` limits very wide screens; `.narrow` is for text pages.
  * ------------------------------------------------------------------------- */
+.section {
+  padding-inline: var(--edge);
+  padding-block: var(--section-y);
+}
 
-/* Centred content column with side padding */
+/* A section flush to the top (its heading follows the one above) */
+.section-tight {
+  padding-block: clamp(1.5rem, 3vw, 3rem);
+}
+
+/* Centred column with the same side gutter (used by the text pages) */
 .container {
   width: 100%;
   max-width: var(--max);
@@ -161,16 +272,39 @@ b {
 }
 
 .narrow {
-  max-width: 980px;
-}
-
-/* Vertical breathing room between page sections */
-.section {
-  padding-block: clamp(3rem, 7vw, 5.5rem);
+  max-width: 820px;
 }
 
 .center {
   text-align: center;
+}
+
+/* A quiet band in the warmer paper tone (about, FAQ, packages) */
+.band {
+  background: var(--panel);
+}
+
+/* A full-width espresso band with light text (film, divider, statements) */
+.band-dark {
+  background: var(--dark);
+  color: var(--on-dark);
+}
+
+.band-dark .eyebrow {
+  color: var(--accent-on-dark);
+}
+
+.band-dark a {
+  color: var(--on-dark);
+}
+
+/* Hairline between two sections */
+.rule-top {
+  border-top: 1px solid var(--line);
+}
+
+.rule-bottom {
+  border-bottom: 1px solid var(--line);
 }
 
 /* Hides content visually but keeps it for screen readers */
@@ -184,80 +318,137 @@ b {
 }
 
 /* ---------------------------------------------------------------------------
- * 5. TYPOGRAPHY PATTERNS FROM THE ORIGINAL SITE
+ * 5. TYPOGRAPHY PATTERNS
  * ------------------------------------------------------------------------- */
 
-/* Bold, widely spaced line: "CANDID SOULS × QUIET ELEGANCE" */
-.tagline {
+/* Small terracotta capitals above a heading: "BEHIND THE LENS" */
+.eyebrow {
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.8rem;
-  letter-spacing: 0.32em;
+  font-weight: 400;
+  font-size: 0.75rem; /* 11px */
+  letter-spacing: 0.2em;
+  line-height: 1.8;
   text-transform: uppercase;
-  text-align: center;
+  color: var(--accent);
+  margin: 0 0 1rem;
+}
+
+/* Grey capitals for captions and meta lines: "01 — THE WEDDING" */
+.meta {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.75rem; /* 10px */
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
   margin: 0;
 }
 
-/* Spaced serif capitals above a heading: "BEHIND THE LENS" */
-.eyebrow {
+/* The big light serif statement used for page titles and pull quotes */
+.display {
   font-family: var(--font-serif);
-  font-size: 0.95rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  margin: 0 0 1.2rem;
+  font-weight: 200;
+  font-size: clamp(2.5rem, 6.6vw, 5.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  margin: 0;
 }
 
-/* Spaced sans-serif capitals: "EVERY STORY DESERVES TO BE REMEMBERED BEAUTIFULLY" */
-.kicker {
+/*
+ * The title of a section: one size everywhere, so sections read as one system
+ * (used by src/components/SectionHead.astro and the FAQ heading).
+ */
+.section-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 200;
+  font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+/* Italic serif intro sentence under a title */
+.lede {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.15rem, 1.9vw, 1.45rem);
+  line-height: 1.45;
+  color: var(--text-soft);
+  margin: 0;
+}
+
+/* Body copy inside sections, a touch softer than headings */
+.body-text {
+  font-size: clamp(0.9375rem, 1.3vw, 1.0625rem);
+  line-height: 1.8;
+  font-weight: 350;
+  color: var(--text-soft);
+}
+
+/* The one H1 per page: the search phrase, kept visually quiet */
+.h1-quiet {
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 0.78rem;
-  letter-spacing: 0.24em;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  line-height: 1.8;
   text-transform: uppercase;
-  margin: 0 0 0.8rem;
+  color: var(--accent);
+  margin: 0 0 1rem;
 }
 
-/* Serif heading in capitals: "WHAT MY CLIENTS SAY" */
+/* Wide serif capitals used for the wordmark */
+.wordmark {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+/* Kept for older sections: quiet serif capitals */
 .caps-title {
   font-family: var(--font-serif);
+  font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
-/* Keyword H1 that sits calmly in the design (smaller than a normal H1) */
-.h1-quiet {
-  font-family: var(--font-serif);
-  font-size: clamp(1.15rem, 2vw, 1.4rem);
-  letter-spacing: 0.08em;
+.tagline {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin: 0 0 1.5rem;
+  color: var(--muted);
+  margin: 0;
 }
 
 /* ---------------------------------------------------------------------------
- * 6. BUTTONS, FRAMES, DIVIDERS
+ * 6. BUTTONS AND LINKS
  * ------------------------------------------------------------------------- */
 
-/* Espresso button: "REQUEST PRICING", "GET IN TOUCH" */
+/* Filled espresso button: "REQUEST PRICING", "SEND MESSAGE" */
 .button {
   display: inline-block;
-  padding: 1.05rem 1.8rem;
-  border: 0;
-  border-radius: 6px;
-  background: var(--accent);
-  color: var(--white);
+  padding: 1rem 2.25rem;
+  border: 1px solid var(--dark);
+  border-radius: 0; /* the design uses sharp corners */
+  background: var(--dark);
+  color: var(--bg);
   font: inherit;
   font-weight: 400;
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  text-decoration: none;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
 .button:hover {
-  background: var(--accent-dark);
-  color: var(--white);
+  background: transparent;
+  color: var(--text);
 }
 
 .button[disabled] {
@@ -265,15 +456,43 @@ b {
   cursor: wait;
 }
 
-/* Photo in a passe-partout frame, in the espresso colour of the buttons */
-.frame {
-  background: var(--dark);
-  padding: clamp(1.25rem, 4vw, 3rem) clamp(1.25rem, 5vw, 3.75rem);
+/* Outlined button: same size, lighter presence */
+.button-ghost {
+  display: inline-block;
+  padding: 1rem 2.25rem;
+  border: 1px solid var(--text);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
-.frame img {
-  width: 100%;
-  height: auto;
+.button-ghost:hover {
+  background: var(--dark);
+  color: var(--bg);
+}
+
+/* Small underlined text link: "VIEW GALLERIES", "ABOUT" */
+.link-quiet {
+  display: inline-block;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--line-strong);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.link-quiet:hover {
+  border-color: var(--accent);
+}
+
+.band-dark .link-quiet {
+  border-color: oklch(0.95 0.012 85 / 0.4);
 }
 
 .divider {
@@ -283,17 +502,42 @@ b {
 }
 
 /* ---------------------------------------------------------------------------
- * 7. LONG TEXT PAGES (imprint, privacy)
+ * 7. SCROLL REVEAL
+ *
+ * Elements marked with data-reveal fade up once when they scroll into view.
+ * src/layouts/Base.astro adds data-revealed="1" via IntersectionObserver;
+ * without JavaScript (or with "reduce motion") everything stays visible.
  * ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal]:not([data-revealed]) {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  html.js [data-reveal] {
+    transition: opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 8. LONG TEXT PAGES (imprint, privacy)
+ * ------------------------------------------------------------------------- */
+.prose {
+  font-size: 0.9375rem;
+}
+
 .prose h1 {
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 1rem;
 }
 
 .prose h2 {
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 300;
   margin-top: 2.5rem;
 }
+
+
 
 .prose ul {
   padding-left: 1.2rem;

@@ -4,7 +4,7 @@
  * FOOTER  (src/components/Footer.astro)
  * ============================================================================
  *
- * Logo, menu links (like the original site), social media, legal links.
+ * Four columns, as in the design: wordmark · pages · galleries · contact.
  *
  * SEO note: the footer appears on every page, so its links to the main
  * sections (packages, galleries) help search engines find and weigh them.
@@ -13,121 +13,112 @@
  * Pinterest until a visitor clicks, so no cookie banner is needed.
  * ============================================================================
  */
-import { getCollection } from 'astro:content';
 import { site } from '../site.config';
-import { getCategories } from '../lib/galleries';
+import { getCategories, categoryText, hrefIn } from '../lib/galleries';
+import { getPackagesPages } from '../lib/packages';
+import { getJournalArticles } from '../lib/journal';
+import { langOf, routes, useUi } from '../i18n';
 
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
 const categories = await getCategories({ onlyWithGalleries: true });
-const packagesPages = (await getCollection('packages')).sort((a, b) => a.data.order - b.data.order);
+const packagesPages = await getPackagesPages();
+const hasJournal = (await getJournalArticles(lang)).length > 0;
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
-  <div class="container inner">
-    <a href="/" class="logo">{site.name}</a>
-    <p class="tagline small">{site.tagline}</p>
+  <div class="brand">
+    <a href={routes.home[lang]} class="logo wordmark">{site.name}</a>
+    <p class="tagline">{site.tagline}</p>
+  </div>
 
-    <nav aria-label="Footer" class="columns">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/about/">About</a></li>
-        <li><a href="/testimonials/">Testimonials</a></li>
-        <li><a href="/contact/">Contact</a></li>
-      </ul>
-      <ul>
-        {packagesPages.map((p) => <li><a href={`/${p.id}/`}>{p.data.menuLabel}</a></li>)}
-      </ul>
-      <ul>
-        {categories.map((c) => <li><a href={c.href}>{c.data.menuLabel}</a></li>)}
-      </ul>
-    </nav>
+  <nav aria-label="Footer" class="column">
+    <a href={routes.home[lang]}>{t.home}</a>
+    <a href={routes.about[lang]}>{t.about}</a>
+    {packagesPages.map((p) => <a href={lang === 'de' ? p.hrefDe : p.href}>{p.label[lang]}</a>)}
+    {hasJournal && <a href={routes.journal[lang]}>{t.journal}</a>}
+  </nav>
 
-    <ul class="social">
-      <li><a href={site.social.instagram} rel="noopener noreferrer" target="_blank">Instagram</a></li>
-      <li><a href={site.social.tiktok} rel="noopener noreferrer" target="_blank">TikTok</a></li>
-      <li><a href={site.social.pinterest} rel="noopener noreferrer" target="_blank">Pinterest</a></li>
-      <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-    </ul>
+  <nav aria-label={t.galleries} class="column">
+    {categories.map((c) => <a href={hrefIn(c, lang)}>{categoryText(c, lang).menuLabel}</a>)}
+  </nav>
 
-    <ul class="legal">
-      <li><a href="/imprint/">Imprint</a></li>
-      <li><a href="/privacy/">Privacy Policy</a></li>
-      <li>© {year} {site.name} · Wedding &amp; elopement photographer in Vienna and the Dolomites</li>
-    </ul>
+  <div class="column">
+    <a href={routes.testimonials[lang]}>{t.testimonials}</a>
+    <a href={routes.contact[lang]}>{t.contact}</a>
+    <a href={`mailto:${site.email}`}>{site.email}</a>
+    <a href={site.social.instagram} rel="noopener noreferrer" target="_blank">Instagram</a>
+    <a href={site.social.tiktok} rel="noopener noreferrer" target="_blank">TikTok</a>
+    <a href={site.social.pinterest} rel="noopener noreferrer" target="_blank">Pinterest</a>
+  </div>
+
+  <div class="legal">
+    <a href={routes.imprint[lang]}>{t.imprint}</a>
+    <a href={routes.privacy[lang]}>{t.privacy}</a>
+    <span>© {year} {site.name} · {t.footerLine}</span>
   </div>
 </footer>
 
 <style>
   .footer {
-    margin-top: clamp(3rem, 8vw, 6rem);
+    display: grid;
+    /* Four equal columns, so the links reach the right edge of the page */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+    margin-top: clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(1.5rem, 3vw, 2.5rem) var(--edge);
     border-top: 1px solid var(--line);
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--muted);
   }
 
-  .inner {
+  .brand {
     display: grid;
-    justify-items: center;
-    gap: 1.6rem;
-    padding-block: 3.5rem 2.5rem;
-    text-align: center;
-  }
-
-  .logo {
-    font-family: var(--font-serif);
-    font-size: 1.3rem;
-    text-transform: uppercase;
-    text-decoration: none;
-  }
-
-  .small {
-    font-size: 0.68rem;
-  }
-
-  .columns {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem 4rem;
-    padding-block: 0.5rem;
-  }
-
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .columns ul {
-    display: grid;
-    gap: 0.35rem;
+    gap: 0.75rem;
     align-content: start;
   }
 
-  .columns a {
+  .logo {
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .tagline {
     font-size: 0.75rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    text-decoration: none;
+    letter-spacing: 0.18em;
   }
 
-  .social {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.4rem 2rem;
-    font-size: 0.85rem;
+  .column {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
   }
 
-  .social a,
-  .legal a {
-    text-decoration: none;
+  /* Phones and tablets: two columns, then one */
+  @media (max-width: 900px) {
+    .footer {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
+  @media (max-width: 520px) {
+    .footer {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* The last row: legal links and copyright, across the full width */
   .legal {
+    grid-column: 1 / -1;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.4rem 1.6rem;
-    color: var(--muted);
-    font-size: 0.72rem;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+    margin-top: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.75rem;
   }
 </style>

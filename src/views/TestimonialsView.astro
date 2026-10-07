@@ -1,0 +1,294 @@
+---
+/**
+ * ============================================================================
+ * TESTIMONIALS  (src/views/TestimonialsView.astro)
+ * Used by src/pages/testimonials.astro (/testimonials/) and
+ * src/pages/de/erfahrungen.astro (/de/erfahrungen/). The reviews stay in
+ * their original English on both (marked lang="en"): a real couple's own
+ * words are worth more than a translation.
+ * ============================================================================
+ *
+ * Every Markdown file in src/content/testimonials/ becomes one review.
+ * Layout from the v3 design: wide rows that alternate sides,
+ *
+ *   ┌───────────┐  "Quote text …"          "Quote text …"   ┌───────────┐
+ *   │   photo   │                                           │   photo   │
+ *   └───────────┘  ANNIE & HUONG — …       EMILY & NOLAN …  └───────────┘
+ *
+ * with a full-width photo ("Where emotion becomes art") after the second review,
+ * the words centred over it as on the original site.
+ *
+ * Add or edit reviews most easily with the gallery manager (npm run manage),
+ * or copy annie-and-huong.md and change names, photo and text.
+ * A review linked to a gallery shows a "View their gallery" link.
+ * ============================================================================
+ */
+import { Image, Picture } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { breadcrumbSchema } from '../lib/seo';
+import { getTestimonials } from '../lib/testimonials';
+import { hrefIn } from '../lib/galleries';
+import { site } from '../site.config';
+import { langOf, pick, routes, useUi } from '../i18n';
+import dividerPhoto from '../assets/testimonials/where-emotion-becomes-art.jpg';
+
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
+const copy = pick(lang, {
+  en: {
+    title: 'Kind Words from Wedding & Elopement Couples',
+    description:
+      'Reviews from couples who booked Gemy Campei for their wedding, elopement, proposal or couple session, in Europe and beyond.',
+    display: ['What my clients ', 'say'],
+    blurb: 'Words from the couples I have photographed, in Europe and far beyond.',
+    dividerAlt: 'Couple lying in the grass, heads together, eyes closed',
+    divider: 'Where emotion becomes art',
+    viewGallery: 'View their gallery',
+  },
+  de: {
+    title: 'Erfahrungen von Hochzeits- & Elopement-Paaren',
+    description:
+      'Bewertungen von Paaren, die Gemy Campei für Hochzeit, Elopement, Heiratsantrag oder Paarshooting gebucht haben, in Europa und darüber hinaus.',
+    display: ['Was meine Paare ', 'sagen'],
+    blurb: 'Worte der Paare, die ich fotografieren durfte, in ihrer Originalsprache.',
+    dividerAlt: 'Paar liegt im Gras, die Köpfe aneinander, die Augen geschlossen',
+    divider: 'Wo Gefühl zu Kunst wird',
+    viewGallery: 'Zu ihrer Galerie',
+  },
+});
+
+/** The espresso band appears after this many reviews */
+const DIVIDER_AFTER = 2;
+
+// Reviews in page order, with their photo and linked gallery (see src/lib/testimonials.ts)
+const reviews = await getTestimonials();
+
+// render() turns each Markdown body into a component. Promise.all waits for all of them.
+const testimonials = await Promise.all(
+  reviews.map(async (review) => ({ review, Content: (await render(review.entry)).Content })),
+);
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  ogImage={reviews[0]?.image}
+  schema={[
+    breadcrumbSchema([
+      { name: t.breadcrumbHome, path: routes.home[lang] },
+      { name: t.testimonials, path: routes.testimonials[lang] },
+    ]),
+  ]}
+  alternates={{ en: routes.testimonials.en, de: routes.testimonials.de }}
+>
+  <section class="head">
+    <div>
+      <h1 class="h1-quiet">{t.testimonials}</h1>
+      <p class="display head-title">{copy.display[0]}<em>{copy.display[1]}</em></p>
+    </div>
+    <p class="lede head-blurb">{copy.blurb}</p>
+  </section>
+
+  <div class="list">
+    {
+      testimonials.map(({ review, Content }, i) => (
+        <>
+          {i === DIVIDER_AFTER && (
+            <section class="divider-photo">
+              <Picture
+                src={dividerPhoto}
+                formats={['avif', 'webp']}
+                widths={[640, 960, 1280, 1920, 2400]}
+                sizes="100vw"
+                quality={65}
+                alt={copy.dividerAlt}
+                class="divider-image"
+              />
+              <h2 class="divider-title">{copy.divider}</h2>
+            </section>
+          )}
+
+          <figure id={review.entry.id} class:list={['review', 'section', { reverse: i % 2 === 1 }]} data-reveal>
+            <Image
+              src={review.image}
+              alt={`${review.names}, ${t.photographedBy} ${site.name}`}
+              widths={[480, 800, 1000]}
+              sizes="(max-width: 800px) 92vw, 44vw"
+              class="review-photo"
+            />
+            <div class="review-text">
+              <blockquote class="quote" lang="en">
+                <Content />
+              </blockquote>
+              <figcaption class="meta">
+                {review.names}
+                {review.gallery && (
+                  <>
+                    {' — '}
+                    <a class="gallery-link" href={hrefIn(review.gallery, lang)}>
+                      {copy.viewGallery}
+                    </a>
+                  </>
+                )}
+              </figcaption>
+            </div>
+          </figure>
+        </>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  /* Title left, one line right: both ends of the row are anchored */
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(2.25rem, 6vw, 5.75rem) var(--edge) clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .head-blurb {
+    max-width: 34ch;
+  }
+
+  .head-title {
+    font-size: clamp(2.25rem, 6.4vw, 5.375rem);
+  }
+
+  /* ── One review ────────────────────────────────────────────────────────── */
+  /*
+   * The photo is capped at --photo-quote and the quote takes the rest.
+   * Equal halves made the photo 650 px wide and over 800 px tall.
+   */
+  /*
+   * Every row is exactly photo + gap + a 65-character text column, centred on
+   * the page. With a flexible text column the gap changed with the side the
+   * photo was on: text on the left sat at the far end of its wide column,
+   * hundreds of pixels away from the photo.
+   */
+  .review {
+    /*
+     * A fixed text column (--measure, about 65 characters), or less on
+     * screens too narrow for that. A flexible column let the browser size it from each review's own
+     * text, so rows came out at different widths.
+     */
+    --text-column: min(var(--measure), 100% - var(--photo-quote) - var(--space-6));
+    display: grid;
+    grid-template-columns: var(--photo-quote) var(--text-column);
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-6);
+    margin: 0;
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--line);
+  }
+
+  .review.reverse {
+    grid-template-columns: var(--text-column) var(--photo-quote);
+  }
+
+  /* Every second review shows the photo on the right */
+  .review.reverse :global(.review-photo) {
+    order: 2;
+  }
+
+  .review :global(.review-photo) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .review-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-width: var(--measure);
+  }
+
+  .quote {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: 200;
+    font-size: clamp(1.0625rem, 1.8vw, 1.375rem);
+    line-height: 1.55;
+  }
+
+  .quote :global(p) {
+    margin: 0;
+  }
+
+  /* Longer reviews with several paragraphs get a little space between them */
+  .quote :global(p + p) {
+    margin-top: 0.75em;
+  }
+
+  /* Quotation marks around the whole review */
+  .quote :global(p:first-child)::before {
+    content: '\201C';
+  }
+
+  .quote :global(p:last-child)::after {
+    content: '\201D';
+  }
+
+  .gallery-link {
+    color: var(--accent);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  /* ── Full-width photo between the reviews ──────────────────────────────── */
+  .divider-photo {
+    position: relative;
+    height: clamp(20rem, 45vw, 34rem);
+    margin-block: var(--space-6);
+    overflow: hidden;
+  }
+
+  .divider-photo :global(picture),
+  .divider-photo :global(.divider-image) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* A light veil keeps the white words readable on bright parts of the photo */
+  .divider-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 0.28);
+  }
+
+  .divider-title {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding-inline: var(--edge);
+    font-style: italic;
+    font-size: clamp(2.5rem, 7vw, 6rem);
+    line-height: 1.05;
+    text-align: center;
+    color: var(--white);
+  }
+
+  @media (max-width: 800px) {
+    /* On phones the photo always comes first, at its own size */
+    .review,
+    .review.reverse {
+      grid-template-columns: 1fr;
+    }
+
+    .review.reverse :global(.review-photo) {
+      order: 0;
+    }
+  }
+</style>

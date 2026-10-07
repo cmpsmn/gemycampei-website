@@ -15,6 +15,9 @@
 import type {
   AppState,
   Changes,
+  DocDetail,
+  DocPayload,
+  DocSummary,
   GalleryDetail,
   GalleryForm,
   Testimonial,
@@ -56,7 +59,7 @@ async function request<T>(method: string, url: string, body?: unknown): Promise<
 export const api = {
   state: () => request<AppState>('GET', '/api/state'),
 
-  // Galleries (an id looks like "weddings/palais-daun-kinsky-wedding-vienna")
+  // Galleries (an id looks like "vienna-wedding-photographer/palais-daun-kinsky-wedding-vienna")
   gallery: (id: string) => request<GalleryDetail>('GET', `/api/galleries/${id}`),
   createGallery: (data: { category: string; title: string; type?: string; couple?: string; place?: string }) =>
     request<{ id: string }>('POST', '/api/galleries', data),
@@ -70,8 +73,14 @@ export const api = {
     request<{ renamed: Record<string, string> }>('POST', `/api/galleries/${id}/photos/order`, { names }),
   deletePhotos: (id: string, names: string[]) =>
     request<{ trashEntry: string }>('POST', `/api/galleries/${id}/photos/delete`, { names }),
+  /** A preview image for a video, saved in the gallery's posters/ folder */
+  uploadPoster: (id: string, file: File) =>
+    request<{ name: string }>('PUT', `/api/galleries/${id}/posters?name=${encodeURIComponent(file.name)}`, file),
   movePhotos: (id: string, names: string[], to: string) =>
     request<{ moved: Record<string, string> }>('POST', `/api/galleries/${id}/photos/move`, { names, to }),
+  /** Saves the description (alt text) of one photo in both languages (photos.yaml) */
+  savePhotoAlt: (id: string, name: string, alt: { en: string; de: string }) =>
+    request<{ ok: true }>('POST', `/api/galleries/${id}/photos/alt`, { name, alt }),
 
   // Gallery order on a category page
   saveOrder: (category: string, ids: string[]) => request<{ ok: true }>('PUT', `/api/categories/${category}/order`, { ids }),
@@ -84,6 +93,16 @@ export const api = {
   uploadTestimonialImage: (id: string, file: File) => request<Testimonial>('PUT', `/api/testimonials/${id}/image`, file),
   deleteTestimonial: (id: string) => request<{ trashEntry: string }>('DELETE', `/api/testimonials/${id}`),
   reorderTestimonials: (ids: string[]) => request<{ ok: true }>('POST', '/api/testimonials/order', { ids }),
+
+  // Other texts (kind: category, packages, journal, page, settings)
+  docs: (kind: string) => request<DocSummary[]>('GET', `/api/docs/${kind}`),
+  doc: (kind: string, id: string) => request<DocDetail>('GET', `/api/docs/${kind}/${id}`),
+  saveDoc: (kind: string, id: string, payload: DocPayload) => request<DocDetail>('PUT', `/api/docs/${kind}/${id}`, payload),
+  /** Replaces (or adds) a photo next to the text file, e.g. a package photo */
+  uploadDocImage: (kind: string, id: string, name: string, file: File) =>
+    request<{ name: string; path: string }>('PUT', `/api/docs/${kind}/${id}/file?name=${encodeURIComponent(name)}`, file),
+  createJournalEntry: (title: string, cover: string) => request<{ id: string }>('POST', '/api/docs/journal', { title, cover }),
+  deleteJournalEntry: (id: string) => request<{ trashEntry: string }>('DELETE', `/api/docs/journal/${id}`),
 
   // Trash
   trash: () => request<TrashEntry[]>('GET', '/api/trash'),
@@ -98,7 +117,7 @@ export const api = {
 
 /**
  * URL of a small version of a photo (created and cached by the server).
- * @param path project-relative, e.g. "galleries/weddings/x/x-001.jpg"
+ * @param path project-relative, e.g. "galleries/vienna-wedding-photographer/x/x-001.jpg"
  * @param width 160, 400, 800 or 1400
  * @param version changes when the file changes, so the browser reloads it
  */

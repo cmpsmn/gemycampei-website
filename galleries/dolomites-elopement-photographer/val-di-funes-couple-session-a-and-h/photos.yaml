@@ -1,0 +1,111 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+val-di-funes-couple-session-a-and-h-001.jpg:
+  en: "He carries her in his arms above Val di Funes, the Odle peaks in the haze"
+  de: "Er trägt sie auf den Armen über dem Villnößtal, die Geislerspitzen im Dunst"
+val-di-funes-couple-session-a-and-h-002.jpg:
+  en: "Couple lying in the grass reaching their joined hands up to the Odle peaks"
+  de: "Paar liegt im Gras und streckt die verbundenen Hände zu den Geislerspitzen"
+val-di-funes-couple-session-a-and-h-003.jpg:
+  en: "Couple seen from behind looking over the green hills of Val di Funes"
+  de: "Paar von hinten mit Blick über die grünen Hügel des Villnößtals"
+val-di-funes-couple-session-a-and-h-004.jpg:
+  en: "Couple dancing in front of St. John's Chapel in Ranui"
+  de: "Paar tanzt vor der Kapelle St. Johann in Ranui"
+val-di-funes-couple-session-a-and-h-005.jpg:
+  en: "Couple embracing above the valley with the Odle peaks behind"
+  de: "Paar umarmt sich über dem Tal, dahinter die Geislerspitzen"
+val-di-funes-couple-session-a-and-h-006.jpg:
+  en: "Couple forehead to forehead in the meadows of Val di Funes"
+  de: "Paar Stirn an Stirn auf den Wiesen des Villnößtals"
+val-di-funes-couple-session-a-and-h-007.jpg:
+  en: "Couple holding hands above Santa Maddalena village and the Odle peaks"
+  de: "Paar hält sich an den Händen über dem Dorf St. Magdalena und den Geislerspitzen"
+val-di-funes-couple-session-a-and-h-008.jpg:
+  en: "Hand holding a small bunch of wild yarrow against the valley"
+  de: "Hand hält einen kleinen Strauß wilder Schafgarbe vor dem Tal"
+val-di-funes-couple-session-a-and-h-009.jpg:
+  en: "Val di Funes with the village of Santa Maddalena below the Odle peaks"
+  de: "Das Villnößtal mit dem Dorf St. Magdalena unter den Geislerspitzen"
+val-di-funes-couple-session-a-and-h-010.jpg:
+  en: "Black and white photo of the couple walking hand in hand along a fence"
+  de: "Schwarz-Weiß-Foto: Das Paar geht Hand in Hand an einem Zaun entlang"
+val-di-funes-couple-session-a-and-h-011.jpg:
+  en: "Black and white photo of the couple embracing with the Odle peaks behind"
+  de: "Schwarz-Weiß-Foto: Das Paar umarmt sich vor den Geislerspitzen"
+val-di-funes-couple-session-a-and-h-012.jpg:
+  en: "Couple smiling at each other in a sunlit meadow"
+  de: "Paar lächelt sich auf einer sonnigen Wiese an"
+val-di-funes-couple-session-a-and-h-013.jpg:
+  en: "He offers her a small bunch of wildflowers with the Odle peaks behind"
+  de: "Er reicht ihr einen kleinen Wildblumenstrauß vor den Geislerspitzen"
+val-di-funes-couple-session-a-and-h-014.jpg:
+  en: "Couple sitting in the grass, laughing, on a hillside in Val di Funes"
+  de: "Paar sitzt lachend im Gras an einem Hang im Villnößtal"
+val-di-funes-couple-session-a-and-h-015.jpg:
+  en: "Couple resting in the grass looking over Val di Funes"
+  de: "Paar ruht im Gras mit Blick über das Villnößtal"
+val-di-funes-couple-session-a-and-h-016.jpg:
+  en: "Couple walking along the path to St. John's Chapel in Ranui"
+  de: "Paar geht den Weg zur Kapelle St. Johann in Ranui entlang"
+val-di-funes-couple-session-a-and-h-017.jpg:
+  en: "He gently touches her nose as the sun sets over the hills"
+  de: "Er berührt sanft ihre Nase, während die Sonne über den Hügeln untergeht"
+val-di-funes-couple-session-a-and-h-018.jpg:
+  en: "Couple hugging tightly against a blue sky"
+  de: "Paar umarmt sich fest vor blauem Himmel"
+val-di-funes-couple-session-a-and-h-019.jpg:
+  en: "Couple walking up the steps to St. John's Chapel in Ranui"
+  de: "Paar geht die Stufen zur Kapelle St. Johann in Ranui hinauf"
+val-di-funes-couple-session-a-and-h-020.jpg:
+  en: "Couple sitting in the painted doorway of St. John's Chapel in Ranui"
+  de: "Paar sitzt im bemalten Eingang der Kapelle St. Johann in Ranui"
+val-di-funes-couple-session-a-and-h-021.jpg:
+  en: "Couple laughing in a green field with farmhouses on the hill"
+  de: "Paar lacht auf einer grünen Wiese, Bauernhöfe am Hang"
+val-di-funes-couple-session-a-and-h-022.jpg:
+  en: "She sits on his lap in the tall grass, both smiling"
+  de: "Sie sitzt im hohen Gras auf seinem Schoß, beide lächeln"
+val-di-funes-couple-session-a-and-h-023.jpg:
+  en: "St. John's Chapel in Ranui with its onion dome below the Odle peaks"
+  de: "Die Kapelle St. Johann in Ranui mit Zwiebelturm unter den Geislerspitzen"
+val-di-funes-couple-session-a-and-h-024.jpg:
+  en: "She hugs him with a bunch of wildflowers against the blue sky"
+  de: "Sie umarmt ihn mit einem Wildblumenstrauß vor blauem Himmel"
+val-di-funes-couple-session-a-and-h-025.jpg:
+  en: "Couple kissing in front of St. John's Chapel in Ranui"
+  de: "Paar küsst sich vor der Kapelle St. Johann in Ranui"
+val-di-funes-couple-session-a-and-h-026.jpg:
+  en: "Black and white photo of the couple walking to St. John's Chapel"
+  de: "Schwarz-Weiß-Foto: Das Paar geht zur Kapelle St. Johann"
+val-di-funes-couple-session-a-and-h-027.jpg:
+  en: "He twirls her in her white dress in a meadow"
+  de: "Er dreht sie im weißen Kleid auf einer Wiese"
+val-di-funes-couple-session-a-and-h-028.jpg:
+  en: "Black and white photo of the chapel framed between the couple"
+  de: "Schwarz-Weiß-Foto: Die Kapelle zwischen den Silhouetten des Paares"
+val-di-funes-couple-session-a-and-h-029.jpg:
+  en: "Close-up of his arms wrapped around her waist, her hands on his"
+  de: "Nahaufnahme seiner Arme um ihre Taille, ihre Hände auf seinen"
+val-di-funes-couple-session-a-and-h-030.jpg:
+  en: "Black and white detail of the couple holding each other in the grass"
+  de: "Schwarz-Weiß-Detail des Paares, das sich im Gras hält"
+val-di-funes-couple-session-a-and-h-031.jpg:
+  en: "Couple running playfully with arms spread along a meadow path"
+  de: "Paar läuft ausgelassen mit ausgebreiteten Armen einen Wiesenweg entlang"
+val-di-funes-couple-session-a-and-h-032.jpg:
+  en: "Couple holding hands above the valley and the Odle peaks"
+  de: "Paar hält sich über dem Tal und den Geislerspitzen an den Händen"
+val-di-funes-couple-session-a-and-h-033.jpg:
+  en: "Couple walking through the meadow near St. John's Chapel in Ranui"
+  de: "Paar geht über die Wiese nahe der Kapelle St. Johann in Ranui"
+val-di-funes-couple-session-a-and-h-034.jpg:
+  en: "Couple kissing in front of the painted facade of St. John's Chapel"
+  de: "Paar küsst sich vor der bemalten Fassade der Kapelle St. Johann"
+val-di-funes-couple-session-a-and-h-035.jpg:
+  en: "He brushes her hair from her face near the chapel"
+  de: "Er streicht ihr nahe der Kapelle eine Strähne aus dem Gesicht"

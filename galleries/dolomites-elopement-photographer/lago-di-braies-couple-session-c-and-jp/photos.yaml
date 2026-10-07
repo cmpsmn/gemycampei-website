@@ -1,0 +1,102 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+lago-di-braies-couple-session-c-and-jp-001.jpg:
+  en: Couple in a wooden rowing boat on Lago di Braies with the sun over the peaks
+  de: Paar in einem Holzruderboot auf dem Pragser Wildsee, die Sonne über den Gipfeln
+lago-di-braies-couple-session-c-and-jp-002.jpg:
+  en: Couple walking hand in hand along the shore of Lago di Braies, snowy mountains mirrored
+  de: Paar geht Hand in Hand am Ufer des Pragser Wildsees, die verschneiten Berge spiegeln sich
+lago-di-braies-couple-session-c-and-jp-003.jpg:
+  en: Couple at the door of the little stone chapel at Lago di Braies in autumn
+  de: Paar an der Tür der kleinen Steinkapelle am Pragser Wildsee im Herbst
+lago-di-braies-couple-session-c-and-jp-004.jpg:
+  en: Couple smiling at each other under a veil
+  de: Paar lächelt sich unter einem Schleier an
+lago-di-braies-couple-session-c-and-jp-005.jpg:
+  en: Couple in the foreground with the historic Hotel Lago di Braies behind
+  de: Paar im Vordergrund, dahinter das historische Hotel Pragser Wildsee
+lago-di-braies-couple-session-c-and-jp-006.jpg:
+  en: Black and white photo of the couple by the lake, mountains reflected in the water
+  de: Schwarz-Weiß-Foto des Paares am See, die Berge spiegeln sich im Wasser
+lago-di-braies-couple-session-c-and-jp-007.jpg:
+  en: Black and white photo of the couple walking hand in hand to the lake chapel
+  de: "Schwarz-Weiß-Foto: Das Paar geht Hand in Hand zur Seekapelle"
+lago-di-braies-couple-session-c-and-jp-008.jpg:
+  en: Close-up of the couple holding hands, the lake blurred behind them
+  de: Nahaufnahme der Hände des Paares, dahinter unscharf der See
+lago-di-braies-couple-session-c-and-jp-009.jpg:
+  en: He puts a ring on her finger by the lake, golden larches behind
+  de: Er steckt ihr am See einen Ring an, dahinter goldene Lärchen
+lago-di-braies-couple-session-c-and-jp-010.jpg:
+  en: Couple in a veil and suit sitting in a rowing boat on Lago di Braies
+  de: Paar mit Schleier und Anzug sitzt in einem Ruderboot auf dem Pragser Wildsee
+lago-di-braies-couple-session-c-and-jp-012.jpg:
+  en: Couple embracing in a rowing boat on Lago di Braies below the Seekofel
+  de: Paar umarmt sich in einem Ruderboot auf dem Pragser Wildsee unter dem Seekofel
+lago-di-braies-couple-session-c-and-jp-013.jpg:
+  en: Black and white portrait of the couple in the rowing boat
+  de: Schwarz-Weiß-Porträt des Paares im Ruderboot
+lago-di-braies-couple-session-c-and-jp-014.jpg:
+  en: Black and white photo of the couple rowing across the lake
+  de: "Schwarz-Weiß-Foto: Das Paar rudert über den See"
+lago-di-braies-couple-session-c-and-jp-015.jpg:
+  en: Couple laughing in a rowing boat among golden autumn larches
+  de: Paar lacht in einem Ruderboot zwischen goldenen Herbstlärchen
+lago-di-braies-couple-session-c-and-jp-016.jpg:
+  en: Couple hugging and laughing by the lake in autumn light
+  de: Paar umarmt sich lachend am See im Herbstlicht
+lago-di-braies-couple-session-c-and-jp-017.jpg:
+  en: Black and white detail of her white calla bouquet with ribbons
+  de: Schwarz-Weiß-Detail ihres weißen Callastraußes mit Bändern
+lago-di-braies-couple-session-c-and-jp-018.jpg:
+  en: Black and white detail of his suit and her long veil
+  de: Schwarz-Weiß-Detail seines Anzugs und ihres langen Schleiers
+lago-di-braies-couple-session-c-and-jp-019.jpg:
+  en: Couple standing in a boat on the mirror-still lake, snowy peaks above
+  de: Paar steht in einem Boot auf dem spiegelglatten See, darüber verschneite Gipfel
+lago-di-braies-couple-session-c-and-jp-020.jpg:
+  en: Couple embracing by the lake, dramatic rock walls behind
+  de: Paar umarmt sich am See, dahinter mächtige Felswände
+lago-di-braies-couple-session-c-and-jp-021.jpg:
+  en: Her hand on his shoulder at the boathouse, larches glowing behind
+  de: Ihre Hand auf seiner Schulter am Bootshaus, dahinter leuchtende Lärchen
+lago-di-braies-couple-session-c-and-jp-022.jpg:
+  en: Black and white photo of the couple walking down the jetty past the wooden boats
+  de: "Schwarz-Weiß-Foto: Das Paar geht den Steg an den Holzbooten entlang"
+lago-di-braies-couple-session-c-and-jp-023.jpg:
+  en: Couple face to face on the lake shore below snowy mountains
+  de: Paar Gesicht an Gesicht am Seeufer unter verschneiten Bergen
+lago-di-braies-couple-session-c-and-jp-024.jpg:
+  en: He gives her a ring in the rowing boat on the lake
+  de: Er überreicht ihr im Ruderboot auf dem See einen Ring
+lago-di-braies-couple-session-c-and-jp-025.jpg:
+  en: Black and white photo of the couple embracing by the lake
+  de: "Schwarz-Weiß-Foto: Das Paar umarmt sich am See"
+lago-di-braies-couple-session-c-and-jp-026.jpg:
+  en: Close-up of their hands with the wedding ring and bracelets
+  de: Nahaufnahme ihrer Hände mit Ehering und Armbändern
+lago-di-braies-couple-session-c-and-jp-027.jpg:
+  en: Couple embracing against golden larches and snowy peaks
+  de: Paar umarmt sich vor goldenen Lärchen und verschneiten Gipfeln
+lago-di-braies-couple-session-c-and-jp-028.jpg:
+  en: Lago di Braies with its wooden boats and snow-dusted peaks reflected in autumn
+  de: Der Pragser Wildsee mit Holzbooten und gespiegelten, angezuckerten Gipfeln im Herbst
+lago-di-braies-couple-session-c-and-jp-029.jpg:
+  en: Black and white photo of the smiling couple in the boat
+  de: Schwarz-Weiß-Foto des lächelnden Paares im Boot
+lago-di-braies-couple-session-c-and-jp-030.jpg:
+  en: Couple in front of the little stone chapel at Lago di Braies
+  de: Paar vor der kleinen Steinkapelle am Pragser Wildsee
+lago-di-braies-couple-session-c-and-jp-031.jpg:
+  en: Couple kissing on the shore of the lake
+  de: Paar küsst sich am Seeufer
+lago-di-braies-couple-session-c-and-jp-032.jpg:
+  en: Her hand with an engagement ring on his dark suit, under the veil
+  de: Ihre Hand mit Verlobungsring auf seinem dunklen Anzug, unter dem Schleier
+lago-di-braies-couple-session-c-and-jp-033.jpg:
+  en: Couple on the jetty overlooking the wooden boats and autumn larches of Lago di Braies
+  de: Paar auf dem Steg mit Blick auf Holzboote und Herbstlärchen am Pragser Wildsee

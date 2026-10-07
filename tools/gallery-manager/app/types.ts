@@ -15,6 +15,8 @@ export interface Category {
   label: string;
   singular: string;
   display: Display;
+  /** slider / carousel: the galleries also get their own pages */
+  galleryPages: boolean;
   region: string;
   menuOrder: number;
   /** "<category>/<slug>" ids in page order */
@@ -32,6 +34,8 @@ export interface GallerySummary {
   photoCount: number;
   coverPhoto: string;
   coverVersion: number;
+  /** Vimeo videos (Super 8 galleries) */
+  videoCount: number;
   categories: string[];
 }
 
@@ -42,6 +46,27 @@ export interface Photo {
   size: number;
   /** changes when the file changes (used to refresh thumbnails) */
   version: number;
+  /** Description (alt text) from photos.yaml, empty when missing */
+  alt: { en: string; de: string };
+}
+
+/** German texts of a gallery (gallery.de.md); empty strings = not translated */
+export interface GermanTexts {
+  title: string;
+  type: string;
+  location: string;
+  seoTitle: string;
+  seoDescription: string;
+  story: string;
+  /** German video titles, same order as `videos` */
+  videoTitles: string[];
+}
+
+/** A Vimeo video of a gallery; `poster` is a file in the gallery's posters/ folder */
+export interface Video {
+  vimeoId: string;
+  title: string;
+  poster: string;
 }
 
 export interface GalleryFields {
@@ -71,6 +96,10 @@ export interface GalleryDetail {
   url: string;
   fields: GalleryFields;
   story: string;
+  videos: Video[];
+  /** Preview images in posters/ */
+  posters: string[];
+  de: GermanTexts;
   categories: string[];
   photos: Photo[];
   coverPhoto: string;
@@ -82,6 +111,8 @@ export interface GalleryDetail {
 export interface GalleryForm {
   fields: GalleryFields;
   story: string;
+  videos: Video[];
+  de: GermanTexts;
   categories: string[];
   mainCategory: string;
   slug: string;
@@ -107,7 +138,7 @@ export interface Testimonial {
 
 export interface TrashEntry {
   id: string;
-  kind: 'gallery' | 'photos' | 'testimonial';
+  kind: 'gallery' | 'photos' | 'testimonial' | 'journal';
   label: string;
   createdAt: string;
   count: number;
@@ -120,8 +151,40 @@ export interface Changes {
   groups: { key: string; kind: string; label: string; files: { status: string; path: string }[] }[];
 }
 
+/** One text file (or pair of files) of the Categories, Packages, Journal, Pages or Settings tab */
+export interface DocSummary {
+  id: string;
+  title: string;
+  draft: boolean;
+  /** "YYYY-MM-DD" (journal), else "" */
+  date: string;
+}
+
+export interface DocDetail {
+  id: string;
+  /** Address on the website, for the preview */
+  url: string;
+  /** Project-relative folder (photos next to the text) */
+  folder: string;
+  en: { data: Record<string, unknown>; body: string };
+  de: { data: Record<string, unknown>; body: string; exists: boolean };
+}
+
+/** One change: the path of the field in the file and its new value (empty = remove) */
+export interface DocChange {
+  path: string[];
+  value: unknown;
+}
+
+export interface DocPayload {
+  en?: { changes: DocChange[]; body?: string };
+  de?: { changes: DocChange[]; body?: string };
+}
+
 export interface AppState {
   categories: Category[];
   galleries: GallerySummary[];
   trashCount: number;
+  /** German version switched on in src/content/settings.yaml */
+  german: boolean;
 }

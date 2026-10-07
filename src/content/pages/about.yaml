@@ -1,0 +1,101 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Texts of the about page  (src/content/pages/about.yaml)
+# Edit them in the gallery manager (npm run manage → Pages) or here.
+# en = English, de = German (only shown when the German version is switched on).
+# *italic* and **bold** work in most texts. Layout and photos are in src/views/.
+# ─────────────────────────────────────────────────────────────────────────────
+
+en:
+  title: About Gemy · Vienna & Dolomites Wedding Photographer
+  description: "Hi, I'm Gemy: a wedding and elopement photographer raised between the Italian Dolomites and Bangkok, now based in Vienna and working across Europe."
+  eyebrow: Behind the lens
+  h1: Hi, I'm *Gemy*
+  lead: Capturing honest love stories and unforgettable moments across Vienna, the Dolomites, and beyond.
+  storyTitle: Visual Storyteller & Destination Wedding Photographer
+  story:
+    - I was raised between the quiet majesty of the Italian Dolomites and the vibrancy of Bangkok, and today I call Vienna home. Living in a city built on art, romance, and history constantly shapes how I view light, composition, and human connection.
+    - My love for photography deepened when I planned my own wedding. Experiencing that day from the inside gave me a profound appreciation for how fast moments move and how rare it is to find imagery that captures both how a day looked and how it actually felt.
+    - When I'm not photographing celebrations, I'm usually travelling, collecting new flavours, and finding inspiration in culture, architecture, and design.
+  portraitAlt: Gemy Campei, wedding and elopement photographer based in Vienna
+  approachEyebrow: My approach — Editorial Documentary Photography
+  approach: My style lives at the intersection of honest *storytelling* and *quiet artistry*.
+  points:
+    - title: Editorial Documentary Lens
+      text: I document weddings through an editorial documentary lens, capturing spontaneous, unscripted emotion alongside clean, elevated portraiture that feels effortless rather than staged.
+    - title: Digital Precision with Subtle Film Texture
+      text: I shoot fully digital, editing each gallery in a clean, modern, and timeless tone. To give your images an added layer of soul and organic warmth, I selectively introduce a touch of warm analog grain to key moments.
+    - title: True Presence
+      text: "Whether capturing an intimate civil ceremony, a full-day wedding, or a destination wedding weekend abroad, my goal is simple: to keep you feeling completely at ease so you can remain present in every moment."
+  whereEyebrow: Where I work
+  whereTitle: Based in Vienna and the Dolomites, available worldwide
+  where:
+    - title: Vienna and Austria
+      text: Vienna is home. I know its palaces, churches and registry offices, and the light in its old town at every hour, from a quiet civil ceremony to a palace celebration or a wedding in the Austrian countryside.
+      link: Vienna weddings →
+      category: vienna-wedding-photographer
+    - title: The Dolomites
+      text: I grew up between these mountains. For elopements, proposals and couple sessions in South Tyrol and Trentino, I help you find the right place, season and light, and a quiet corner away from the crowds.
+      link: Dolomites elopements →
+      category: dolomites-elopement-photographer
+    - title: Europe and beyond
+      text: "Destination weddings are close to my heart: multi-day celebrations in Sweden, Morocco and beyond. I love discovering a new place through your eyes and telling your story there."
+      link: Destination weddings →
+      category: vienna-wedding-photographer
+  togetherEyebrow: Working together
+  togetherTitle: What you can expect
+  together:
+    - A first call to get to know each other and hear your plans.
+    - Honest help with the timeline, the light and, for elopements, the location.
+    - "Gentle direction on the day: you are guided, never posed."
+    - Candid moments and elegant portraits, edited by hand in a timeless tone.
+    - A private online gallery to download, share and keep.
+    - Optional 35mm film photos and Super 8 film for a nostalgic, living memory.
+  contactLink: Tell me about your plans →
+  stripAlt: Candid wedding photography by Gemy Campei
+de:
+  title: Über Gemy · Hochzeitsfotograf Wien & Dolomiten
+  description: "Hallo, ich bin Gemy: Hochzeits- und Elopement-Fotograf, aufgewachsen zwischen den Dolomiten und Bangkok, heute in Wien zu Hause und in ganz Europa unterwegs."
+  eyebrow: Hinter der Kamera
+  h1: Hallo, ich bin *Gemy*
+  lead: Ich halte ehrliche Liebesgeschichten und unvergessliche Momente fest, in Wien, in den Dolomiten und weit darüber hinaus.
+  storyTitle: Visueller Geschichtenerzähler & Destination-Wedding-Fotograf
+  story:
+    - Aufgewachsen bin ich zwischen der stillen Erhabenheit der italienischen Dolomiten und dem lebendigen Bangkok, heute ist Wien mein Zuhause. In einer Stadt voller Kunst, Romantik und Geschichte zu leben, prägt jeden Tag, wie ich Licht, Komposition und menschliche Nähe sehe.
+    - Meine Liebe zur Fotografie wurde tiefer, als ich meine eigene Hochzeit geplant habe. Diesen Tag selbst zu erleben, hat mir gezeigt, wie schnell Momente vergehen und wie selten Bilder sind, die festhalten, wie ein Tag aussah und wie er sich wirklich anfühlte.
+    - Wenn ich nicht gerade Hochzeiten fotografiere, bin ich meist auf Reisen, entdecke neue Aromen und finde Inspiration in Kultur, Architektur und Design.
+  portraitAlt: Gemy Campei, Hochzeits- und Elopement-Fotograf in Wien
+  approachEyebrow: "Mein Ansatz: editoriale Reportagefotografie"
+  approach: Mein Stil liegt zwischen ehrlichem *Erzählen* und *leiser Kunst*.
+  points:
+    - title: Editorialer, dokumentarischer Blick
+      text: "Ich begleite Hochzeiten mit einem editorialen, dokumentarischen Blick: spontane, ungestellte Gefühle und klare, elegante Porträts, die mühelos wirken statt gestellt."
+    - title: Digitale Präzision mit einem Hauch Film
+      text: Ich fotografiere digital und bearbeite jede Galerie in einem klaren, modernen und zeitlosen Look. Für mehr Seele und Wärme gebe ich ausgewählten Momenten ein feines, warmes Analogkorn.
+    - title: Echte Präsenz
+      text: "Ob eine kleine standesamtliche Trauung, ein ganzer Hochzeitstag oder ein Hochzeitswochenende im Ausland: Mein Ziel ist, dass ihr euch rundum wohlfühlt und jeden Moment ganz erlebt."
+  whereEyebrow: Wo ich fotografiere
+  whereTitle: Zu Hause in Wien und den Dolomiten, weltweit unterwegs
+  where:
+    - title: Wien und Österreich
+      text: Wien ist mein Zuhause. Ich kenne die Palais, Kirchen und Standesämter der Stadt und das Licht in der Altstadt zu jeder Stunde, von der kleinen standesamtlichen Trauung bis zum Fest im Palais oder auf dem Land.
+      link: Hochzeiten in Wien →
+      category: vienna-wedding-photographer
+    - title: Die Dolomiten
+      text: Zwischen diesen Bergen bin ich aufgewachsen. Für Elopements, Heiratsanträge und Paarshootings in Südtirol und im Trentino helfe ich euch, den richtigen Ort, die Jahreszeit und das Licht zu finden, abseits der Menschenmengen.
+      link: Elopements in den Dolomiten →
+      category: dolomites-elopement-photographer
+    - title: Europa und die Welt
+      text: "Destination Weddings liegen mir besonders am Herzen: mehrtägige Feste in Schweden, Marokko und darüber hinaus. Ich liebe es, einen neuen Ort durch eure Augen zu entdecken und eure Geschichte dort zu erzählen."
+      link: Destination Weddings →
+      category: vienna-wedding-photographer
+  togetherEyebrow: Zusammenarbeit
+  togetherTitle: Was euch erwartet
+  together:
+    - Ein erstes Gespräch, um uns kennenzulernen und von euren Plänen zu hören.
+    - Ehrliche Hilfe beim Zeitplan, beim Licht und bei Elopements auch bei der Wahl des Ortes.
+    - "Behutsame Anleitung am Tag selbst: Ihr werdet begleitet, nie gestellt."
+    - Natürliche Momente und elegante Porträts, von Hand in einem zeitlosen Look bearbeitet.
+    - Eine private Online-Galerie zum Herunterladen, Teilen und Aufbewahren.
+    - Auf Wunsch 35-mm-Film und Super-8-Film für eine nostalgische, lebendige Erinnerung.
+  contactLink: Erzählt mir von euren Plänen →
+  stripAlt: Natürliche Hochzeitsfotografie von Gemy Campei

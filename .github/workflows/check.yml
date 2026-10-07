@@ -1,0 +1,50 @@
+# =============================================================================
+# CHECK  (.github/workflows/check.yml)
+# =============================================================================
+#
+# Tests every feature branch and every pull request WITHOUT publishing:
+#   npm run check  (type check)
+#   npm run build  (builds all pages and images, fails on content errors such
+#                   as a missing title or a photo that does not exist)
+#
+# A green tick on the pull request means it is safe to merge into `master`,
+# which then publishes the website (deploy.yml).
+# =============================================================================
+
+name: Check
+
+on:
+  push:
+    branches-ignore: [master] # master is checked by the deployment itself
+  pull_request:
+    branches: [master]
+
+# A newer push to the same branch cancels the older, still running check
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Same image cache as the deployment, so checks stay fast
+      - name: Cache optimized images
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.astro
+          key: astro-assets-${{ hashFiles('galleries/**', 'src/assets/**', 'src/content/**') }}
+          restore-keys: astro-assets-
+
+      - run: npm run check
+      - run: npm run build

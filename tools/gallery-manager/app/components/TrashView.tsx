@@ -18,7 +18,7 @@ interface Props {
   onChanged: () => Promise<void>;
 }
 
-const KIND_LABEL: Record<TrashEntry['kind'], string> = { gallery: 'Gallery', photos: 'Photos', testimonial: 'Review' };
+const KIND_LABEL: Record<TrashEntry['kind'], string> = { gallery: 'Gallery', photos: 'Photos', testimonial: 'Review', journal: 'Journal entry' };
 
 export default function TrashView({ notify, onChanged }: Props) {
   const [entries, setEntries] = useState<TrashEntry[] | null>(null);

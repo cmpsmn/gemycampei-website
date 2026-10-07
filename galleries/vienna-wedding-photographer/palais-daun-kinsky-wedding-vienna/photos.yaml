@@ -1,0 +1,174 @@
+# Photo descriptions (alt texts) for this gallery: what is in each photo.
+# Read by search engines, Google Images and screen readers.
+# Keep them short and natural (about 125 characters). The gallery manager
+# (npm run manage) keeps this file in step when photos are renamed,
+# moved or deleted. Photos without an entry get a generic description.
+
+palais-daun-kinsky-wedding-vienna-001.jpg:
+  en: Groom dips the bride under a crystal chandelier in a baroque hall of Palais Daun-Kinsky
+  de: Bräutigam neigt die Braut unter einem Kristallluster in einem barocken Saal des Palais Daun-Kinsky
+palais-daun-kinsky-wedding-vienna-002.jpg:
+  en: Bridesmaids helping the bride into her off-shoulder gown
+  de: Brautjungfern helfen der Braut in ihr schulterfreies Kleid
+palais-daun-kinsky-wedding-vienna-003.jpg:
+  en: Black and white photo of the bride smiling during the civil ceremony
+  de: "Schwarz-Weiß-Foto: Die Braut lächelt während der standesamtlichen Trauung"
+palais-daun-kinsky-wedding-vienna-004.jpg:
+  en: Couple arriving through the guests, the bride in a lace mantilla veil
+  de: Paar kommt durch die Gäste, die Braut mit Spitzenmantilla
+palais-daun-kinsky-wedding-vienna-005.jpg:
+  en: Civil wedding ceremony in a red and gold baroque hall at Palais Daun-Kinsky
+  de: Standesamtliche Trauung in einem rot-goldenen Barocksaal im Palais Daun-Kinsky
+palais-daun-kinsky-wedding-vienna-006.jpg:
+  en: Black and white photo of the couple holding hands in a tall white doorway
+  de: "Schwarz-Weiß-Foto: Das Paar hält sich in einer hohen weißen Tür an den Händen"
+palais-daun-kinsky-wedding-vienna-007.jpg:
+  en: Groom kisses the bride's forehead on the red carpet in the palace
+  de: Bräutigam küsst die Stirn der Braut auf dem roten Teppich im Palais
+palais-daun-kinsky-wedding-vienna-008.jpg:
+  en: Couple cutting a tiramisu cake reading Just Married
+  de: Paar schneidet eine Tiramisu-Torte mit der Aufschrift Just Married an
+palais-daun-kinsky-wedding-vienna-009.jpg:
+  en: Black and white photo of a musician playing a traditional zurna
+  de: Schwarz-Weiß-Foto eines Musikers mit traditioneller Zurna
+palais-daun-kinsky-wedding-vienna-010.jpg:
+  en: Bride standing on a marble fireplace, her long veil falling below a chandelier
+  de: Braut steht auf einem Marmorkamin, ihr langer Schleier fällt unter einem Luster
+palais-daun-kinsky-wedding-vienna-011.jpg:
+  en: Black and white photo of the couple during the civil ceremony
+  de: Schwarz-Weiß-Foto des Paares während der standesamtlichen Trauung
+palais-daun-kinsky-wedding-vienna-012.jpg:
+  en: Newlyweds walking out through the palace courtyard as guests throw ribbons
+  de: Brautpaar zieht durch den Innenhof des Palais, die Gäste werfen Bänder
+palais-daun-kinsky-wedding-vienna-013.jpg:
+  en: Black and white photo of the bride adjusting her lace veil
+  de: "Schwarz-Weiß-Foto: Die Braut richtet ihren Spitzenschleier"
+palais-daun-kinsky-wedding-vienna-014.jpg:
+  en: Bride in a silk slip dress getting ready by the window
+  de: Braut im Seidenunterkleid beim Getting Ready am Fenster
+palais-daun-kinsky-wedding-vienna-015.jpg:
+  en: Close-up of the ring exchange
+  de: Nahaufnahme des Ringtauschs
+palais-daun-kinsky-wedding-vienna-016.jpg:
+  en: Couple standing at a gilded door in a marble hall of Palais Daun-Kinsky
+  de: Paar an einer vergoldeten Tür in einem Marmorsaal des Palais Daun-Kinsky
+palais-daun-kinsky-wedding-vienna-017.jpg:
+  en: Black and white detail of the bride's hands on her silk dress
+  de: Schwarz-Weiß-Detail der Hände der Braut auf ihrem Seidenkleid
+palais-daun-kinsky-wedding-vienna-018.jpg:
+  en: Black and white photo of the father leading the bride down the stairs
+  de: "Schwarz-Weiß-Foto: Der Vater führt die Braut die Stiege hinunter"
+palais-daun-kinsky-wedding-vienna-019.jpg:
+  en: Black and white photo of the groom being hugged at the door
+  de: "Schwarz-Weiß-Foto: Der Bräutigam wird an der Tür umarmt"
+palais-daun-kinsky-wedding-vienna-020.jpg:
+  en: Groom and bride walking arm in arm, calla lilies in her hand
+  de: Bräutigam und Braut gehen Arm in Arm, Callas in ihrer Hand
+palais-daun-kinsky-wedding-vienna-021.jpg:
+  en: Black and white photo of the bride greeted by her family
+  de: "Schwarz-Weiß-Foto: Die Braut wird von ihrer Familie begrüßt"
+palais-daun-kinsky-wedding-vienna-022.jpg:
+  en: Bride and groom with family during the traditional picking up of the bride
+  de: Braut und Bräutigam mit Familie beim traditionellen Brautabholen
+palais-daun-kinsky-wedding-vienna-023.jpg:
+  en: Couple walking arm in arm into the candlelit palace hall
+  de: Paar geht Arm in Arm in den kerzenbeleuchteten Saal des Palais
+palais-daun-kinsky-wedding-vienna-024.jpg:
+  en: Groom carrying the bride through a golden hall of the palace
+  de: Bräutigam trägt die Braut durch einen goldenen Saal des Palais
+palais-daun-kinsky-wedding-vienna-025.jpg:
+  en: Black and white photo of family helping the bride with her dress
+  de: "Schwarz-Weiß-Foto: Die Familie hilft der Braut mit dem Kleid"
+palais-daun-kinsky-wedding-vienna-026.jpg:
+  en: Groom arriving with flowers to pick up the bride at her home
+  de: Bräutigam kommt mit Blumen, um die Braut zu Hause abzuholen
+palais-daun-kinsky-wedding-vienna-027.jpg:
+  en: Couple cutting the tiramisu cake at the reception
+  de: Paar schneidet beim Empfang die Tiramisu-Torte an
+palais-daun-kinsky-wedding-vienna-028.jpg:
+  en: Couple standing in front of a gilded mirror in the baroque palace
+  de: Paar vor einem vergoldeten Spiegel im barocken Palais
+palais-daun-kinsky-wedding-vienna-029.jpg:
+  en: Groom and bride signing the marriage certificate
+  de: Braut und Bräutigam unterschreiben die Heiratsurkunde
+palais-daun-kinsky-wedding-vienna-030.jpg:
+  en: Couple under the bride's lace veil beneath a chandelier
+  de: Paar unter dem Spitzenschleier der Braut unter einem Luster
+palais-daun-kinsky-wedding-vienna-031.jpg:
+  en: Bride on the marble fireplace with her veil spread out
+  de: Braut auf dem Marmorkamin mit ausgebreitetem Schleier
+palais-daun-kinsky-wedding-vienna-032.jpg:
+  en: Baroque ceiling fresco in Palais Daun-Kinsky
+  de: Barockes Deckenfresko im Palais Daun-Kinsky
+palais-daun-kinsky-wedding-vienna-033.jpg:
+  en: Black and white photo of guests lifting the groom in celebration
+  de: "Schwarz-Weiß-Foto: Gäste heben den Bräutigam feiernd hoch"
+palais-daun-kinsky-wedding-vienna-034.jpg:
+  en: Black and white photo of the couple kissing between stucco sculptures
+  de: "Schwarz-Weiß-Foto: Das Paar küsst sich zwischen Stuckfiguren"
+palais-daun-kinsky-wedding-vienna-035.jpg:
+  en: Couple laughing in the back seat of a vintage car
+  de: Paar lacht auf der Rückbank eines Oldtimers
+palais-daun-kinsky-wedding-vienna-036.jpg:
+  en: Guests seated in the gilded ceremony hall
+  de: Gäste sitzen im vergoldeten Trauungssaal
+palais-daun-kinsky-wedding-vienna-037.jpg:
+  en: Bride hurries towards the groom at a gilded door, her veil in motion
+  de: Braut eilt zum Bräutigam an einer vergoldeten Tür, ihr Schleier in Bewegung
+palais-daun-kinsky-wedding-vienna-038.jpg:
+  en: Portrait of the couple by a gilded mirror and wall sconces
+  de: Porträt des Paares an einem vergoldeten Spiegel mit Wandleuchten
+palais-daun-kinsky-wedding-vienna-039.jpg:
+  en: Couple hugging their parents after the ceremony
+  de: Paar umarmt nach der Trauung seine Eltern
+palais-daun-kinsky-wedding-vienna-040.jpg:
+  en: Black and white detail of the couple holding hands during the ceremony
+  de: "Schwarz-Weiß-Detail: Das Paar hält sich während der Trauung an den Händen"
+palais-daun-kinsky-wedding-vienna-041.jpg:
+  en: Black and white photo of the bride sitting on a tall window sill
+  de: "Schwarz-Weiß-Foto: Die Braut sitzt auf einem hohen Fensterbrett"
+palais-daun-kinsky-wedding-vienna-042.jpg:
+  en: Calla lily bouquet resting on a marble cherub sculpture
+  de: Callastrauß auf einer marmornen Putto-Skulptur
+palais-daun-kinsky-wedding-vienna-043.jpg:
+  en: Couple sitting together on the palace stairs
+  de: Paar sitzt gemeinsam auf der Palaisstiege
+palais-daun-kinsky-wedding-vienna-044.jpg:
+  en: Black and white photo of the bride putting on lipstick in the mirror
+  de: "Schwarz-Weiß-Foto: Die Braut trägt vor dem Spiegel Lippenstift auf"
+palais-daun-kinsky-wedding-vienna-045.jpg:
+  en: Family portrait with the bride and groom in a damask-walled room
+  de: Familienporträt mit Brautpaar in einem Raum mit Damasttapete
+palais-daun-kinsky-wedding-vienna-046.jpg:
+  en: Couple in the back of a vintage car, seen through the open door
+  de: Paar auf der Rückbank eines Oldtimers, durch die offene Tür gesehen
+palais-daun-kinsky-wedding-vienna-047.jpg:
+  en: Black and white detail of the calla lily bouquet in the bride's hand
+  de: Schwarz-Weiß-Detail des Callastraußes in der Hand der Braut
+palais-daun-kinsky-wedding-vienna-048.jpg:
+  en: Guests celebrating as the couple arrives at the palace
+  de: Gäste feiern, als das Paar am Palais ankommt
+palais-daun-kinsky-wedding-vienna-049.jpg:
+  en: Black and white photo of the bride sitting in the vintage car
+  de: "Schwarz-Weiß-Foto: Die Braut sitzt im Oldtimer"
+palais-daun-kinsky-wedding-vienna-050.jpg:
+  en: Chauffeur's gloved hand on the dashboard of the vintage car
+  de: Die behandschuhte Hand des Chauffeurs am Armaturenbrett des Oldtimers
+palais-daun-kinsky-wedding-vienna-051.jpg:
+  en: Black and white photo of the couple walking down the aisle in the palace hall
+  de: "Schwarz-Weiß-Foto: Das Paar zieht durch den Saal des Palais aus"
+palais-daun-kinsky-wedding-vienna-052.jpg:
+  en: Finger food served at the wedding reception
+  de: Fingerfood beim Hochzeitsempfang
+palais-daun-kinsky-wedding-vienna-053.jpg:
+  en: Detail of the bride's platform shoes, calla bouquet and satin gown
+  de: Detail der Plateauschuhe, des Callastraußes und des Satinkleids der Braut
+palais-daun-kinsky-wedding-vienna-054.jpg:
+  en: Couple beside a white baroque tiled stove in the palace
+  de: Paar neben einem weißen barocken Kachelofen im Palais
+palais-daun-kinsky-wedding-vienna-055.jpg:
+  en: Black and white detail of the bride's necklace and bare shoulder
+  de: Schwarz-Weiß-Detail der Halskette und der Schulter der Braut
+palais-daun-kinsky-wedding-vienna-056.jpg:
+  en: Black and white photo of the couple reflected in a mirror reading Kinsky
+  de: "Schwarz-Weiß-Foto: Das Paar spiegelt sich in einem Spiegel mit der Aufschrift Kinsky"

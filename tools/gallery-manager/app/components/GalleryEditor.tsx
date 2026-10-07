@@ -17,10 +17,12 @@
  */
 import { useCallback, useEffect, useState } from 'react';
 import { api, photoUrl, slugify } from '../api';
-import type { AppState, GalleryDetail, GalleryFields, GalleryForm } from '../types';
+import type { AppState, GalleryDetail, GalleryFields, GalleryForm, GermanTexts } from '../types';
 import type { Notify } from '../App';
 import PhotoGrid from './PhotoGrid';
 import FocusPicker from './FocusPicker';
+import VideoList from './VideoList';
+import Counter from './Counter';
 
 interface Props {
   id: string;
@@ -43,6 +45,8 @@ const SEO_DESCRIPTION_MAX = 155;
 const toForm = (d: GalleryDetail): GalleryForm => ({
   fields: { ...d.fields, legacyUrls: [...d.fields.legacyUrls] },
   story: d.story,
+  videos: d.videos.map((v) => ({ ...v })),
+  de: { ...d.de, videoTitles: [...d.de.videoTitles] },
   categories: [...d.categories],
   mainCategory: d.category,
   slug: d.slug,
@@ -104,6 +108,7 @@ export default function GalleryEditor({ id, state, notify, onDirtyChange, onChan
   }
 
   const update = (patch: Partial<GalleryFields>) => setForm((f) => (f ? { ...f, fields: { ...f.fields, ...patch } } : f));
+  const updateDe = (patch: Partial<GermanTexts>) => setForm((f) => (f ? { ...f, de: { ...f.de, ...patch } } : f));
 
   async function save() {
     if (!form || saving) return;
@@ -143,7 +148,7 @@ export default function GalleryEditor({ id, state, notify, onDirtyChange, onChan
   if (!detail || !form) return <div className="editor loading">Loading …</div>;
 
   const categoryById = new Map(state.categories.map((c) => [c.id, c]));
-  const hasPage = form.categories.some((c) => categoryById.get(c)?.display === 'cards');
+  const hasPage = form.categories.some((c) => categoryById.get(c)?.display === 'cards' || categoryById.get(c)?.galleryPages);
   const pageUrl = hasPage ? `/${form.mainCategory}/${form.slug}/` : `/${form.mainCategory}/`;
   const coverName = form.fields.cover || detail.coverPhoto;
   const coverPhoto = detail.photos.find((p) => p.name === coverName);
@@ -165,7 +170,7 @@ export default function GalleryEditor({ id, state, notify, onDirtyChange, onChan
 
   async function remove() {
     const label = `Gallery "${detail!.displayTitle}"`;
-    if (!window.confirm(`Move ${label} with ${detail!.photos.length} photos to the trash?`)) return;
+    if (!window.confirm(`Move ${label} with ${detail!.photos.length} photos${detail!.videos.length ? ` and ${detail!.videos.length} videos` : ''} to the trash?`)) return;
     try {
       const { trashEntry } = await api.deleteGallery(id);
       onDeleted(trashEntry, label);
@@ -228,8 +233,28 @@ export default function GalleryEditor({ id, state, notify, onDirtyChange, onChan
               onSetCover={(name) => update({ cover: name })}
               onChanged={reloadPhotos}
               notify={notify}
+              german={state.german}
             />
           </div>
+
+          {(form.videos.length > 0 || detail.photos.length === 0) && (
+            <div className="card">
+              <h3>Videos ({form.videos.length})</h3>
+              <VideoList
+                galleryId={id}
+                videos={form.videos}
+                germanTitles={form.de.videoTitles}
+                posters={detail.posters}
+                german={state.german}
+                notify={notify}
+                onChange={(videos, videoTitles) => setForm((f) => (f ? { ...f, videos, de: { ...f.de, videoTitles } } : f))}
+                onPosterUploaded={async () => {
+                  const d = await api.gallery(id);
+                  setDetail(d);
+                }}
+              />
+            </div>
+          )}
 
           <div className="card">
             <h3>Story</h3>
@@ -238,6 +263,48 @@ export default function GalleryEditor({ id, state, notify, onDirtyChange, onChan
             </p>
             <textarea rows={9} value={form.story} onChange={(e) => setForm({ ...form, story: e.target.value })} />
           </div>
+
+          {state.german && (
+          <div className="card form">
+            <h3>Deutsch (German version)</h3>
+            <p className="muted small">
+              The German page (/de/…) shows these texts. As long as the story is empty, it shows the English story and
+              stays hidden from Google. Empty fields use the English value or a German default.
+            </p>
+            <div className="row">
+              <label>
+                Titel
+                <input value={form.de.title} onChange={(e) => updateDe({ title: e.target.value })} placeholder={form.fields.title || detail.displayTitle} />
+              </label>
+              <label>
+                Art des Shootings
+                <input value={form.de.type} onChange={(e) => updateDe({ type: e.target.value })} placeholder="Hochzeit, Elopement, Paarshooting …" />
+              </label>
+            </div>
+            <label>
+              Ort
+              <input value={form.de.location} onChange={(e) => updateDe({ location: e.target.value })} placeholder="Pragser Wildsee, Dolomiten, Italien" />
+            </label>
+            <label>
+              <span className="label-row">
+                Titel in Google
+                <Counter value={form.de.seoTitle} max={SEO_TITLE_MAX} />
+              </span>
+              <input value={form.de.seoTitle} onChange={(e) => updateDe({ seoTitle: e.target.value })} placeholder="Automatisch aus Art, Titel und Ort" />
+            </label>
+            <label>
+              <span className="label-row">
+                Beschreibung in Google
+                <Counter value={form.de.seoDescription} max={SEO_DESCRIPTION_MAX} />
+              </span>
+              <textarea rows={3} value={form.de.seoDescription} onChange={(e) => updateDe({ seoDescription: e.target.value })} />
+            </label>
+            <label>
+              Geschichte
+              <textarea rows={9} value={form.de.story} onChange={(e) => updateDe({ story: e.target.value })} />
+            </label>
+          </div>
+          )}
         </div>
 
         <div className="col-side">
@@ -399,9 +466,4 @@ export default function GalleryEditor({ id, state, notify, onDirtyChange, onChan
       </div>
     </section>
   );
-}
-
-/** "42 / 60" character counter, red when too long */
-function Counter({ value, max }: { value: string; max: number }) {
-  return <small className={value.length > max ? 'counter over' : 'counter'}>{value.length} / {max}</small>;
 }

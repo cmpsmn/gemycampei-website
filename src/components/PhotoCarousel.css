@@ -18,7 +18,7 @@
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
-  padding-inline: var(--gutter);
+  padding-inline: var(--edge);
   position: relative; /* slide positions are measured relative to the track */
 }
 

@@ -21,25 +21,28 @@
 import { useState } from 'react';
 import GalleryCard from './GalleryCard';
 import type { CardData } from '../lib/galleries';
+import { ui, type Lang } from '../i18n';
 import './GalleryFilter.css';
 
 interface Props {
   galleries: CardData[];
   categories: { id: string; label: string }[];
+  lang?: Lang;
 }
 
-export default function GalleryFilter({ galleries, categories }: Props) {
+export default function GalleryFilter({ galleries, categories, lang = 'en' }: Props) {
+  const t = ui[lang];
   // `active` holds the selected category id, or 'all'. It starts as 'all'.
   const [active, setActive] = useState<string>('all');
 
   // Derived data: recalculated on every render from the current state.
   // A gallery can belong to several categories, so we check its whole list.
   const visible = active === 'all' ? galleries : galleries.filter((g) => g.categoryIds.includes(active));
-  const options = [{ id: 'all', label: 'All' }, ...categories];
+  const options = [{ id: 'all', label: t.all }, ...categories];
 
   return (
     <div>
-      <div className="filter" role="group" aria-label="Filter galleries by type">
+      <div className="filter" role="group" aria-label={t.filterLabel}>
         {options.map((option) => (
           <button
             key={option.id}
@@ -56,11 +59,17 @@ export default function GalleryFilter({ galleries, categories }: Props) {
 
       <div className="card-grid">
         {visible.map((gallery, index) => (
-          <GalleryCard key={gallery.id} gallery={gallery} eager={index < 2} showCategory={active === 'all'} />
+          <GalleryCard
+            key={gallery.id}
+            gallery={gallery}
+            eager={index < 2}
+            showCategory={active === 'all'}
+            lang={lang}
+          />
         ))}
       </div>
 
-      {visible.length === 0 && <p className="center">New galleries coming soon.</p>}
+      {visible.length === 0 && <p className="center">{t.comingSoon}</p>}
     </div>
   );
 }

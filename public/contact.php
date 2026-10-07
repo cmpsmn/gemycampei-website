@@ -46,9 +46,22 @@ const MIN_FILL_SECONDS = 3;
  */
 const SHOOT_TYPES = ['Wedding', 'Elopement', 'Couple Session', 'Pre Wedding', 'Surprise Proposal', 'Maternity', 'Others'];
 const REFERRAL_SOURCES = ['Google', 'Instagram', 'TikTok', 'Pinterest', 'Event', 'Referral'];
+// Optional: the ranges offered in the form. Keep in sync with ContactForm.tsx.
+const BUDGET_RANGES = ['Under €3,000', '€3,000 – €5,000', '€5,000 – €8,000', '€8,000+', "I'd like guidance"];
 
 // The React form asks for JSON with the header "Accept: application/json"
 $wantsJson = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
+
+// Language of the page the form was sent from (hidden field "lang"): answers
+// and the thank-you page are in the same language.
+$lang = ($_POST['lang'] ?? '') === 'de' ? 'de' : 'en';
+
+/** The English or German text, depending on the form's language */
+function t(string $en, string $de): string
+{
+    global $lang;
+    return $lang === 'de' ? $de : $en;
+}
 
 /**
  * Sends the answer and stops the script.
@@ -56,7 +69,7 @@ $wantsJson = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
  */
 function respond(bool $ok, string $error = '', int $status = 200): never
 {
-    global $wantsJson;
+    global $wantsJson, $lang;
     if ($wantsJson) {
         http_response_code($ok ? 200 : $status);
         header('Content-Type: application/json; charset=utf-8');
@@ -64,7 +77,10 @@ function respond(bool $ok, string $error = '', int $status = 200): never
         echo json_encode($ok ? ['ok' => true] : ['ok' => false, 'error' => $error]);
     } else {
         // 303 = "see other page": the browser loads the thank-you or error page
-        header('Location: ' . ($ok ? '/thank-you/' : '/message-error/'), true, 303);
+        $pages = $lang === 'de'
+            ? ['/de/danke/', '/de/nachricht-nicht-gesendet/']
+            : ['/thank-you/', '/message-error/'];
+        header('Location: ' . ($ok ? $pages[0] : $pages[1]), true, 303);
     }
     exit;
 }
@@ -106,40 +122,46 @@ $name        = field('name', 200);
 $email       = field('email', 200);
 $partnerName = field('partnerName', 200);
 $phone       = field('phone', 50);
-$date        = field('date', 20);
+$date        = field('date', 100);
 $venue       = field('venue', 200);
 $shootType   = field('shootType', 60);
+$guestCount  = field('guestCount', 50);
+$budget      = field('budget', 60);
 $message     = field('message', 5000);
 $referral    = field('referral', 60);
 $consent     = ($_POST['consent'] ?? '') === 'yes';
 
 if ($name === '' || $message === '') {
-    respond(false, 'Please fill in your name and message.', 422);
+    respond(false, t('Please fill in your name and message.', 'Bitte gebt euren Namen und eure Nachricht ein.'), 422);
 }
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    respond(false, 'Please enter a valid email address.', 422);
+    respond(false, t('Please enter a valid email address.', 'Bitte gebt eine gültige E-Mail-Adresse ein.'), 422);
 }
-if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) { // date inputs send YYYY-MM-DD
-    respond(false, 'Please choose a date.', 422);
+if ($date === '') { // free text: a single date, a range or a season
+    respond(false, t('Please tell me your date or dates.', 'Bitte nennt mir euer Datum oder euren Zeitraum.'), 422);
 }
 if ($venue === '') {
-    respond(false, 'Please tell me the venue or area.', 422);
+    respond(false, t('Please tell me the venue or area.', 'Bitte nennt mir die Location oder die Gegend.'), 422);
 }
 if (!in_array($shootType, SHOOT_TYPES, true)) {
-    respond(false, 'Please choose the type of shooting.', 422);
+    respond(false, t('Please choose the type of shooting.', 'Bitte wählt die Art des Shootings.'), 422);
+}
+// The investment range is optional, so an empty value is allowed
+if ($budget !== '' && !in_array($budget, BUDGET_RANGES, true)) {
+    respond(false, t('Please choose one of the given options.', 'Bitte wählt eine der angebotenen Optionen.'));
 }
 if (!in_array($referral, REFERRAL_SOURCES, true)) {
-    respond(false, 'Please tell me how you heard about me.', 422);
+    respond(false, t('Please tell me how you heard about me.', 'Bitte verratet mir, wie ihr von mir erfahren habt.'), 422);
 }
 if (!$consent) {
-    respond(false, 'Please agree to the privacy notice.', 422);
+    respond(false, t('Please agree to the privacy notice.', 'Bitte stimmt dem Datenschutzhinweis zu.'), 422);
 }
 
 // --- 4. Load the mailbox settings ------------------------------------------------
 $configFile = dirname(__DIR__) . '/contact-config.php'; // one folder above public_html
 if (!is_file($configFile)) {
     error_log('contact.php: missing config file ' . $configFile);
-    respond(false, 'The form is not configured yet.', 500);
+    respond(false, t('The form is not configured yet.', 'Das Formular ist noch nicht eingerichtet.'), 500);
 }
 /** @var array{smtp_host:string,smtp_port:int,smtp_user:string,smtp_pass:string,from_email:string,from_name:string,to_email:string} $config */
 $config = require $configFile;
@@ -155,6 +177,8 @@ $body = implode("\n", [
     'Shooting:    ' . $shootType,
     'Date:        ' . $date,
     'Venue:       ' . $venue,
+    'Guests:      ' . ($guestCount !== '' ? $guestCount : '-'),
+    'Investment:  ' . ($budget !== '' ? $budget : '-'),
     'Heard via:   ' . $referral,
     '',
     'Message:',
@@ -192,5 +216,5 @@ try {
 } catch (MailException $e) {
     // Log the technical reason (visible in Hostinger's error log), without personal data
     error_log('contact.php: mail failed: ' . $mail->ErrorInfo);
-    respond(false, 'The message could not be sent right now.', 502);
+    respond(false, t('The message could not be sent right now.', 'Die Nachricht konnte gerade nicht gesendet werden.'), 502);
 }

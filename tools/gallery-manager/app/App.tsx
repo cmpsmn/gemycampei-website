@@ -5,7 +5,8 @@
  *
  * The frame of the manager:
  *
- *   ┌ Gallery Manager ─ [Galleries] [Order] [Testimonials] [Trash] [Changes] ─ [+ New gallery] ┐
+ *   ┌ Gallery Manager ─ [Galleries] [Categories] [Packages] [Journal] [Testimonials] [Pages]
+ *   │                   [Settings] [Order] [Trash] [Changes] ─ [+ New gallery] ┐
  *   │ sidebar list │ editor of the selected gallery                                           │
  *   └────────────────────────────────────────────────────────────────────────────────────────┘
  *
@@ -25,8 +26,13 @@ import TestimonialsEditor from './components/TestimonialsEditor';
 import TrashView from './components/TrashView';
 import ChangesPanel from './components/ChangesPanel';
 import NewGalleryDialog from './components/NewGalleryDialog';
+import DocumentEditor from './components/DocumentEditor';
+import type { DocKind } from './schemas';
 
-type Tab = 'galleries' | 'order' | 'testimonials' | 'trash' | 'changes';
+type Tab = 'galleries' | DocKind | 'order' | 'testimonials' | 'trash' | 'changes';
+
+/** Tabs that use the shared DocumentEditor */
+const DOCUMENT_TABS: DocKind[] = ['category', 'packages', 'journal', 'page', 'settings'];
 
 export interface Toast {
   id: number;
@@ -107,8 +113,13 @@ export default function App() {
 
   const tabs: { id: Tab; label: string; badge?: number }[] = [
     { id: 'galleries', label: 'Galleries', badge: state.galleries.length },
-    { id: 'order', label: 'Order on pages' },
+    { id: 'category', label: 'Categories' },
+    { id: 'packages', label: 'Packages' },
+    { id: 'journal', label: 'Journal' },
     { id: 'testimonials', label: 'Testimonials' },
+    { id: 'page', label: 'Pages' },
+    { id: 'settings', label: 'Settings' },
+    { id: 'order', label: 'Order on pages' },
     { id: 'trash', label: 'Trash', badge: state.trashCount || undefined },
     { id: 'changes', label: 'Changes' },
   ];
@@ -159,6 +170,12 @@ export default function App() {
               <div className="empty">Select a gallery on the left or create a new one.</div>
             )}
           </div>
+        )}
+        {DOCUMENT_TABS.map(
+          (kind) =>
+            tab === kind && (
+              <DocumentEditor key={kind} kind={kind} state={state} notify={notify} onDirtyChange={setDirty} onChanged={refresh} />
+            ),
         )}
         {tab === 'order' && <CategoryOrder state={state} notify={notify} onChanged={refresh} />}
         {tab === 'testimonials' && <TestimonialsEditor state={state} notify={notify} onDirtyChange={setDirty} />}

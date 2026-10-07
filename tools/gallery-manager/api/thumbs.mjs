@@ -7,7 +7,7 @@
  * be slow, so this creates small WebP versions on demand and keeps them in
  * node_modules/.cache/gallery-manager (never committed, safe to delete).
  *
- * URL: /api/file?path=galleries/weddings/x/x-001.jpg&w=400&v=<version>&t=<token>
+ * URL: /api/file?path=galleries/vienna-wedding-photographer/x/x-001.jpg&w=400&v=<version>&t=<token>
  * `v` changes when the file changes, so the browser never shows an old image.
  * ============================================================================
  */
@@ -34,8 +34,8 @@ export async function sendThumbnail(params, res) {
   const requested = Number(params.get('w')) || 400;
   const width = WIDTHS.find((w) => w >= requested) ?? WIDTHS.at(-1);
 
-  const { mtimeMs } = await stat(file);
-  const key = createHash('sha1').update(`${file}|${mtimeMs}|${width}`).digest('hex');
+  const { mtimeMs, size } = await stat(file);
+  const key = createHash('sha1').update(`${file}|${mtimeMs}|${size}|${width}`).digest('hex');
   const cached = path.join(CACHE, `${key}.webp`);
 
   if (!(await exists(cached))) {

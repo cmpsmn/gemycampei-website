@@ -22,10 +22,17 @@
  *   display: z.enum(['a', 'b'])      → must be exactly one of these words
  *
  * THE COLLECTIONS
- *   categories   galleries/<category>/_category.md      (weddings, the-alps, maternity, 35mm-super-8-film)
+ *   categories   galleries/<category>/_category.md      (weddings, dolomites-elopement-photographer, maternity, 35mm-film-super-8-wedding)
  *   galleryMeta  galleries/<category>/<gallery>/gallery.md  (optional per gallery)
  *   packages     src/content/packages/<page>/index.md   (packages + FAQ pages)
  *   testimonials src/content/testimonials/<name>.md
+ *   journal      src/content/journal/<article>/index.md (guides and stories)
+ *
+ * GERMAN VERSIONS (see src/i18n/index.ts)
+ * Every collection above except testimonials has a German twin that reads the
+ * "*.de.md" file next to the English one (categoriesDe, galleryMetaDe,
+ * packagesDe, journalDe). German files only hold texts: photos, order and
+ * settings always come from the English file, so they never get out of sync.
  *
  * The photos themselves are NOT listed here. They are collected directly from
  * the folders in src/lib/galleries.ts, so a folder with photos is enough.
@@ -44,6 +51,25 @@ const faqItem = z.object({
   question: z.string(),
   answer: z.string(),
 });
+
+/**
+ * Landing-page sections of a category page (both languages):
+ *   steps   "How it works", numbered
+ */
+const step = z.object({ title: z.string(), text: z.string() });
+const landing = {
+  /** Heading above the steps, e.g. "How your elopement comes together" */
+  stepsTitle: z.string().optional(),
+  steps: z.array(step).default([]),
+  /** Heading of the FAQ block */
+  faqTitle: z.string().optional(),
+};
+
+/**
+ * German slug: the last part of the German address, e.g.
+ * "hochzeitsfotograf-wien" → https://gemycampei.com/de/hochzeitsfotograf-wien/
+ */
+const slug = z.string().regex(/^[a-z0-9-]+$/, 'slug: only lower-case letters, digits and hyphens');
 
 /**
  * Where a gallery took place. Used for search engine data and alt texts.
@@ -66,7 +92,7 @@ const categories = defineCollection({
   loader: glob({
     pattern: '*/_category.md',
     base: './galleries',
-    // The ID is the folder name ("weddings"), which is also the URL: /weddings/
+    // The ID is the folder name ("vienna-wedding-photographer"), which is also the URL: /vienna-wedding-photographer/
     generateId: ({ entry }) => entry.split('/')[0],
   }),
   schema: z.object({
@@ -91,13 +117,19 @@ const categories = defineCollection({
     packages: z.string().optional(),
     /**
      * How the category page shows its galleries:
-     * cards    = grid of gallery cards, every gallery gets its own page (weddings, the alps)
+     * cards    = grid of gallery cards, every gallery gets its own page (all categories)
      * carousel = the photos of this folder's galleries in a full-width row that moves
-     *            on by itself (maternity, 35mm & Super 8)
+     *            on by itself (available, not used)
      * slider   = the photos one at a time with counter and thumbnails (available, not used)
      * Galleries that are only listed here via `alsoIn` always appear as cards.
      */
     display: z.enum(['cards', 'slider', 'carousel']).default('cards'),
+    /**
+     * Only for slider / carousel: true = each gallery of this folder ALSO gets
+     * its own page and a card on /galleries/ (the 35mm and Super 8 galleries).
+     * The category page itself still shows the photos and videos, not cards.
+     */
+    galleryPages: z.boolean().default(false),
     /** Position in the menu, lower numbers first */
     order: z.number().default(100),
     /**
@@ -106,8 +138,51 @@ const categories = defineCollection({
      * not listed follow after the listed ones, newest first.
      */
     galleryOrder: z.array(z.string()).default([]),
+    /** Heading above the videos, e.g. "Super 8 films" */
+    videosTitle: z.string().default('Films'),
+    /**
+     * Videos hosted on Vimeo, shown two per row after the photos. The player only loads
+     * after a visitor clicks play (no connection to Vimeo before that).
+     *   - vimeoId: the number in the Vimeo address (vimeo.com/1226323019)
+     *   - title:   shown on the preview image and read by screen readers
+     *   - poster:  preview image file inside the category folder
+     */
+    videos: z
+      .array(
+        z.object({
+          vimeoId: z.string().regex(/^\d+$/, 'vimeoId must be the number from the Vimeo address'),
+          title: z.string(),
+          poster: z.string(),
+        }),
+      )
+      .default([]),
     faq: z.array(faqItem).default([]),
+    ...landing,
     legacyUrls,
+  }),
+});
+
+/** German texts of a category: galleries/<category>/_category.de.md */
+const categoriesDe = defineCollection({
+  loader: glob({
+    pattern: '*/_category.de.md',
+    base: './galleries',
+    generateId: ({ entry }) => entry.split('/')[0],
+  }),
+  schema: z.object({
+    slug,
+    menuLabel: z.string(),
+    singular: z.string(),
+    heroTitle: z.string(),
+    heroSubtitle: z.string().optional(),
+    h1: z.string(),
+    seoTitle: z.string(),
+    seoDescription: z.string(),
+    videosTitle: z.string().optional(),
+    /** Video titles in the same order as `videos` in _category.md */
+    videoTitles: z.array(z.string()).default([]),
+    faq: z.array(faqItem).default([]),
+    ...landing,
   }),
 });
 
@@ -118,7 +193,7 @@ const galleryMeta = defineCollection({
   loader: glob({
     pattern: '*/*/gallery.md',
     base: './galleries',
-    // ID = "<category>/<gallery>", e.g. "weddings/palais-daun-kinsky-wedding-vienna"
+    // ID = "<category>/<gallery>", e.g. "vienna-wedding-photographer/palais-daun-kinsky-wedding-vienna"
     generateId: ({ entry }) => entry.split('/').slice(0, 2).join('/'),
   }),
   schema: z.object({
@@ -130,7 +205,7 @@ const galleryMeta = defineCollection({
      */
     type: z.string().optional(),
     /**
-     * Extra categories this gallery also appears in (folder names), e.g. [35mm-super-8-film].
+     * Extra categories this gallery also appears in (folder names), e.g. [35mm-film-super-8-wedding].
      * The gallery's own folder stays its main category and decides the URL.
      */
     alsoIn: z.array(z.string()).default([]),
@@ -156,7 +231,39 @@ const galleryMeta = defineCollection({
     seoDescription: z.string().optional(),
     /** true = only visible with `npm run dev`, hidden on the live site */
     draft: z.boolean().default(false),
+    /**
+     * Videos on Vimeo, shown instead of (or before) photos, two per row.
+     * The preview image (`poster`) is a file in the gallery's `posters/` folder,
+     * so it is not counted as a photo. A gallery may consist of videos only.
+     */
+    videos: z
+      .array(
+        z.object({
+          vimeoId: z.string().regex(/^\d+$/, 'vimeoId must be the number from the Vimeo address'),
+          title: z.string(),
+          poster: z.string(),
+        }),
+      )
+      .default([]),
     legacyUrls,
+  }),
+});
+
+/** German texts of a gallery: galleries/<category>/<gallery>/gallery.de.md (body = story) */
+const galleryMetaDe = defineCollection({
+  loader: glob({
+    pattern: '*/*/gallery.de.md',
+    base: './galleries',
+    generateId: ({ entry }) => entry.split('/').slice(0, 2).join('/'),
+  }),
+  schema: z.object({
+    title: z.string().optional(),
+    type: z.string().optional(),
+    location: z.string().optional(),
+    seoTitle: z.string().optional(),
+    seoDescription: z.string().optional(),
+    /** Video titles in the same order as `videos` in gallery.md */
+    videoTitles: z.array(z.string()).default([]),
   }),
 });
 
@@ -174,8 +281,23 @@ const packages = defineCollection({
       seoDescription: z.string(),
       h1: z.string(),
       tagline: z.string(),
-      buttonLabel: z.string().default('Request pricing'),
+      buttonLabel: z.string().default('Request the packages'),
       order: z.number().default(100),
+      /**
+       * How the packages are shown (both looks come from the v3 design):
+       * rows  = wide rows of photo + text that alternate sides (wedding packages)
+       * cards = a grid of cards with "what's included" lists (elopement packages)
+       */
+      layout: z.enum(['rows', 'cards']).default('rows'),
+      /**
+       * Folder name of a category whose hero.jpg becomes the big photo at the
+       * top of this page, e.g. "dolomites-elopement-photographer". Without it the page starts with text.
+       */
+      heroCategory: z.string().optional(),
+      /** Small line above the card grid, e.g. "Four ways to elope" */
+      intro: z.string().optional(),
+      /** Heading next to the FAQ list, e.g. "Everything couples ask before booking" */
+      faqHeadline: z.string().optional(),
       packages: z
         .array(
           z.object({
@@ -191,6 +313,91 @@ const packages = defineCollection({
       faq: z.array(faqItem).default([]),
       legacyUrls,
     }),
+});
+
+/**
+ * German texts of a packages page: src/content/packages/<page>/index.de.md.
+ * `packages` holds the texts in the same order as the English file (the photos
+ * come from there).
+ */
+const packagesDe = defineCollection({
+  loader: glob({
+    pattern: '*/index.de.md',
+    base: './src/content/packages',
+    generateId: ({ entry }) => entry.split('/')[0],
+  }),
+  schema: z.object({
+    slug,
+    menuLabel: z.string(),
+    seoTitle: z.string(),
+    seoDescription: z.string(),
+    h1: z.string(),
+    tagline: z.string(),
+    buttonLabel: z.string().default('Pakete anfragen'),
+    intro: z.string().optional(),
+    faqHeadline: z.string().optional(),
+    packages: z
+      .array(
+        z.object({
+          eyebrow: z.string().optional(),
+          title: z.string(),
+          text: z.string(),
+          included: z.array(z.string()).default([]),
+        }),
+      )
+      .default([]),
+    faqTitle: z.string().default('FAQ'),
+    faq: z.array(faqItem).default([]),
+  }),
+});
+
+// ---------------------------------------------------------------------------
+// JOURNAL: src/content/journal/<article>/index.md  (+ index.de.md in German)
+// ---------------------------------------------------------------------------
+/**
+ * Guides and stories. The folder name is the English address:
+ *   src/content/journal/how-to-elope-in-the-dolomites/ → /journal/how-to-elope-in-the-dolomites/
+ * Photos are not copied here: `cover` and `photos` name photos of the gallery
+ * folders as "<category>/<gallery>/<file>.jpg".
+ */
+const galleryPhotoRef = z
+  .string()
+  .regex(/^[\w-]+\/[\w-]+\/[^/]+\.(jpe?g|png|webp|avif)$/i, 'use "<category>/<gallery>/<file>.jpg"');
+
+const journal = defineCollection({
+  loader: glob({ pattern: '*/index.md', base: './src/content/journal' }),
+  schema: z.object({
+    title: z.string(),
+    /** Title for Google (about 60 characters max). Default: title */
+    seoTitle: z.string().optional(),
+    /** Text under the title in Google and on the journal overview (about 155 characters) */
+    description: z.string(),
+    date: z.coerce.date(),
+    /** When the guide was last checked or changed */
+    updated: z.coerce.date().optional(),
+    cover: galleryPhotoRef,
+    /** A few photos shown as a row inside the article */
+    photos: z.array(galleryPhotoRef).default([]),
+    /** Galleries shown as cards at the end ("<category>/<gallery>") */
+    galleries: z.array(z.string()).default([]),
+    faq: z.array(faqItem).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+const journalDe = defineCollection({
+  loader: glob({
+    pattern: '*/index.de.md',
+    base: './src/content/journal',
+    generateId: ({ entry }) => entry.split('/')[0],
+  }),
+  schema: z.object({
+    slug,
+    title: z.string(),
+    seoTitle: z.string().optional(),
+    description: z.string(),
+    faq: z.array(faqItem).default([]),
+  }),
 });
 
 // ---------------------------------------------------------------------------
@@ -213,4 +420,14 @@ const testimonials = defineCollection({
 });
 
 // Astro reads this export to know which collections exist.
-export const collections = { categories, galleryMeta, packages, testimonials };
+export const collections = {
+  categories,
+  categoriesDe,
+  galleryMeta,
+  galleryMetaDe,
+  packages,
+  packagesDe,
+  testimonials,
+  journal,
+  journalDe,
+};

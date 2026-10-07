@@ -8,16 +8,16 @@
  * saves a few steps and makes the photos web-ready.
  *
  * USAGE (in the terminal, from the project folder)
- *   npm run new-gallery -- --category the-alps --type Elopement --title "Lago di Braies" --couple "S & J" --place "Dolomites" --photos "C:\Export\Braies"
+ *   npm run new-gallery -- --category dolomites-elopement-photographer --type Elopement --title "Lago di Braies" --couple "S & J" --place "Dolomites" --photos "C:\Export\Braies"
  *
  * OPTIONS
- *   --category  category folder in galleries/ (required): weddings, the-alps, maternity, 35mm-super-8-film
+ *   --category  category folder in galleries/ (required): weddings, dolomites-elopement-photographer, maternity, 35mm-film-super-8-wedding
  *   --title     venue or place, becomes the big title (required)
  *   --type      kind of shoot, e.g. Elopement, "Couple Session", Proposal (optional,
  *               default: the category's `singular`)
  *   --couple    names or initials shown above the title (optional)
  *   --place     extra words for the folder name / URL, e.g. "Vienna" or "Dolomites" (optional)
- *   --also-in   more categories, comma separated, e.g. "35mm-super-8-film" (optional)
+ *   --also-in   more categories, comma separated, e.g. "35mm-film-super-8-wedding" (optional)
  *   --photos    folder with exported photos (optional)
  *
  * WHAT HAPPENS WITH THE PHOTOS
@@ -69,7 +69,7 @@ for (const entry of await readdir(galleriesDir, { withFileTypes: true })) {
 
 if (!args.category || !args.title) {
   console.error(
-    'Usage: npm run new-gallery -- --category <category> --title "Venue" [--type "Elopement"] [--couple "S & J"] [--place "Dolomites"] [--also-in "35mm-super-8-film"] [--photos "C:\\path"]',
+    'Usage: npm run new-gallery -- --category <category> --title "Venue" [--type "Elopement"] [--couple "S & J"] [--place "Dolomites"] [--also-in "35mm-film-super-8-wedding"] [--photos "C:\\path"]',
   );
   console.error(`Categories: ${categories.join(', ')}`);
   process.exit(1);

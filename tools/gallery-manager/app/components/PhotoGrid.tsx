@@ -11,6 +11,9 @@
  * - Click photos to select them (Shift+click selects a range), then delete
  *   them or move them to another gallery.
  * - "★" makes a photo the cover (saved with the Save button, like all fields).
+ * - With one photo selected, its description (alt text, English and German)
+ *   can be edited below the toolbar. It is saved to photos.yaml right away.
+ *   Photos without a description show a small "no text" mark.
  *
  * File operations are saved immediately; deleted photos can be restored from
  * the trash (or with Undo).
@@ -33,6 +36,8 @@ interface Props {
   /** reload the gallery; `renamed` maps old → new photo names after renumbering */
   onChanged: (renamed?: Record<string, string>) => Promise<void>;
   notify: Notify;
+  /** German version switched on: show the German description too */
+  german: boolean;
 }
 
 /** Photos smaller than this on the long side get a warning mark */
@@ -40,7 +45,7 @@ const MIN_LONG_EDGE = 1500;
 
 const kb = (bytes: number) => (bytes > 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.round(bytes / 1024)} KB`);
 
-export default function PhotoGrid({ galleryId, photos, cover, galleries, onSetCover, onChanged, notify }: Props) {
+export default function PhotoGrid({ galleryId, photos, cover, galleries, onSetCover, onChanged, notify, german }: Props) {
   // Local copy of the order, so a dragged photo jumps to its place immediately
   const [order, setOrder] = useState(photos);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -48,6 +53,25 @@ export default function PhotoGrid({ galleryId, photos, cover, galleries, onSetCo
   const [upload, setUpload] = useState<{ done: number; total: number } | null>(null);
   const [dropActive, setDropActive] = useState(false);
   const [moveTarget, setMoveTarget] = useState('');
+  /** Description being edited for the single selected photo */
+  const [altDraft, setAltDraft] = useState<{ name: string; en: string; de: string } | null>(null);
+  const singleSelected = selected.size === 1 ? order.find((p) => selected.has(p.name)) : undefined;
+  useEffect(() => {
+    setAltDraft(singleSelected ? { name: singleSelected.name, ...singleSelected.alt } : null);
+    // Only when the selected photo changes, not on every render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [singleSelected?.name, singleSelected?.alt.en, singleSelected?.alt.de]);
+
+  async function saveAlt() {
+    if (!altDraft) return;
+    try {
+      await api.savePhotoAlt(galleryId, altDraft.name, { en: altDraft.en, de: altDraft.de });
+      notify('Description saved.');
+      await onChanged();
+    } catch (error) {
+      notify((error as Error).message, { level: 'error' });
+    }
+  }
   const fileInput = useRef<HTMLInputElement>(null);
 
   // When the server sends new photos, show them and forget selections of removed photos
@@ -206,6 +230,29 @@ export default function PhotoGrid({ galleryId, photos, cover, galleries, onSetCo
         )}
       </div>
 
+      {altDraft && (
+        <div className="alt-editor form">
+          <strong>Description of {altDraft.name}</strong>
+          <p className="muted small">
+            What is in the photo, in a short natural sentence, e.g. "Bride and groom on a rowing boat at Lago di Braies at
+            dawn". Used by Google Images and screen readers.
+          </p>
+          <label>
+            English
+            <input value={altDraft.en} maxLength={300} onChange={(e) => setAltDraft({ ...altDraft, en: e.target.value })} />
+          </label>
+          {german && (
+            <label>
+              Deutsch
+              <input value={altDraft.de} maxLength={300} onChange={(e) => setAltDraft({ ...altDraft, de: e.target.value })} />
+            </label>
+          )}
+          <div>
+            <button onClick={saveAlt}>Save description</button>
+          </div>
+        </div>
+      )}
+
       {order.length === 0 ? (
         <div className="drop-hint" onClick={() => fileInput.current?.click()}>
           <strong>Drop photos here</strong>
@@ -244,6 +291,11 @@ export default function PhotoGrid({ galleryId, photos, cover, galleries, onSetCo
                     </span>
                   )}
                   {selected.has(photo.name) && <span className="photo-check">✓</span>}
+                  {!photo.alt.en && (
+                    <span className="photo-noalt" title="No description yet: select the photo to add one">
+                      no text
+                    </span>
+                  )}
                 </li>
               );
             })}

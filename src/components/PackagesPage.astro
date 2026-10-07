@@ -5,23 +5,35 @@
  * ============================================================================
  *
  * The complete content of a packages page, used by:
- *   src/pages/wedding-photography-packages.astro
+ *   src/pages/wedding-photography-packages.astro        (English)
  *   src/pages/dolomites-elopement-packages.astro
+ *   src/pages/de/hochzeitsfotografie-pakete.astro       (German)
+ *   src/pages/de/elopement-pakete-dolomiten.astro
+ *
+ * German texts come from index.de.md next to index.md (photos, layout and
+ * order always from index.md). The German page file name must match the
+ * `slug` in index.de.md.
  *
  * Those page files are only three lines long. All texts come from
- * src/content/packages/<id>/index.md.
+ * src/content/packages/<id>/index.md, including which of the two layouts
+ * from the v3 design is used (`layout:` in that file):
  *
- * WHAT THE PAGE SHOWS (like the original INFO pages)
- *   tagline · H1 · intro text · "Request pricing" · divider
- *   · packages (framed photo + text, alternating left/right) · FAQ · button
+ *   rows   wedding packages: intro, then wide rows of photo + description
+ *          that alternate sides, then the FAQ on a quiet band
+ *   cards  elopement packages: full-width hero photo, then a grid of cards
+ *          with their "what's included" lists, then a numbered FAQ
  * ============================================================================
  */
-import { Image } from 'astro:assets';
+import { Image, Picture } from 'astro:assets';
 import { getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Faq from './Faq.astro';
+import SectionHead from './SectionHead.astro';
+import { getCategories } from '../lib/galleries';
 import { inlineMarkdown } from '../lib/markdown';
 import { breadcrumbSchema, faqSchema } from '../lib/seo';
+import { getPackagesPage } from '../lib/packages';
+import { langOf, pick, routes, useUi } from '../i18n';
 
 interface Props {
   /** Folder name in src/content/packages/, e.g. "wedding-photography-packages" */
@@ -29,145 +41,355 @@ interface Props {
 }
 
 const { id } = Astro.props;
+const lang = langOf(Astro.currentLocale);
+const t = useUi(lang);
 const page = await getEntry('packages', id);
 if (!page) throw new Error(`No packages page found in src/content/packages/${id}/index.md`);
+const info = (await getPackagesPage(id))!;
+const de = lang === 'de' ? info.de : undefined;
 
-const { Content } = await render(page); // the intro text below the settings block
-const { data } = page;
+// The intro text below the settings block: German when index.de.md exists
+const { Content } = await render(de ?? page);
+const en = page.data;
+const cards = en.layout === 'cards';
+
+// Texts of the current language; photos, layout and order from index.md
+const data = {
+  menuLabel: de?.data.menuLabel ?? en.menuLabel,
+  seoTitle: de?.data.seoTitle ?? en.seoTitle,
+  seoDescription: de?.data.seoDescription ?? en.seoDescription,
+  h1: de?.data.h1 ?? en.h1,
+  tagline: de?.data.tagline ?? en.tagline,
+  buttonLabel: de?.data.buttonLabel ?? en.buttonLabel,
+  intro: de ? de.data.intro : en.intro,
+  faqHeadline: de ? de.data.faqHeadline : en.faqHeadline,
+  faqTitle: de?.data.faqTitle ?? en.faqTitle,
+  faq: de ? de.data.faq : en.faq,
+  heroCategory: en.heroCategory,
+  packages: en.packages.map((pkg, i) => ({ ...pkg, ...(de?.data.packages[i] ?? {}) })),
+};
+const href = lang === 'de' ? info.hrefDe : info.href;
+const collection = pick(lang, { en: 'Collection', de: 'Paket' });
+
+// The big photo at the top of the elopement page is the hero of a category
+// folder (`heroCategory:` in index.md), so no photo has to be stored twice.
+const categories = await getCategories();
+const hero = data.heroCategory ? categories.find((c) => c.id === data.heroCategory)?.hero : undefined;
+if (data.heroCategory && !hero) {
+  throw new Error(`src/content/packages/${id}/index.md: no category folder "${data.heroCategory}" for heroCategory.`);
+}
 
 const schema = [
   breadcrumbSchema([
-    { name: 'Home', path: '/' },
-    { name: data.menuLabel, path: `/${id}/` },
+    { name: t.breadcrumbHome, path: routes.home[lang] },
+    { name: data.menuLabel, path: href },
   ]),
   ...(data.faq.length ? [faqSchema(data.faq)] : []),
 ];
 ---
 
-<Base title={data.seoTitle} description={data.seoDescription} ogImage={data.packages[0]?.image} schema={schema}>
-  <section class="container intro">
-    <p class="tagline">{data.tagline}</p>
-    <h1 class="h1-quiet heading">{data.h1}</h1>
-    <div class="intro-text">
-      <Content />
-    </div>
-    <a class="button" href="/contact/">{data.buttonLabel}</a>
-  </section>
+<Base
+  title={data.seoTitle}
+  description={data.seoDescription}
+  ogImage={hero ?? data.packages[0]?.image}
+  schema={schema}
+  noindex={lang === 'de' && !info.de}
+  alternates={{ en: info.href, de: info.de ? info.hrefDe : undefined }}
+>
+  {
+    hero ? (
+      /* ── Hero with the title on top of the photo ───────────────────────── */
+      <section class="hero">
+        <Picture
+          src={hero}
+          formats={['avif', 'webp']}
+          widths={[640, 960, 1280, 1920]}
+          sizes="100vw"
+          quality={65}
+          alt={data.h1}
+          loading="eager"
+          class="hero-image"
+        />
+        <div class="hero-text">
+          <h1 class="h1-quiet hero-h1">{data.h1}</h1>
+          <p class="display hero-title" set:html={inlineMarkdown(data.tagline)} />
+        </div>
+      </section>
+    ) : (
+      /* ── Title block ───────────────────────────────────────────────────── */
+      <section class="intro">
+        <div class="intro-head">
+          <h1 class="h1-quiet">{data.h1}</h1>
+          <p class="display intro-title" set:html={inlineMarkdown(data.tagline)} />
+          <a class="button" href={routes.contact[lang]}>{data.buttonLabel}</a>
+        </div>
+        <div class="intro-text body-text">
+          <Content />
+        </div>
+      </section>
+    )
+  }
 
-  <div class="container">
-    <hr class="divider" />
-  </div>
-
-  <!-- class:list adds "reverse" to every second package, so photo and text swap sides -->
-  <section class="container packages" aria-label="Packages">
-    {
-      data.packages.map((pkg, i) => (
-        <article class:list={['package', { reverse: i % 2 === 1 }]}>
-          <div class="frame">
-            <Image src={pkg.image} alt={`${pkg.title}: ${data.menuLabel}`} widths={[480, 800, 1000]} sizes="(max-width: 800px) 90vw, 420px" />
-          </div>
-          <div class="package-text">
-            {pkg.eyebrow && <p class="eyebrow">{pkg.eyebrow}</p>}
-            <h2>{pkg.title}</h2>
-            <p set:html={inlineMarkdown(pkg.text)} />
-            {pkg.included.length > 0 && (
-              <>
-                <p class="included-label">What's included:</p>
+  {
+    cards ? (
+      /* ── Card grid with "what's included" lists ─────────────────────────── */
+      <section class="section band">
+        {data.intro && <SectionHead eyebrow={data.menuLabel} title={data.intro} />}
+        <div class="card-grid">
+          {data.packages.map((pkg) => (
+            <article class="card" data-reveal>
+              <Image
+                src={pkg.image}
+                alt={`${pkg.title}: ${data.menuLabel}`}
+                widths={[320, 480, 800]}
+                sizes="(max-width: 700px) 92vw, 23vw"
+                quality={72}
+                class="card-image"
+              />
+              {pkg.eyebrow && <p class="eyebrow card-eyebrow">{pkg.eyebrow}</p>}
+              <h2 class="card-title">{pkg.title}</h2>
+              <p class="card-text" set:html={inlineMarkdown(pkg.text)} />
+              {pkg.included.length > 0 && (
                 <ul class="included">
                   {pkg.included.map((item) => (
-                    <li>{item}</li>
+                    <li set:html={inlineMarkdown(item)} />
                   ))}
                 </ul>
-              </>
-            )}
-          </div>
-        </article>
-      ))
-    }
-  </section>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+    ) : (
+      /* ── Wide rows, photo and text swapping sides ──────────────────────── */
+      <section class="section rows" aria-label={data.menuLabel}>
+        {data.packages.map((pkg, i) => (
+          <article class:list={['row', { reverse: i % 2 === 1 }]} data-reveal>
+            <Image
+              src={pkg.image}
+              alt={`${pkg.title}: ${data.menuLabel}`}
+              widths={[480, 800, 1000]}
+              sizes="(max-width: 800px) 92vw, 45vw"
+              class="row-image"
+            />
+            <div class="row-text">
+              <p class="eyebrow">{pkg.eyebrow ?? `${collection} ${['I', 'II', 'III', 'IV'][i] ?? i + 1}`}</p>
+              <h2 class="row-title">{pkg.title}</h2>
+              <p class="body-text" set:html={inlineMarkdown(pkg.text)} />
+              {pkg.included.length > 0 && (
+                <ul class="included">
+                  {pkg.included.map((item) => (
+                    <li set:html={inlineMarkdown(item)} />
+                  ))}
+                </ul>
+              )}
+            </div>
+          </article>
+        ))}
+      </section>
+    )
+  }
 
-  <Faq title={data.faqTitle} items={data.faq} />
+  <Faq
+    eyebrow={data.faqTitle}
+    headline={data.faqHeadline}
+    items={data.faq}
+    numbered={cards}
+    button={cards ? { label: data.buttonLabel, href: routes.contact[lang] } : undefined}
+  />
 
-  <section class="container center closing">
-    <a class="button" href="/contact/">{data.buttonLabel}</a>
-  </section>
 </Base>
 
 <style>
+  /* ── Hero ──────────────────────────────────────────────────────────────── */
+  .hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: 72vh;
+    padding: clamp(2.25rem, 6vw, 6rem) var(--edge) clamp(1.75rem, 4vw, 3.25rem);
+  }
+
+  .hero :global(.hero-image),
+  .hero :global(picture) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Dark gradient so the white title stays readable on any photo */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, oklch(0.22 0.012 60 / 0.82), oklch(0.22 0.012 60 / 0.1) 65%);
+  }
+
+  .hero-text {
+    position: relative;
+    z-index: 1;
+    max-width: 51rem;
+    color: oklch(0.97 0.01 85);
+  }
+
+  .hero-h1 {
+    color: oklch(0.88 0.04 62);
+  }
+
+  .hero-title {
+    font-size: clamp(2.25rem, 6.4vw, 5.375rem);
+    line-height: 1;
+  }
+
+  /* ── Title block (wedding packages) ────────────────────────────────────── */
+  /* Title and button on the left, the intro text on the right */
   .intro {
-    text-align: center;
-    padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(3rem, 6vw, 5rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure));
+    align-items: end;
+    gap: var(--space-5) var(--space-6);
+    padding: clamp(1.5rem, 3.5vw, 3rem) var(--edge) var(--space-5);
   }
 
-  .heading {
-    margin-top: 2.5rem;
+  .intro-title {
+    font-size: clamp(2.375rem, 6vw, 5rem);
+    margin-bottom: var(--space-4);
   }
 
-  .intro-text {
-    max-width: 940px;
-    margin: 2rem auto 2.5rem;
+  @media (max-width: 900px) {
+    .intro {
+      grid-template-columns: 1fr;
+    }
   }
 
   /* Keeps the line breaks written in the Markdown file */
   .intro-text :global(p) {
     white-space: pre-line;
+    margin-bottom: 1rem;
   }
 
-  .packages {
-    max-width: 1240px;
+  /* ── Card grid (elopement packages) ────────────────────────────────────── */
+  .card-grid {
     display: grid;
-    gap: clamp(3rem, 7vw, 6rem);
-    padding-block: clamp(3rem, 6vw, 5rem);
+    grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr));
+    gap: clamp(1.375rem, 3vw, 2.25rem);
   }
 
-  .package {
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .card :global(.card-image) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .card-eyebrow {
+    margin: 0.375rem 0 0;
+  }
+
+  .card-title {
+    margin: 0;
+    font-weight: 300;
+    font-size: 1.5625rem;
+  }
+
+  .card-text {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    font-weight: 300;
+    color: var(--text-soft);
+  }
+
+  /* ── Rows (wedding packages) ───────────────────────────────────────────── */
+  .rows {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--space-6);
+  }
+
+  /* Photo capped at --photo-text, text on the wide side (a 2 : 3 split) */
+  /*
+   * Every row is exactly photo + gap + a fixed text column, centred, so the
+   * distance between photo and text is the same whichever side the photo is
+   * on (a flexible text column left the middle row's text far from its photo).
+   */
+  .row {
+    --photo-col: 22.5rem; /* 360px portrait */
+    --text-column: min(var(--measure), 100% - var(--photo-col) - var(--space-6));
+    display: grid;
+    grid-template-columns: var(--photo-col) var(--text-column);
+    justify-content: center;
     align-items: center;
-    gap: clamp(2rem, 6vw, 5.5rem);
+    gap: var(--space-6);
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-4);
   }
 
-  .package .frame {
-    padding: clamp(1.5rem, 3.5vw, 2.75rem) clamp(1.5rem, 5vw, 3.75rem);
+  .row.reverse {
+    grid-template-columns: var(--text-column) var(--photo-col);
   }
 
-  /* `order: 2` moves the photo to the right for every second package */
-  .package.reverse .frame {
+  /*
+   * Portrait photos (4:5) at a fixed 360px, so all three collections match.
+   */
+  .row :global(.row-image) {
+    width: 100%;
+    aspect-ratio: 4 / 5; /* portrait */
+    object-fit: cover;
+  }
+
+  /* Every second row shows the photo on the right */
+  .row.reverse :global(.row-image) {
     order: 2;
   }
 
-  .package h2 {
-    font-size: clamp(1.8rem, 3vw, 2.3rem);
-    margin-bottom: 1.8rem;
+  .row-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-width: var(--measure);
   }
 
-  .package-text {
-    max-width: 580px;
-  }
-
-  .included-label {
-    font-style: italic;
-    font-size: 0.85rem;
-    margin: 2rem 0 0.8rem;
-  }
-
-  .included {
+  .row-title {
     margin: 0;
-    padding-left: 2.3rem;
-    font-size: 0.88rem;
-    line-height: 1.95;
+    font-size: clamp(1.625rem, 3.4vw, 2.625rem);
   }
 
-  .closing {
-    padding-top: 1rem;
+  .row-text p {
+    margin: 0;
+  }
+
+  /* ── "What's included" list ────────────────────────────────────────────── */
+  .included {
+    margin: 0.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    font-size: 0.8125rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text-soft);
+  }
+
+  .included li {
+    border-top: 1px solid var(--line);
+    padding: 0.5rem 0;
   }
 
   @media (max-width: 800px) {
-    .package {
+    /* On phones the photo always comes first, at its own size */
+    .row,
+    .row.reverse {
       grid-template-columns: 1fr;
     }
 
-    .package.reverse .frame {
+    .row.reverse :global(.row-image) {
       order: 0;
     }
   }
