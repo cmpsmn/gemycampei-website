@@ -1,7 +1,7 @@
 ---
 # Gallery settings. Edit with the gallery manager (npm run manage) or by hand.
 # Every field is explained in src/content.config.ts
-title: "35mm Film Photographs"
+title: "35mm"
 type: "35mm Film"
 location: "Vienna, Dolomites & Europe"
 region: destination

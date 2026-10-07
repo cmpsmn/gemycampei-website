@@ -26,6 +26,7 @@ import VimeoVideo from '../components/VimeoVideo.astro';
 import {
   toPhotoData,
   describeGallery,
+  galleryHeading,
   galleryText,
   categoryText,
   placeWithoutTitle,
@@ -59,11 +60,9 @@ const href = hrefIn(gallery, lang);
 const placeShort = placeWithoutTitle(text.place, text.title);
 const description = describeGallery(gallery, lang); // "Wedding at Palais Daun-Kinsky, Vienna, Austria"
 
-// The H1 says what and where: "Elopement at Lago di Braies" / "Elopement am Lago di Braies"
-const heading = pick(lang, {
-  en: `${text.typeLabel} at ${text.title}`,
-  de: `${text.typeLabel} · ${text.title}`,
-});
+// The H1 says what and where: "Elopement at Lago di Braies" / "Elopement · Lago di Braies",
+// or only the title when it already names the kind of shoot ("Super 8", "35mm")
+const heading = galleryHeading(gallery, lang);
 
 // Story text: German body if gallery.de.md exists, else the English body
 const storyEntry = lang === 'de' && gallery.de ? gallery.de : gallery.entry;
@@ -93,7 +92,7 @@ const copy = pick(lang, {
     readWhole: 'Read the whole review →',
     planning: `Planning your own ${text.typeLabel.toLowerCase()}? Every collection includes planning support, honest guidance and a private online gallery.`,
     seePackages: (label: string) => `See the ${label.toLowerCase()}`,
-    seoTitle: `${gallery.couple ? `${gallery.couple} · ` : ''}${text.typeLabel} at ${text.title}, ${placeShort}`,
+    seoTitle: `${gallery.couple ? `${gallery.couple} · ` : ''}${heading}, ${placeShort}`,
     seoDescription: `${description}. Candid ${text.typeLabel.toLowerCase()} photography by ${site.name}, photographer in Vienna and the Dolomites.`,
   },
   de: {

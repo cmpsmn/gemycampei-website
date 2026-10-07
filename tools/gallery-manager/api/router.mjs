@@ -34,7 +34,7 @@ import {
   saveGallery,
   uploadPoster,
 } from './galleries.mjs';
-import { afterPhotosRestored, deletePhotos, movePhotos, reorderPhotos, savePhotoAlt, uploadPhoto } from './photos.mjs';
+import { afterPhotosRestored, deletePhotos, movePhotos, reorderPhotos, rotatePhotos, savePhotoAlt, uploadPhoto } from './photos.mjs';
 import {
   createTestimonial,
   deleteTestimonial,
@@ -137,6 +137,11 @@ const routes = [
     const { name, alt } = await readJson(req);
     await savePhotoAlt(galleryId(params), name, alt ?? {});
     return { ok: true };
+  }],
+  // Turn photos: { names, degrees: 90 (right) | -90 (left) | 180 }
+  ['POST', '/api/galleries/:category/:slug/photos/rotate', async ({ req, params }) => {
+    const { names = [], degrees } = await readJson(req);
+    return rotatePhotos(galleryId(params), names, Number(degrees));
   }],
   // A video preview image (into the gallery's posters/ folder)
   ['PUT', '/api/galleries/:category/:slug/posters', async ({ req, params, query }) =>

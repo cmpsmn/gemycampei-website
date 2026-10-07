@@ -1,7 +1,7 @@
 ---
 # Gallery settings. Edit with the gallery manager (npm run manage) or by hand.
 # Every field is explained in src/content.config.ts
-title: "Super 8 Films"
+title: "Super 8"
 type: "Super 8 Film"
 location: "Weddings in Sweden & Morocco"
 region: destination
@@ -11,12 +11,12 @@ seoDescription: "Super 8 wedding films shot on real film stock: short, nostalgic
 # IMPORTANT: Vimeo only plays these videos on other websites if you allow it:
 # in Vimeo, open each video > Privacy > "Where can this be embedded?" and allow gemycampei.com.
 videos:
-  - vimeoId: "1226323019"
-    title: "Leonie & Yassine · Super 8 wedding film"
-    poster: super-8-leonie-and-yassine.jpg
   - vimeoId: "1226323229"
     title: "Araya & Christoffer · Super 8 wedding film"
     poster: super-8-araya-and-christoffer.jpg
+  - vimeoId: "1226323019"
+    title: "Leonie & Yassine · Super 8 wedding film"
+    poster: super-8-leonie-and-yassine.jpg
 ---
 
 Super 8 captures the mood of a celebration, not just its timeline. Shot on **vintage cameras** with real film stock, every film has natural grain, soft light leaks and the gentle flicker of motion that digital filters can't imitate.

@@ -76,6 +76,9 @@ export const api = {
   /** A preview image for a video, saved in the gallery's posters/ folder */
   uploadPoster: (id: string, file: File) =>
     request<{ name: string }>('PUT', `/api/galleries/${id}/posters?name=${encodeURIComponent(file.name)}`, file),
+  /** Turns photos: 90 = right (clockwise), -90 = left, 180 = upside down */
+  rotatePhotos: (id: string, names: string[], degrees: 90 | -90 | 180) =>
+    request<{ rotated: number }>('POST', `/api/galleries/${id}/photos/rotate`, { names, degrees }),
   movePhotos: (id: string, names: string[], to: string) =>
     request<{ moved: Record<string, string> }>('POST', `/api/galleries/${id}/photos/move`, { names, to }),
   /** Saves the description (alt text) of one photo in both languages (photos.yaml) */

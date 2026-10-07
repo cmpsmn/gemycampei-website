@@ -537,11 +537,32 @@ export function placeWithoutTitle(place: string, title: string): string {
 }
 
 /**
+ * Is the title already the kind of shoot? E.g. title "Super 8" with type
+ * "Super 8 Film", or title "35mm" with type "35mm Film". Then headings show the
+ * title alone instead of "Super 8 Film at Super 8".
+ */
+export function titleIsType(title: string, typeLabel: string): boolean {
+  const simple = (text: string) => text.toLowerCase().replace(/[^a-z0-9äöüß]/g, '');
+  const a = simple(title);
+  const b = simple(typeLabel);
+  return a !== '' && b !== '' && (a.startsWith(b) || b.startsWith(a));
+}
+
+/** The H1 of a gallery page: "Elopement at Lago di Braies", or just "Super 8" */
+export function galleryHeading(gallery: Gallery, lang: Lang = 'en'): string {
+  const { title, typeLabel } = galleryText(gallery, lang);
+  if (titleIsType(title, typeLabel)) return title;
+  return lang === 'de' ? `${typeLabel} · ${title}` : `${typeLabel} at ${title}`;
+}
+
+/**
  * "Elopement at Lago di Braies, Dolomites, Italy" / "Elopement am Lago di Braies, Dolomiten, Italien":
  * used for alt texts and descriptions. The title is not repeated when the place starts with it.
  */
 export function describeGallery(gallery: Gallery, lang: Lang = 'en'): string {
   const { title, typeLabel, place } = galleryText(gallery, lang);
+  // "Super 8 Film, weddings in Sweden & Morocco" instead of "Super 8 Film at Super 8, …"
+  if (titleIsType(title, typeLabel)) return `${typeLabel}, ${place}`;
   const rest = placeWithoutTitle(place, title);
   const where = rest === title ? title : place.startsWith(title) ? `${title}, ${rest}` : `${title}, ${place}`;
   return lang === 'de' ? `${typeLabel}: ${where}` : `${typeLabel} at ${where}`;

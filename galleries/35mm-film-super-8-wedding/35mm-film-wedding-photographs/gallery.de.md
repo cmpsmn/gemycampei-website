@@ -1,7 +1,7 @@
 ---
 # German texts of this gallery. Photos and settings come from gallery.md.
 # The text below the settings block is the German story.
-title: "35-mm-Filmfotos"
+title: "35mm"
 type: "35-mm-Film"
 location: "Wien, Dolomiten & Europa"
 seoTitle: "Analoge Hochzeitsfotografie auf 35-mm-Film"
