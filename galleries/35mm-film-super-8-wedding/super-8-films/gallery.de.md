@@ -1,7 +1,7 @@
 ---
 # German texts of this gallery. Photos and settings come from gallery.md.
 # The text below the settings block is the German story.
-title: "Super-8-Filme"
+title: "Super 8"
 type: "Super-8-Film"
 location: "Hochzeiten in Schweden & Marokko"
 seoTitle: "Super-8-Hochzeitsfilme · Vintage Hochzeitsvideo"

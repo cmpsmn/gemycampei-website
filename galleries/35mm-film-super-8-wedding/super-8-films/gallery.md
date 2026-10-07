@@ -1,7 +1,7 @@
 ---
 # Gallery settings. Edit with the gallery manager (npm run manage) or by hand.
 # Every field is explained in src/content.config.ts
-title: "Super 8 Films"
+title: "Super 8"
 type: "Super 8 Film"
 location: "Weddings in Sweden & Morocco"
 region: destination

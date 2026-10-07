@@ -18,11 +18,12 @@ export async function galleryPaths(lang: Lang) {
           gallery: gallery.slug,
         },
         // prev / next let visitors browse through the galleries of this category,
-        // in a circle: after the last gallery comes the first again
+        // in a circle: after the last gallery comes the first again. With only two
+        // galleries, previous and next would be the same one: then only "next".
         props: {
           gallery,
           category,
-          prev: galleries.length > 1 ? galleries[(i - 1 + galleries.length) % galleries.length] : null,
+          prev: galleries.length > 2 ? galleries[(i - 1 + galleries.length) % galleries.length] : null,
           next: galleries.length > 1 ? galleries[(i + 1) % galleries.length] : null,
         },
       });
