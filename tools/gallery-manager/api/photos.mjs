@@ -21,7 +21,8 @@
  */
 
 import { createHash } from 'node:crypto';
-import { readFile, stat, writeFile } from 'node:fs/promises';
+import { readFile, rename, stat, writeFile } from 'node:fs/promises';
+import sharp from 'sharp';
 import path from 'node:path';
 import { UserError, assertPhotoName, exists, galleryDir, parseGalleryId, ROOT } from './paths.mjs';
 import { readMarkdown, toPlain, writeMarkdown } from './frontmatter.mjs';
@@ -29,7 +30,7 @@ import { markChanged, photoNames, readGallery, renumberPhotos } from './gallerie
 import { reviewsUsingPhotos } from './testimonials.mjs';
 import { moveFile, moveToTrash } from './trash.mjs';
 import { addAlts, setAlt, takeAlts } from './alts.mjs';
-import { optimisePhoto, photoName } from '../../../scripts/lib/photos.mjs';
+import { JPEG_QUALITY, optimisePhoto, photoName } from '../../../scripts/lib/photos.mjs';
 
 /** Photos with a long side below this are flagged: they may look soft on big screens. */
 export const MIN_LONG_EDGE = 1500;
@@ -149,6 +150,53 @@ export async function movePhotos(fromId, toId, names) {
     Object.fromEntries(Object.entries(alts).map(([name, alt]) => [moved[name], alt])),
   );
   return moved;
+}
+
+/**
+ * Turns photos by 90° (right = clockwise) or 180°. The file keeps its name, so
+ * descriptions, cover and review links stay as they are. The cover focus point
+ * is turned along with the photo.
+ * @param {number} degrees 90, -90 (left) or 180
+ */
+export async function rotatePhotos(galleryId, names, degrees) {
+  names.forEach(assertPhotoName);
+  if (![90, -90, 180].includes(degrees)) throw new UserError('Choose left, right or upside down.');
+  const gallery = await readGallery(galleryId);
+  const dir = galleryDir(gallery.category, gallery.slug);
+  for (const name of names) {
+    if (!gallery.photos.some((p) => p.name === name)) throw new UserError(`"${name}" is not in this gallery.`, 404);
+  }
+
+  const files = [];
+  for (const name of names) {
+    const file = path.join(dir, name);
+    // .rotate() first applies a camera orientation tag, then the wanted turn.
+    // Saved like an uploaded photo (same JPEG quality, no camera data).
+    const buffer = await sharp(file)
+      .rotate()
+      .rotate((degrees + 360) % 360)
+      .jpeg({ quality: JPEG_QUALITY, mozjpeg: true })
+      .toBuffer();
+    // Write next to it first, then replace: a half-written photo is never left behind
+    const temporary = path.join(dir, `.rotate-${name}`);
+    await writeFile(temporary, buffer);
+    await rename(temporary, file);
+    files.push(file);
+  }
+  // New version, so the manager and the preview show the turned photo right away
+  await markChanged(files);
+
+  // The cover's focus point ("left% top%") turns with the photo
+  const focus = /^(\d{1,3})% (\d{1,3})%$/.exec(gallery.fields.coverFocus ?? '');
+  if (focus && names.includes(gallery.coverPhoto)) {
+    const [x, y] = [Number(focus[1]), Number(focus[2])];
+    const turned = degrees === 90 ? [100 - y, x] : degrees === -90 ? [y, 100 - x] : [100 - x, 100 - y];
+    const file = path.join(dir, 'gallery.md');
+    const { doc, body } = await readMarkdown(file);
+    doc.set('coverFocus', `${turned[0]}% ${turned[1]}%`);
+    await writeMarkdown(file, doc, body);
+  }
+  return { rotated: names.length };
 }
 
 /** Writes (or removes) the cover setting directly. */

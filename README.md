@@ -327,7 +327,7 @@ the terminal.
 |---|---|
 | **Galleries** | Sidebar with every gallery (filter: all / published / drafts). **+ New gallery** asks for main category, title, type, couple and place and suggests the address. The editor has all fields: title, couple, type, location, date, draft, story, SEO title and description (with length counters), address and old addresses. |
 | | **Categories**: tick every category the gallery fits, choose the *main* one (it decides the address). A card linking to the gallery then appears on every ticked category page. |
-| | **Photos**: drop files onto the grid (or "Add photos"). Each upload is rotated, resized to 2400 px, stripped of camera/GPS data and named `<slug>-001.jpg`; exact duplicates are skipped and small photos get a warning. Drag photos to reorder. Click to select, Shift+click for a range, then move or delete several at once. ★ makes a photo the cover. |
+| | **Photos**: drop files onto the grid (or "Add photos"). Each upload is rotated, resized to 2400 px, stripped of camera/GPS data and named `<slug>-001.jpg`; exact duplicates are skipped and small photos get a warning. Drag photos to reorder. Click to select, Shift+click for a range, then turn (↺ Left / ↻ Right), move or delete several at once. ★ makes a photo the cover. |
 | | **Cover focus**: click the important spot on the cover. The preview shows how the portrait (3 : 4) card crop will look. |
 | | **Checks**: hints such as "fewer than 10 photos", "story is empty", "SEO title too long". |
 | | **Videos** (shown for galleries with videos or without photos, e.g. Super 8): Vimeo address, title and preview image per video; upload preview images into the gallery's `posters/` folder. |

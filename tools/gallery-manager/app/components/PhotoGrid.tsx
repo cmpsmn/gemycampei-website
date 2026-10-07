@@ -8,8 +8,8 @@
  * - Drop photos from Explorer onto the grid (or use "Add photos") to upload.
  *   The server optimises them and skips exact duplicates.
  * - Drag a photo onto another position to reorder (saved immediately).
- * - Click photos to select them (Shift+click selects a range), then delete
- *   them or move them to another gallery.
+ * - Click photos to select them (Shift+click selects a range), then turn them
+ *   (↺ Left / ↻ Right, saved immediately), delete them or move them to another gallery.
  * - "★" makes a photo the cover (saved with the Save button, like all fields).
  * - With one photo selected, its description (alt text, English and German)
  *   can be edited below the toolbar. It is saved to photos.yaml right away.
@@ -166,6 +166,16 @@ export default function PhotoGrid({ galleryId, photos, cover, galleries, onSetCo
     }
   }
 
+  async function rotateSelected(degrees: 90 | -90) {
+    try {
+      await api.rotatePhotos(galleryId, names, degrees);
+      await onChanged(); // reloads the photos with their new version
+      notify(`${names.length} photo${names.length > 1 ? 's' : ''} turned ${degrees === 90 ? 'right' : 'left'}.`);
+    } catch (error) {
+      notify((error as Error).message, { level: 'error' });
+    }
+  }
+
   async function moveSelected() {
     if (!moveTarget) return;
     try {
@@ -203,6 +213,12 @@ export default function PhotoGrid({ galleryId, photos, cover, galleries, onSetCo
             <strong>{selected.size} selected</strong>
             <button className="link" onClick={() => setSelected(new Set())}>
               Clear
+            </button>
+            <button onClick={() => rotateSelected(-90)} title="Turn left (anticlockwise)" aria-label="Turn left">
+              ↺ Left
+            </button>
+            <button onClick={() => rotateSelected(90)} title="Turn right (clockwise)" aria-label="Turn right">
+              ↻ Right
             </button>
             <select value={moveTarget} onChange={(e) => setMoveTarget(e.target.value)} aria-label="Move to gallery">
               <option value="">Move to …</option>
