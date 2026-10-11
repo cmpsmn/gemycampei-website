@@ -71,7 +71,7 @@ const copy = getPage('about', lang);
         src={portrait}
         alt={copy.portraitAlt}
         widths={[480, 800, 1000]}
-        sizes="(max-width: 900px) 92vw, 400px"
+        sizes="(max-width: 800px) 46vw, (max-width: 900px) 92vw, 400px"
         loading="eager"
         class="portrait"
       />
@@ -114,6 +114,8 @@ const copy = getPage('about', lang);
     </div>
   </section>
 
+  <!-- On phones the photo strip moves above "Working together" (see .closing) -->
+  <div class="closing">
   <!-- ── Working together ────────────────────────────────────────────────── -->
   <section class="section band together">
     <div class="together-head">
@@ -146,6 +148,7 @@ const copy = getPage('about', lang);
       ))
     }
   </section>
+  </div>
 </Base>
 
 <style>
@@ -199,11 +202,33 @@ const copy = getPage('about', lang);
     object-fit: cover;
   }
 
-  /* One column on phones: the portrait keeps its own shape below the text */
+  /*
+   * One column on phones: the portrait keeps its own shape and sits between
+   * the lead and the story. The text column dissolves (display: contents),
+   * so its parts and the portrait can be ordered as one list.
+   */
   @media (max-width: 800px) {
+    .intro {
+      gap: var(--space-3);
+    }
+
+    .intro-text {
+      display: contents;
+    }
+
+    /* Half the width, centred. The width must be set: without it Safari gives
+       the frame (whose photo is absolutely placed, so it has no content) a
+       width and height of 0 */
     .portrait-frame {
+      width: 50%;
+      justify-self: center;
       aspect-ratio: 4 / 5;
       min-height: 0;
+      margin-top: var(--space-2);
+    }
+
+    .intro-story {
+      order: 1;
     }
   }
 
@@ -277,10 +302,17 @@ const copy = getPage('about', lang);
 
 
   /* ── Photo strip ───────────────────────────────────────────────────────── */
+  /* Four in a row; two rows of two on phones and tablets, so the rows are even */
   .strip {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: clamp(0.625rem, 1.5vw, 1.125rem);
+  }
+
+  @media (max-width: 800px) {
+    .strip {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   .strip :global(.strip-photo) {
@@ -298,6 +330,30 @@ const copy = getPage('about', lang);
   .where .link-quiet {
     align-self: start;
     margin-top: auto;
+  }
+
+  /* Phones: left out (it stays in the HTML, so Google still reads it) */
+  @media (max-width: 800px) {
+    .where {
+      display: none;
+    }
+  }
+
+  /* ── Working together + photo strip ────────────────────────────────────── */
+  /* No box of its own on wider screens; on phones the strip comes first */
+  .closing {
+    display: contents;
+  }
+
+  @media (max-width: 800px) {
+    .closing {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .closing .strip {
+      order: -1;
+    }
   }
 
   /* ── Working together: heading left, list right ────────────────────────── */

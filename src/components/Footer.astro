@@ -103,9 +103,17 @@ const year = new Date().getFullYear();
     }
   }
 
+  /* Phones: one group under the other, the links of a group side by side */
   @media (max-width: 520px) {
     .footer {
       grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .column {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
     }
   }
 

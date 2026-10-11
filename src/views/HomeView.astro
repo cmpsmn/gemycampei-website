@@ -174,7 +174,7 @@ const copy = getPage('home', lang);
       src={portrait}
       alt={copy.portraitAlt}
       widths={[480, 800]}
-      sizes="(max-width: 900px) 92vw, 42vw"
+      sizes="(max-width: 800px) 46vw, (max-width: 900px) 92vw, 42vw"
       class="split-image"
       data-reveal
     />
@@ -361,7 +361,7 @@ const copy = getPage('home', lang);
     }
   }
 
-  /* Phones: text first, then as much photo as still fits on the screen */
+  /* Phones: text first, then the whole photo, uncropped, at full width */
   @media (max-width: 820px) {
     .hero {
       align-content: center;
@@ -369,8 +369,8 @@ const copy = getPage('home', lang);
     }
 
     .hero :global(.hero-image) {
-      max-height: 31svh;
-      aspect-ratio: 4 / 5;
+      height: auto;
+      aspect-ratio: auto; /* the photo keeps its own shape */
     }
   }
 
@@ -452,6 +452,14 @@ const copy = getPage('home', lang);
     width: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;
+  }
+
+  /* Phones: the portrait is half the width (as on the about page), centred above the text */
+  @media (max-width: 800px) {
+    .split :global(.split-image) {
+      width: 50%;
+      justify-self: center;
+    }
   }
 
   .split-text {
@@ -594,6 +602,14 @@ const copy = getPage('home', lang);
   @media (max-width: 900px) {
     .answer {
       grid-template-columns: 1fr;
+    }
+  }
+
+  /* Phones: left out (the menu links to the same pages); it stays in the
+     HTML, so Google still reads it */
+  @media (max-width: 800px) {
+    .answer {
+      display: none;
     }
   }
 

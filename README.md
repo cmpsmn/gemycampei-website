@@ -51,6 +51,27 @@ with `draft: true`) are only visible there, never on the live site.
 The first `npm run build` optimises every photo and takes a minute or two. Later builds reuse
 the results and take seconds.
 
+If `npm run dev` only prints "Dev server already running", a preview is still running in the
+background: open http://localhost:4321, or stop it with `npx astro dev stop` and start again.
+
+### Deploying (publishing the live website)
+
+Everything that arrives on the `master` branch on GitHub is published automatically: GitHub
+checks and builds the site and uploads it to Hostinger (progress: the **Actions** tab on
+GitHub, a few minutes). If the check or the build fails, the live site stays as it was.
+
+```bash
+# Small change, straight to the live site:
+git switch master && git pull
+git add .
+git commit -m "What changed"
+git push                             # publishes
+```
+
+For bigger changes use a feature branch and a pull request, so GitHub tests it before it goes
+live: see [Publishing a change](#publishing-a-change) below. Setup and details:
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
 ---
 
 ## 2. The big picture

@@ -91,6 +91,9 @@ const videos = [
   ),
 ];
 
+// "How it works" is left out on phones on these pages (it stays in the HTML for Google)
+const stepsHiddenOnPhones = ['vienna-wedding-photographer', 'dolomites-elopement-photographer'].includes(category.id);
+
 // The packages page this category links to, if set in _category.md
 const packagesPage = data.packages ? await getPackagesPage(data.packages) : undefined;
 
@@ -241,7 +244,7 @@ const noindex = !text.translated;
   <!-- How it works: numbered steps on a quiet band -->
   {
     text.steps.length > 0 && (
-      <section class="section band steps-section">
+      <section class:list={['section', 'band', 'steps-section', { 'hide-on-phones': stepsHiddenOnPhones }]}>
         <SectionHead eyebrow={copy.steps} title={text.stepsTitle ?? copy.steps} />
         <ol class="steps">
           {text.steps.map((step, i) => (
@@ -304,6 +307,42 @@ const noindex = !text.translated;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /*
+   * Phones: no text above the photo, and the photo runs edge to edge as a
+   * short band (cropped at the top and bottom). The title stays in the HTML
+   * for Google and screen readers; under the photo only the link is shown.
+   */
+  @media (max-width: 700px) {
+    .top {
+      height: auto;
+      min-height: 0;
+    }
+
+    .head {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .hero-strip {
+      flex: none;
+      aspect-ratio: 3 / 2;
+      min-height: 0;
+      margin-inline: 0;
+    }
+
+    .intro-text {
+      display: none;
+    }
+
+    .intro {
+      padding-block: var(--space-4);
+    }
   }
 
   /* From tablets up: the size of the hero on the previous website */
@@ -448,6 +487,12 @@ const noindex = !text.translated;
   @media (max-width: 560px) {
     .steps {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .steps-section.hide-on-phones {
+      display: none;
     }
   }
 </style>
