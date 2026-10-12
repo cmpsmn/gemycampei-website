@@ -321,6 +321,9 @@ const isActive = (item: Item) =>
     visibility: visible;
   }
 
+  /* Desktop: the phone menu, its button and its switch don't exist (the
+     switch would otherwise be an unnamed, invisible form field) */
+  .menu-toggle,
   .menu-button,
   .mobile-nav {
     display: none;
@@ -330,6 +333,12 @@ const isActive = (item: Item) =>
   @media (max-width: 820px) {
     .desktop-nav {
       display: none;
+    }
+
+    /* Back in the page, but still invisible (.visually-hidden): the label
+       below is its button */
+    .menu-toggle {
+      display: block;
     }
 
     /* Logo and Close stay above the open menu */

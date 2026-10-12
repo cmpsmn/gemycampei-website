@@ -35,10 +35,12 @@ import { pageTitle, businessSchema, type Schema } from '../lib/seo';
 import { langOf, locale, useUi, type Alternates } from '../i18n';
 import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-// The two fonts every page needs first. Preloading them lets the browser fetch
-// them in parallel with the CSS instead of after it (faster first paint).
+// The fonts every page needs first (the serif italics are in most first-screen
+// titles). Preloading them lets the browser fetch them in parallel with the CSS
+// instead of after it: faster first paint, and no text jumping when they arrive.
 import jostFont from '@fontsource-variable/jost/files/jost-latin-wght-normal.woff2?url';
 import newsreaderFont from '@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url';
+import newsreaderItalicFont from '@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2?url';
 
 // "Props" are the attributes a page passes to this layout.
 interface Props {
@@ -103,6 +105,7 @@ const ogUrl = og ? new URL(og.src, Astro.site).toString() : undefined;
     <meta name="theme-color" content="#f7f3eb" />
     <link rel="preload" href={jostFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={newsreaderFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={newsreaderItalicFont} as="font" type="font/woff2" crossorigin />
     {
       pairs && (
         <>

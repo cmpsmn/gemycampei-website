@@ -41,6 +41,42 @@
 @import '@fontsource-variable/newsreader/wght-italic.css'; /* serif italics (weight axis only: 65 KB instead of 147 KB) */
 @import '@fontsource-variable/jost'; /* sans-serif: body text, labels, menu */
 
+/*
+ * Stand-in fonts while the real ones load. Georgia and Arial are resized to
+ * take exactly as much room as Newsreader and Jost, so the text does not jump
+ * (Google: "layout shift") when the real font arrives. The numbers were
+ * measured from the font files (average letter width and line height); keep
+ * them if the fonts stay the same.
+ */
+@font-face {
+  font-family: 'Newsreader Fallback';
+  font-style: normal;
+  src: local('Georgia'), local('Times New Roman');
+  size-adjust: 96.12%;
+  ascent-override: 76.47%;
+  descent-override: 27.57%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Newsreader Fallback';
+  font-style: italic;
+  src: local('Georgia Italic'), local('Georgia-Italic'), local('Times New Roman Italic');
+  size-adjust: 90.17%;
+  ascent-override: 81.51%;
+  descent-override: 29.39%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Jost Fallback';
+  src: local('Arial'), local('Helvetica');
+  size-adjust: 96.01%;
+  ascent-override: 111.45%;
+  descent-override: 39.06%;
+  line-gap-override: 0%;
+}
+
 /* ---------------------------------------------------------------------------
  * 2. COLOURS AND SIZES
  * CSS variables ("custom properties") are defined once here and used
@@ -72,8 +108,8 @@
   --success: oklch(0.52 0.07 145);
 
   /* Font stacks: the first available font is used */
-  --font-serif: 'Newsreader Variable', 'Newsreader', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Jost Variable', 'Jost', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Newsreader Variable', 'Newsreader', 'Newsreader Fallback', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Jost Variable', 'Jost', 'Jost Fallback', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   /* Side padding of every section: 16px on phones, up to 40px on desktop */
   --gutter: clamp(1rem, 3vw, 2.5rem);

@@ -114,6 +114,7 @@ const copy = getPage('home', lang);
       loading="eager"
       fetchpriority="high"
       class="hero-image"
+      style={`--photo-ratio: ${heroImage.width} / ${heroImage.height}`}
     />
   </section>
 
@@ -368,9 +369,11 @@ const copy = getPage('home', lang);
       gap: clamp(1rem, 4vw, 2rem);
     }
 
+    /* The photo's own shape, known before it loads (--photo-ratio, set in
+       the HTML): the page does not jump when the photo arrives */
     .hero :global(.hero-image) {
       height: auto;
-      aspect-ratio: auto; /* the photo keeps its own shape */
+      aspect-ratio: var(--photo-ratio);
     }
   }
 
