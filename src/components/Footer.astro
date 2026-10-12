@@ -47,7 +47,8 @@ const year = new Date().getFullYear();
   <div class="column">
     <a href={routes.testimonials[lang]}>{t.testimonials}</a>
     <a href={routes.contact[lang]}>{t.contact}</a>
-    <a href={`mailto:${site.email}`}>{site.email}</a>
+    <!-- <wbr>: on narrow phones the address may break after the @, nowhere else -->
+    <a href={`mailto:${site.email}`}>{site.email.split('@')[0]}@<wbr />{site.email.split('@')[1]}</a>
     <a href={site.social.instagram} rel="noopener noreferrer" target="_blank">Instagram</a>
     <a href={site.social.tiktok} rel="noopener noreferrer" target="_blank">TikTok</a>
     <a href={site.social.pinterest} rel="noopener noreferrer" target="_blank">Pinterest</a>
@@ -90,30 +91,39 @@ const year = new Date().getFullYear();
     letter-spacing: 0.18em;
   }
 
+  /* Tight lines inside a link, more room between links: a link that wraps
+     onto two lines reads as one link, not two */
   .column {
     display: grid;
-    gap: 0.5rem;
+    gap: 0.875rem;
     align-content: start;
   }
 
-  /* Phones and tablets: two columns, then one */
+  .column a {
+    line-height: 1.3;
+  }
+
+  /* Phones and tablets: the wordmark across the top, the three groups of
+     links as three columns below it */
   @media (max-width: 900px) {
     .footer {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .brand {
+      grid-column: 1 / -1;
     }
   }
 
-  /* Phones: one group under the other, the links of a group side by side */
+  /* Phones: narrower gaps; a long link wraps into even lines */
   @media (max-width: 520px) {
     .footer {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+      gap: 1.25rem 1rem;
     }
 
-    .column {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem 1.25rem;
+    .column a {
+      text-wrap: balance;
+      overflow-wrap: break-word; /* only if one word is wider than its column */
     }
   }
 
