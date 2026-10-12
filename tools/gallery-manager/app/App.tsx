@@ -6,7 +6,7 @@
  * The frame of the manager:
  *
  *   ┌ Gallery Manager ─ [Galleries] [Categories] [Packages] [Journal] [Testimonials] [Pages]
- *   │                   [Settings] [Order] [Trash] [Changes] ─ [+ New gallery] ┐
+ *   │                   [Settings] [Order] [Trash] [Publish] ─ [+ New gallery] ┐
  *   │ sidebar list │ editor of the selected gallery                                           │
  *   └────────────────────────────────────────────────────────────────────────────────────────┘
  *
@@ -121,7 +121,7 @@ export default function App() {
     { id: 'settings', label: 'Settings' },
     { id: 'order', label: 'Order on pages' },
     { id: 'trash', label: 'Trash', badge: state.trashCount || undefined },
-    { id: 'changes', label: 'Changes' },
+    { id: 'changes', label: 'Publish', badge: state.changeCount || undefined },
   ];
 
   return (
@@ -180,7 +180,7 @@ export default function App() {
         {tab === 'order' && <CategoryOrder state={state} notify={notify} onChanged={refresh} />}
         {tab === 'testimonials' && <TestimonialsEditor state={state} notify={notify} onDirtyChange={setDirty} />}
         {tab === 'trash' && <TrashView notify={notify} onChanged={refresh} />}
-        {tab === 'changes' && <ChangesPanel />}
+        {tab === 'changes' && <ChangesPanel state={state} notify={notify} onChanged={refresh} />}
       </main>
 
       {creating && (

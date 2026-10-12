@@ -5,8 +5,8 @@
  *
  * Asks Git which content files changed since the last commit and groups them
  * so the manager can show "3 photos added to Lago di Braies" instead of a list
- * of file names. Nothing is committed or pushed here: you do that yourself
- * when you are happy (git add . → git commit → git push).
+ * of file names. Nothing is committed or pushed here: that is the "Publish
+ * to the website" button (publish.mjs).
  * ============================================================================
  */
 
@@ -23,15 +23,18 @@ async function git(...args) {
   return stdout;
 }
 
+/** The folders the manager edits: only these are listed and published */
+export const CONTENT_PATHS = ['galleries', 'src/content'];
+
 const STATUS = { '??': 'added', A: 'added', M: 'modified', D: 'deleted', R: 'renamed' };
 
 export async function getChanges() {
   if (!(await exists(path.join(ROOT, '.git')))) {
-    return { available: false, groups: [], total: 0, lastCommit: null };
+    return { available: false, groups: [], total: 0, lastCommit: null, unpublished: 0, branch: null };
   }
 
   // --porcelain = stable, machine-readable output; -uall = list every new file
-  const output = await git('status', '--porcelain=v1', '-uall', '--', 'galleries', 'src/content');
+  const output = await git('status', '--porcelain=v1', '-uall', '--', ...CONTENT_PATHS);
   const groups = new Map();
 
   for (const line of output.split('\n').filter(Boolean)) {
@@ -73,6 +76,16 @@ export async function getChanges() {
     // no commits yet
   }
 
+  // Commits made here but not uploaded yet (e.g. publishing failed without internet).
+  // Compared with what GitHub had at the last fetch, so this needs no internet.
+  let unpublished = 0;
+  try {
+    unpublished = Number(await git('rev-list', '--count', 'origin/master..HEAD'));
+  } catch {
+    // no remote yet
+  }
+  const branch = (await git('rev-parse', '--abbrev-ref', 'HEAD').catch(() => '')).trim() || null;
+
   const list = [...groups.values()];
-  return { available: true, groups: list, total: list.reduce((sum, g) => sum + g.files.length, 0), lastCommit };
+  return { available: true, groups: list, total: list.reduce((sum, g) => sum + g.files.length, 0), lastCommit, unpublished, branch };
 }

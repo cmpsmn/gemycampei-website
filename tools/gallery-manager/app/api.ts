@@ -116,6 +116,8 @@ export const api = {
   // Publishing helpers
   changes: () => request<Changes>('GET', '/api/changes'),
   preview: (path: string) => request<{ url: string }>('POST', '/api/preview', { path }),
+  /** Commits and pushes the changes: the website updates a few minutes later */
+  publish: (message?: string) => request<{ commit: string; actionsUrl: string | null }>('POST', '/api/publish', { message }),
 };
 
 /**

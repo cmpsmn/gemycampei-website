@@ -3,8 +3,9 @@
  * GALLERY MANAGER  (tools/gallery-manager/server.mjs)
  * ============================================================================
  *
- * Start with:   npm run manage
- * Stop with:    Ctrl + C in the terminal
+ * Start with:   double-click "Gallery Manager.command" in the project folder,
+ *               or  npm run manage  in a terminal
+ * Stop with:    close the Terminal window, or Ctrl + C
  *
  * WHAT HAPPENS
  * 1. A small web server starts on this computer only (127.0.0.1).
@@ -15,8 +16,8 @@
  *    the page reloads automatically when you edit the manager's code.
  * 4. Your browser opens the manager.
  *
- * The manager only changes files in this project. To publish, commit and push
- * with Git as usual (see docs/DEPLOYMENT.md).
+ * The manager only changes files in this project. The Publish tab commits and
+ * pushes them after a confirmation, which updates the website (api/publish.mjs).
  * ============================================================================
  */
 
@@ -92,10 +93,10 @@ origins = hosts.map((host) => `http://${host}`);
 const url = `http://${HOST}:${port}/`;
 
 console.log(`\n  Gallery manager running at ${url}`);
-console.log('  Press Ctrl + C to stop.\n');
+console.log('  Close this window (or press Ctrl + C) to stop.\n');
 if (!process.argv.includes('--no-open')) openBrowser(url);
 
-// Clean shutdown on Ctrl + C
+// Clean shutdown on Ctrl + C, and when the Terminal window is closed (SIGHUP)
 async function shutdown() {
   console.log('\n  Stopping the gallery manager ...');
   await stopPreview();
@@ -105,3 +106,4 @@ async function shutdown() {
 }
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
+process.on('SIGHUP', shutdown);

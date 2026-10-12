@@ -55,6 +55,7 @@ import { deleteTrashEntry, emptyTrash, listTrash, restoreFromTrash } from './tra
 import { galleryChecks } from './checks.mjs';
 import { getChanges } from './changes.mjs';
 import { previewUrl } from './preview.mjs';
+import { publish } from './publish.mjs';
 import { sendThumbnail } from './thumbs.mjs';
 
 /** Largest accepted upload (camera JPEGs are usually 10–30 MB) */
@@ -112,6 +113,7 @@ const routes = [
     categories: await listCategories(),
     galleries: await listGalleries(),
     trashCount: (await listTrash()).length,
+    changeCount: (await getChanges()).total,
     german: await germanSwitchedOn(),
   })],
 
@@ -197,6 +199,8 @@ const routes = [
 
   // ---- Change list, preview, images -----------------------------------------
   ['GET', '/api/changes', () => getChanges()],
+  // Commit and push the content changes: publishes the website (publish.mjs)
+  ['POST', '/api/publish', async ({ req }) => publish({ message: (await readJson(req)).message })],
   ['POST', '/api/preview', async ({ req }) => ({ url: await previewUrl((await readJson(req)).path) })],
   ['GET', '/api/file', async ({ res, query }) => {
     await sendThumbnail(query, res);

@@ -148,6 +148,9 @@ export interface Changes {
   available: boolean;
   total: number;
   lastCommit: { subject: string; when: string } | null;
+  /** Commits on this computer that are not on GitHub yet */
+  unpublished: number;
+  branch: string | null;
   groups: { key: string; kind: string; label: string; files: { status: string; path: string }[] }[];
 }
 
@@ -185,6 +188,8 @@ export interface AppState {
   categories: Category[];
   galleries: GallerySummary[];
   trashCount: number;
+  /** Changed content files not published yet (Publish tab badge) */
+  changeCount: number;
   /** German version switched on in src/content/settings.yaml */
   german: boolean;
 }

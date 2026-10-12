@@ -333,14 +333,27 @@ uploads the site to Hostinger within a few minutes. Setup and details:
 
 ## 7. The gallery manager
 
-```bash
-npm run manage
-```
+**Double-click `Gallery Manager.command`** in the project folder (in Finder). A Terminal window
+opens, fetches the newest version from GitHub, installs what is missing and opens the manager in
+the browser. **Close the Terminal window to stop it.** Tip: drag the file into the Dock for a
+one-click start. In a terminal, `npm run manage` does the same (without the update).
 
-This opens a small app in your browser (`http://127.0.0.1:4400`). It is a comfortable way to
-change everything you maintain: the files in `galleries/` and `src/content/`. It **only changes
-files on your computer**: nothing goes online until you commit and push. Stop it with Ctrl+C in
-the terminal.
+The manager is a small app in your browser (`http://127.0.0.1:4400`). It is a comfortable way to
+change everything you maintain: the files in `galleries/` and `src/content/`. Changes are saved
+**on your computer only** until you press **Publish to the website** in the **Publish** tab.
+
+### Publishing from the manager
+
+The **Publish** tab (its number = changed files) lists what changed. **Publish to the
+website …** opens a confirmation window: what goes live, and a warning for galleries that are
+still drafts (those stay hidden: untick "Draft" first). **Yes, publish** then does `git add`,
+`git commit` and `git push` to `master` for `galleries/` and `src/content/` only. Code changes
+in other folders are never published by the button. GitHub updates the website a few minutes
+later (see [Deploying](#deploying-publishing-the-live-website)).
+
+If there is no internet, the change is kept and goes out with the next Publish. The button
+only works on the `master` branch. If the website was changed from another computer in the
+same files at the same time, nothing is published and the manager says so.
 
 ### The tabs
 
@@ -360,7 +373,7 @@ the terminal.
 | **Settings** | German version on/off, email, social links, default Google texts, the data for Google (languages, places, services) and the legal details for the imprint. |
 | **Order on pages** | Pick a category and drag its galleries into place. Saved immediately. |
 | **Trash** | Everything deleted in the manager. Restore or delete for good. |
-| **Changes** | Files changed since the last Git commit, grouped per gallery/review, plus the commands to publish them. |
+| **Publish** | Files changed since the last publication, grouped per gallery/review, and the **Publish to the website** button (with a confirmation window). |
 
 ### What is saved when
 
