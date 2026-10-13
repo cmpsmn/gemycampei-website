@@ -3,7 +3,7 @@ names: "Kyo & Benedikt"
 order: 4
 gallery: vienna-wedding-photographer/schloss-hernstein-wedding-austria
 # The same photo is in their gallery, so it is taken from there
-galleryPhoto: schloss-hernstein-wedding-austria-021.jpg
+galleryPhoto: schloss-hernstein-wedding-austria-019.jpg
 ---
 
 We recently had Gemy as our wedding photographer, and choosing her was one of the best decisions we made for our wedding.

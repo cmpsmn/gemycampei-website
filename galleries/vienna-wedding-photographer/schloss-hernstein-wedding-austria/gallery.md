@@ -4,7 +4,7 @@ location: "Hernstein, Lower Austria"
 region: austria
 legacyUrls:
   - /ksar-char-bagh-morocco-copy/
-cover: schloss-hernstein-wedding-austria-021.jpg
+cover: schloss-hernstein-wedding-austria-019.jpg
 couple: Kyo & Benedikt
 seoTitle: Kyo & Benedikt · Castle Wedding at Schloss Hernstein
 seoDescription: "A multicultural castle wedding at Schloss Hernstein in Lower Austria: guests from around the world, a Korean hanbok and a DIY karaoke party."
