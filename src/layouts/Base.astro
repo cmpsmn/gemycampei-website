@@ -100,7 +100,13 @@ const ogUrl = og ? new URL(og.src, Astro.site).toString() : undefined;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <!-- The "GC" icon: browser tab, Google results (square PNG, multiple of 48 px),
+         phones' home screens. All made from public/favicon.svg. -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+    <link rel="icon" href="/favicon-192x192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="theme-color" content="#f7f3eb" />
     <link rel="preload" href={jostFont} as="font" type="font/woff2" crossorigin />
