@@ -8,8 +8,8 @@
  * The texts of both languages are in `copy` below, next to each other.
  *
  * STRUCTURE (from the v3 design, plus two SEO sections)
- *   hero · statement · "who, where, what" (a direct answer for Google and AI
- *   assistants, with links to the three main landing pages) · galleries ·
+ *   hero · statement · galleries · "who, where, what" (a direct answer for
+ *   Google and AI assistants, with links to the three main landing pages) ·
  *   about · packages · film band · journal
  *
  * Everything else on this page comes from content that the gallery manager
@@ -125,26 +125,6 @@ const copy = getPage('home', lang);
     </blockquote>
   </section>
 
-  <!-- ── Who, where, what: a direct answer, and the three main landing pages ── -->
-  <section class="section answer">
-    <div class="answer-text">
-      <p class="eyebrow">{copy.answerEyebrow}</p>
-      <h2 class="section-title">{copy.answerTitle}</h2>
-      <p class="body-text">{copy.answer}</p>
-    </div>
-    <div class="destinations">
-      {
-        copy.destinations.map((destination) => (
-          <a class="destination" href={categoryHref(destination.category)} data-reveal>
-            <h3>{destination.title}</h3>
-            <p class="body-text">{destination.text}</p>
-            <span class="link-quiet">{destination.link}</span>
-          </a>
-        ))
-      }
-    </div>
-  </section>
-
   <!-- ── Gallery categories ──────────────────────────────────────────────── -->
   <section class="section">
     <SectionHead eyebrow={copy.portfolio} title={copy.galleries} link={{ href: routes.galleries[lang], label: copy.allGalleries }} />
@@ -163,6 +143,26 @@ const copy = getPage('home', lang);
             <span class="meta">
               {String(i + 1).padStart(2, '0')} — {text.menuLabel}
             </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ── Who, where, what: a direct answer, and the three main landing pages ── -->
+  <section class="section answer">
+    <div class="answer-text">
+      <p class="eyebrow">{copy.answerEyebrow}</p>
+      <h2 class="section-title">{copy.answerTitle}</h2>
+      <p class="body-text">{copy.answer}</p>
+    </div>
+    <div class="destinations">
+      {
+        copy.destinations.map((destination) => (
+          <a class="destination" href={categoryHref(destination.category)} data-reveal>
+            <h3>{destination.title}</h3>
+            <p class="body-text">{destination.text}</p>
+            <span class="link-quiet">{destination.link}</span>
           </a>
         ))
       }

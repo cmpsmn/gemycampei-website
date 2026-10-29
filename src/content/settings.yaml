@@ -50,6 +50,8 @@ person:
   # Languages you offer shoots in. TODO: add every language you speak
   languages:
     - English
+    - German
+    - Thai
 
 # Kinds of shoot you offer (sent to Google as services, no prices)
 services:
