@@ -174,8 +174,8 @@ const copy = getPage('home', lang);
     <Image
       src={portrait}
       alt={copy.portraitAlt}
-      widths={[480, 800]}
-      sizes="(max-width: 800px) 46vw, (max-width: 900px) 92vw, 42vw"
+      widths={[360, 540, 728]}
+      sizes="(max-width: 800px) 12vw, 12rem"
       class="split-image"
       data-reveal
     />
@@ -451,17 +451,22 @@ const copy = getPage('home', lang);
     }
   }
 
+  /*
+   * The portrait: a tall photobooth strip of two frames (728 × 1942 px),
+   * uncropped and centred. It is as tall as the earlier 4:5 portrait was:
+   * column width × 1.25. Its width follows from its shape; the width/height
+   * attributes of the image reserve the space before it loads.
+   */
   .split :global(.split-image) {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
+    justify-self: center;
+    width: calc(100% * 1.25 * 728 / 1942);
+    height: auto;
   }
 
-  /* Phones: the portrait is half the width (as on the about page), centred above the text */
+  /* Phones: as tall as half the width × 1.25 (the earlier portrait), centred above the text */
   @media (max-width: 800px) {
     .split :global(.split-image) {
-      width: 50%;
-      justify-self: center;
+      width: calc(50% * 1.25 * 728 / 1942);
     }
   }
 

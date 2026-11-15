@@ -9,8 +9,9 @@
  *
  * Layout: title and story beside the portrait; the approach as three numbered
  * points on a quiet band; where I work; how we work together; a photo strip.
- * The portrait lives in src/assets/about/, the strip photos come from
- * src/assets/home/grid-2/.
+ * The portrait (a photobooth strip of two frames) lives in src/assets/about/,
+ * with frame 3 alone as the picture for link previews; the photo strip at the
+ * bottom comes from src/assets/home/grid-2/.
  *
  * WHY SO MUCH TEXT? Google and AI assistants recommend photographers they can
  * describe: who you are, where you work, how you work. This page is where they
@@ -21,6 +22,8 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import portrait from '../assets/about/gemy-campei-photographer-vienna.jpg';
+// Link previews (WhatsApp, Facebook …) crop to a wide rectangle: one frame works, a tall strip doesn't
+import sharePortrait from '../assets/about/gemy-campei-photographer-vienna-share.jpg';
 import { getCategories, getHomeGrid2, hrefIn } from '../lib/galleries';
 import { breadcrumbSchema } from '../lib/seo';
 import { getPage } from '../lib/pages';
@@ -43,7 +46,7 @@ const copy = getPage('about', lang);
 <Base
   title={copy.title}
   description={copy.description}
-  ogImage={portrait}
+  ogImage={sharePortrait}
   schema={[
     breadcrumbSchema([
       { name: t.breadcrumbHome, path: routes.home[lang] },
@@ -65,13 +68,13 @@ const copy = getPage('about', lang);
         {copy.story.map((paragraph) => <p class="body-text">{paragraph}</p>)}
       </div>
     </div>
-    <!-- The frame takes the height of the text; the photo fills it (see the styles) -->
+    <!-- The photobooth strip, always uncropped (see the styles) -->
     <div class="portrait-frame">
       <Image
         src={portrait}
         alt={copy.portraitAlt}
-        widths={[480, 800, 1000]}
-        sizes="(max-width: 800px) 46vw, (max-width: 900px) 92vw, 400px"
+        widths={[360, 540, 728]}
+        sizes="(max-width: 800px) 12vw, 16rem"
         loading="eager"
         class="portrait"
       />
@@ -183,10 +186,12 @@ const copy = getPage('about', lang);
   }
 
   /*
-   * The portrait lines up with the text at the top and the bottom. The frame
-   * is stretched to the height of the text column; the photo is placed inside
-   * it absolutely, so its own shape can never make the row taller, and
-   * object-fit: cover crops it to fill the frame.
+   * The portrait is a tall photobooth strip of two frames (728 × 1942 px),
+   * never cropped: the torn edges and both faces stay whole. As the earlier
+   * portrait, it is exactly as tall as the text beside it: the frame is
+   * stretched to the height of the text column, and the strip inside it is
+   * placed absolutely at full height (so it can't make the row taller),
+   * centred, its width following from its shape.
    */
   .portrait-frame {
     position: relative;
@@ -196,10 +201,12 @@ const copy = getPage('about', lang);
 
   .portrait-frame :global(.portrait) {
     position: absolute;
-    inset: 0;
-    width: 100%;
+    top: 0;
+    left: 50%;
     height: 100%;
-    object-fit: cover;
+    width: auto;
+    max-width: none;
+    transform: translateX(-50%);
   }
 
   /*
@@ -216,15 +223,23 @@ const copy = getPage('about', lang);
       display: contents;
     }
 
-    /* Half the width, centred. The width must be set: without it Safari gives
-       the frame (whose photo is absolutely placed, so it has no content) a
-       width and height of 0 */
+    /* As tall as the earlier portrait (half the width × 1.25), centred, in
+       the normal flow. The width must be set: Safari otherwise gives the frame
+       a size of 0 */
     .portrait-frame {
-      width: 50%;
+      position: static;
       justify-self: center;
-      aspect-ratio: 4 / 5;
+      width: calc(50% * 1.25 * 728 / 1942);
       min-height: 0;
       margin-top: var(--space-2);
+    }
+
+    .portrait-frame :global(.portrait) {
+      position: static;
+      display: block;
+      width: 100%;
+      height: auto;
+      transform: none;
     }
 
     .intro-story {
