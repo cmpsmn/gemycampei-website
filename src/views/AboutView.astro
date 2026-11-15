@@ -74,7 +74,7 @@ const copy = getPage('about', lang);
         src={portrait}
         alt={copy.portraitAlt}
         widths={[360, 540, 728]}
-        sizes="(max-width: 800px) 12vw, 16rem"
+        sizes="(max-width: 800px) 62vw, 16rem"
         loading="eager"
         class="portrait"
       />
@@ -223,13 +223,12 @@ const copy = getPage('about', lang);
       display: contents;
     }
 
-    /* As tall as the earlier portrait (half the width × 1.25), centred, in
-       the normal flow. The width must be set: Safari otherwise gives the frame
-       a size of 0 */
+    /* Three quarters of the screen height, centred, in the normal flow
+       (svh = the screen height without the browser bars; vh for older
+       browsers). The frame takes the width of the photo. */
     .portrait-frame {
       position: static;
       justify-self: center;
-      width: calc(50% * 1.25 * 728 / 1942);
       min-height: 0;
       margin-top: var(--space-2);
     }
@@ -237,8 +236,9 @@ const copy = getPage('about', lang);
     .portrait-frame :global(.portrait) {
       position: static;
       display: block;
-      width: 100%;
-      height: auto;
+      width: auto;
+      height: 75vh;
+      height: 75svh;
       transform: none;
     }
 
